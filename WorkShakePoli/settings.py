@@ -49,7 +49,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'WorShake.urls'
+ROOT_URLCONF = 'WorkShakePoli.urls'
 
 TEMPLATES = [
     {
@@ -67,7 +67,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'WorShake.wsgi.application'
+WSGI_APPLICATION = 'WorkShakePoli.wsgi.application'
 
 
 # Database
