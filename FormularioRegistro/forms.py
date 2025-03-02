@@ -16,8 +16,16 @@ class RegistroForm(forms.ModelForm):
         return email
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        if len(password) < 8:
-            raise forms.ValidationError("La contraseña debe tener al menos 8 caracteres.")
+        if len(password) < 10:
+            raise ValidationError("La contraseña debe tener al menos 10 caracteres.")
+        if not any(char.islower() for char in password):
+            raise ValidationError("La contraseña debe contener al menos una letra minúscula.")
+        if not any(char.isupper() for char in password):
+            raise ValidationError("La contraseña debe contener al menos una letra mayúscula.")
+        if not any(char.isdigit() for char in password):
+            raise ValidationError("La contraseña debe contener al menos un número.")
+        if not re.search(r'[.,#-]', password):
+            raise ValidationError("La contraseña debe contener al menos un carácter especial (.,#-).")
         return password
 def clean_telefono(self):
     telefono = self.cleaned_data.get('telefono')
