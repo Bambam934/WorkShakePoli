@@ -84,14 +84,19 @@ WSGI_APPLICATION = 'WorkShakePoli.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'basegeneral',
-        'USER': 'root',
-        'PASSWORD': '109165Smc.',
-        'HOST': 'localhost',
-        'PORT': '3306',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres',
+        'USER': 'postgres.mfckupqlpgytjgjrijye',
+        'PASSWORD': '123Poli.',
+        'HOST': 'aws-0-us-west-1.pooler.supabase.com',
+        'PORT': '6543',
+        'OPTIONS': {
+            'sslmode': 'verify-full',  # Verificar el certificado SSL
+            'sslrootcert': BASE_DIR / 'ssl/root.crt',  # Ruta al certificado
+        },
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -110,7 +115,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/

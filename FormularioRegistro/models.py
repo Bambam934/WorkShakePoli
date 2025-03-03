@@ -1,5 +1,3 @@
-# models.py
-
 from django.db import models
 from django.core.mail import send_mail
 from django.utils.crypto import get_random_string
@@ -14,9 +12,16 @@ class Registro(models.Model):
     fecha = models.DateField(auto_now=True)
     is_verified = models.BooleanField(default=False)  # Para verificar el correo
     verification_token = models.CharField(max_length=100, blank=True, null=True)  # Token de verificación
+    objects = models.Manager()  # Añadir el manager por defecto
 
     def __str__(self):
-        return self.email
+        return str(self.email)
+
+    def save(self, *args, **kwargs):
+        # Encriptar la contraseña antes de guardar
+        if not self.pk:  # Solo si es un nuevo registro
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
 
     def send_verification_email(self):
         # Generar un token único para la verificación
@@ -27,7 +32,7 @@ class Registro(models.Model):
         # Crear el enlace de verificación
         verification_link = f"http://tudominio.com/verify-email/{token}/"
 
-         # Personalizar el nombre del remitente
+        # Personalizar el nombre del remitente
         from_email = '"Wordshake Team" <tucorreo@gmail.com>'  # Nombre del remitente y dirección de correo
 
         # Enviar el correo electrónico

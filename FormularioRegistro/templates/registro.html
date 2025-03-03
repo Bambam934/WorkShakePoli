@@ -10,8 +10,7 @@
     <div class="container">
         <h1>Regístrate en Wordshake</h1>
         <form method="post">
-            <!-- {% csrf_token %}
-            {{ form.as_p }}-->
+            {% csrf_token %}  <!-- Token CSRF agregado -->
             <div class="form-group">
                 <label for="id_nombre">Nombre:</label>
                 <input type="text" id="id_nombre" name="nombre" required>
