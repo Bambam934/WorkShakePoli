@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'WorkShakePoli',
     'FormularioRegistro',
+    'FormularioInicioSesion',
 ]
 
 MIDDLEWARE = [

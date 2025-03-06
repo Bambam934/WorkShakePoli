@@ -16,7 +16,11 @@ class RegistroForm(forms.ModelForm):
         if Registro.objects.filter(email=email).exists():
             raise forms.ValidationError("Este correo electrónico ya está registrado.")
         return email
-
+    def clean_nombre(self):
+        nombre = self.cleaned_data.get('nombre')
+        if Registro.objects.filter(nombre=nombre).exists():
+            raise forms.ValidationError("Este nombre de usuario ya esta registrado")
+        return nombre
 
 
     #Funcion para las restricciones de la contraseña    
