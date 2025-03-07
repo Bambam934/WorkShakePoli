@@ -1,7 +1,7 @@
 from django.urls import path
-from .views import inicioSesion, inicioExitoso
+from .views import inicio, inicioExitoso
 
 urlpatterns = [
-    path('iniciarSesion/', inicioSesion, name='inicioSesion'),
-    path('sesionIniciada/', inicioExitoso, name='exito'),
+    path('iniciarSesion/', inicio, name='inicioSesion'),
+    path('inicioExitoso/', inicioExitoso, name='exito'),
 ]
