@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import registro, verify_email, exito
+from .views import home, registro, exito  # Importa la vista home
 
 urlpatterns = [
+    path('', home, name='home'),  # Ruta raíz
     path('registro/', registro, name='registro'),
-    path('verify-email/<str:token>/', verify_email, name='verify_email'),
+    
     path('exito/', exito, name='exito'),
 ]

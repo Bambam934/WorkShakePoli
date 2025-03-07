@@ -13,28 +13,28 @@
             {% csrf_token %}  <!-- Token CSRF agregado -->
             <div class="form-group">
                 <label for="id_nombre">Nombre:</label>
-                <input type="text" id="id_nombre" name="nombre" required>
+                {{ form.nombre }}  <!-- Usa el campo del formulario Django -->
             </div>
             <div class="form-group">
                 <label for="id_apellido">Apellido:</label>
-                <input type="text" id="id_apellido" name="apellido" required>
+                {{ form.apellido }}  <!-- Usa el campo del formulario Django -->
             </div>
             <div class="form-group">
                 <label for="id_email">Correo electrónico:</label>
-                <input type="email" id="id_email" name="email" required>
+                {{ form.email }}  <!-- Usa el campo del formulario Django -->
             </div>
             <div class="form-group">
                 <label for="id_telefono">Teléfono:</label>
-                <input type="tel" id="id_telefono" name="telefono" required>
+                {{ form.telefono }}  <!-- Usa el campo del formulario Django -->
             </div>
             <div class="form-group">
                 <label for="id_password">Contraseña:</label>
-                <input type="password" id="id_password" name="password" required>
+                {{ form.password }}  <!-- Usa el campo del formulario Django -->
             </div>
             <button type="submit">Crear cuenta</button>
         </form>
         <div class="footer">
-            <p>¿Ya tienes una cuenta? <a href="/FormularioInicioSesion/templates/inicio.html">Inicia sesión</a></p>
+            <p>¿Ya tienes una cuenta? <a href="{% url 'home' %}">Inicia sesión</a></p>
         </div>
     </div>
 </body>
