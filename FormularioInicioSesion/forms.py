@@ -1,10 +1,13 @@
 from django import forms
 from .models import Inicio
 
-class inicioSesion(forms.ModelForm):
-    class meta:
+class InicioSesionForm(forms.ModelForm):  # Cambio de nombre para evitar confusión
+    class Meta:
         model = Inicio
-        fields = ['email','password']
+        fields = ['email', 'password']
         widgets = {
-            'password': forms.PasswordInput(),  # Para que el campo de contraseña sea de tipo password
-        } 
+            'password': forms.PasswordInput(),
+        }
+  
+  
+    
