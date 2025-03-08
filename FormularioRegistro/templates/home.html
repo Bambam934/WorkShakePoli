@@ -7,14 +7,10 @@
     <link rel="stylesheet" href="/static/home.css"> <!-- Enlace corregido al CSS -->
 </head>
 <body>
-    <div class=container>
+    <div class="container">
         <h1>Bienvenido a Wordshake</h1>
-        <a href="{% url 'registro' %}">
-            <button>Registrate</button>
-        </a>
-        <a href="{% url 'inicio' %}">
-            <button>Inicia sesion</button>
-        </a>
+        <a href="{% url 'registro' %}" class="btn">Regístrate</a>
+        <a href="{% url 'inicio' %}" class="btn">Inicia sesión</a>
     </div>
 </body>
 </html>
