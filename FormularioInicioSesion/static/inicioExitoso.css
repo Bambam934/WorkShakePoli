@@ -1,0 +1,91 @@
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    color: #333;
+}
+
+/* Contenedor del formulario */
+.container {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(15px);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Título */
+h1 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+}
+
+/* Estilos para los botones */
+.container .btn {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+    margin: 10px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.container .btn:hover {
+    background: linear-gradient(135deg, #2575fc, #6a11cb);
+    transform: translateY(-2px);
+}
+
+.container .btn:active {
+    transform: translateY(0);
+}
+
+/* Mensajes de error */
+.errorlist {
+    color: #ff4d4d;
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+}
+
+.errorlist li {
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+/* Pie de página */
+.footer {
+    text-align: center;
+    margin-top: 25px;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+.footer a {
+    color: #6a11cb;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.footer a:hover {
+    color: #2575fc;
+}

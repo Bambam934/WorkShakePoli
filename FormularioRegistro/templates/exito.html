@@ -2,10 +2,13 @@
 <html>
 <head>
     <title>Registro Exitoso</title>
+    <link rel="stylesheet" href="/static/exito.css">
 </head>
 <body>
-    <h1>¡Registro exitoso!</h1>
-    <p>Tu cuenta ha sido creada correctamente.</p>
-    <a href="{% url 'home' %}">Volver al inicio</a>
+    <div class= 'container'>
+        <h1>¡Registrado de forma exitosa!</h1>
+        <p>Te haz registrado correctamente</p>
+        <a href="{% url 'home' %}" class="btn">Volver al inicio</a>
+    </div>
 </body>
 </html>

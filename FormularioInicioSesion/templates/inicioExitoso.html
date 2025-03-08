@@ -2,10 +2,13 @@
 <html>
 <head>
     <title>Inicio de sesion Exitoso</title>
+    <link rel="stylesheet" href="/static/inicioExitoso.css">
 </head>
 <body>
-    <h1>¡Inicio de sesion exitoso!</h1>
-    <p>Haz iniciado sesion correctamente</p>
-    <a href="/FormularioInicioSesion/templates/inicio.html">Volver al inicio</a>
+    <div class= 'container'>
+        <h1>¡Inicio de sesion exitoso!</h1>
+        <p>Haz iniciado sesion correctamente</p>
+        <a href="{% url 'home' %}" class="btn">Volver al inicio</a>
+    </div>
 </body>
 </html>

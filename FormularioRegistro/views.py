@@ -22,8 +22,7 @@ def registro(request):
             nuevo_registro = form.save(commit=False)  # No guardar todavía para poder manipular los datos
             nuevo_registro.password = make_password(form.cleaned_data['password'])  # Encriptar la contraseña
             nuevo_registro.save()  # Ahora guarda en la base de datos
-            print("Registro guardado:", nuevo_registro)  # Depuración: verifica que se guardó
-            return redirect('exito')  # Redirige a la vista 'exito'
+            return exito(request)  # Redirige a la vista 'exito'
         else:
             print("Formulario no válido:", form.errors)  # Depuración: muestra errores del formulario
     else:
