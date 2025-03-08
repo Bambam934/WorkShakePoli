@@ -3,7 +3,7 @@ from django.db import models
 class Registro(models.Model):
     nombre = models.CharField(max_length=100)
     apellido = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField(unique=False)
     telefono = models.CharField(max_length=10)
     password = models.CharField(max_length=128)  # Asegúrate de que este campo sea lo suficientemente largo para almacenar contraseñas encriptadas
 
