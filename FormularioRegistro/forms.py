@@ -13,17 +13,25 @@ class RegistroForm(forms.ModelForm):
     def clean_email(self):
         email = self.cleaned_data.get('email')
         if Registro.objects.filter(email=email).exists():  # pylint: disable=no-member
-            raise forms.ValidationError("Este correo electrónico ya está registrado.")
+            self.add_error("email", "Este correo electronico ya esta registrado")
         return email
 
     def clean_nombreUsuario(self):
         nombre = self.cleaned_data.get('nombreUsuario')
         if Registro.objects.filter(nombreUsuario=nombre).exists():  # pylint: disable=no-member
-            raise forms.ValidationError("Este nombre de usuario ya está registrado")
+            self.add_error("email", "Este nombre de usuario ya esta en uso")
         return nombre
 
     def clean_password(self):
         password = self.cleaned_data.get('password')
-        if len(password) < 8:  # Allow shorter passwords for testing
-            raise ValidationError("La contraseña debe tener al menos 8 caracteres.")
+        if len(password) < 10:
+            self.add_error("password","La contraseña debe tener al menos 10 caracteres.")
+        if not any(char.islower() for char in password):
+            self.add_error("password","La contraseña debe contener al menos una letra minúscula.")
+        if not any(char.isupper() for char in password):
+            self.add_error("password","La contraseña debe contener al menos una letra mayúscula.")
+        if not any(char.isdigit() for char in password):
+            self.add_error("password","La contraseña debe contener al menos un número.")
+        if not re.search(r'[.,#\-*]', password):
+            self.add_error("password","La contraseña debe contener al menos un carácter especial (.,#-).")
         return password
