@@ -4,10 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Wordshake</title>
+    <link rel="stylesheet" href="/static/home.css"> <!-- Enlace corregido al CSS -->
 </head>
 <body>
-    <h1>Bienvenido a Wordshake</h1>
-    <p>¡Regístrate para comenzar!</p>
-    <a href="{% url 'registro' %}">Registrarse</a>
+    <div class=container>
+        <h1>Bienvenido a Wordshake</h1>
+        <a href="{% url 'registro' %}">
+            <button>Registrate</button>
+        </a>
+        <a href="{% url 'inicio' %}">
+            <button>Inicia sesion</button>
+        </a>
+    </div>
 </body>
 </html>
