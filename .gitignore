@@ -1,0 +1,27 @@
+# Ignorar variables de entorno
+.env
+
+# Archivos de caché y compilación de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Archivos de logs
+*.log
+logs/
+
+# Configuración de entornos virtuales
+venv/
+env/
+
+# Base de datos SQLite (si usas SQLite en desarrollo)
+db.sqlite3
+db.postgresql
+# Archivos de Django y migraciones innecesarias
+*.mo
+*.pot
+*.swp
+migrations/__pycache__/
+migrations/*.pyc
+migrations/*.pyo
