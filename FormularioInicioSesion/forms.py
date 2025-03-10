@@ -1,19 +1,11 @@
-import email
 from django import forms
+from django.contrib.auth import authenticate
 from FormularioRegistro import models
-from django.contrib.auth.hashers import check_password
-from django import forms
-from django.contrib.auth.hashers import check_password
 
+class InicioSesionForm(forms.Form):  # ❌ No debe ser ModelForm
+    email = forms.EmailField(label="Correo electrónico")
+    password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
 
-
-class InicioSesionForm(forms.ModelForm):
-    class Meta:
-        model = models.Registro
-        fields = ['email', 'password']
-        widgets = {
-            'password': forms.PasswordInput(),
-        }
     def clean(self):
         cleaned_data = super().clean()
         email = cleaned_data.get("email")
@@ -24,18 +16,11 @@ class InicioSesionForm(forms.ModelForm):
             self.add_error("password", "Debe ingresar una contraseña.")
             return cleaned_data
 
-        # Buscar el usuario en la base de datos
-        usuario = models.Registro.objects.filter(email=email).first()
+        # Usar authenticate en lugar de check_password
+        user = authenticate(username=email, password=password)
 
-        if usuario is None:
-            self.add_error("email", "Correo no registrado. Puedes crearte una cuenta.")
-            return cleaned_data
-
-        # Comparar la contraseña ingresada con la almacenada en la BD
-        if not check_password(password, usuario.password):
-            self.add_error("password", "Contraseña incorrecta.")
+        if user is None:
+            self.add_error("email", "Correo o contraseña incorrectos.")
             return cleaned_data
 
         return cleaned_data
-
-    

@@ -1,7 +1,6 @@
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.core.mail import send_mail
@@ -13,9 +12,9 @@ from .serializers import ResetPasswordRequestSerializer, ResetPasswordSerializer
 from .forms import InicioSesionForm
 from django.contrib.auth.views import PasswordResetView
 from django.contrib import messages
-from django.contrib.auth import get_user_model
 
-User = get_user_model()  
+User = get_user_model()
+
 def inicio(request):
     remembered_email = request.COOKIES.get('remembered_email', '')
 
@@ -25,24 +24,23 @@ def inicio(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
             user = authenticate(request, username=email, password=password)
+
             if user is not None:
                 login(request, user)
                 response = redirect('inicioExitoso')
-                
-                # Si se marcó "Recordar mi cuenta", guardar en cookies
+
                 if form.cleaned_data.get('remember_me'):
-                    response.set_cookie('remembered_email', email, max_age=30*24*60*60)  # 30 días
+                    response.set_cookie('remembered_email', email, max_age=30*24*60*60)
                 else:
-                    response.delete_cookie('remembered_email')  # Eliminar cookie si no se marcó
-                
+                    response.delete_cookie('remembered_email')
+
                 return response
             else:
-                form.add_error(None, "Correo o contraseña incorrectos")
+                form.add_error(None, "Correo o contraseña incorrectos")  # Mensaje correcto para login
     else:
         form = InicioSesionForm(initial={'email': remembered_email})
 
     return render(request, 'inicio.html', {'form': form})
-
 
 
 def inicioExitoso(request):
@@ -100,13 +98,33 @@ class ResetPassword(generics.GenericAPIView):
             return Response(serializer.errors, status=400)
         return Response({'error': 'El enlace de restablecimiento de contraseña es inválido o ha expirado.'}, status=400)
 
-
 class CustomPasswordResetView(PasswordResetView):
     template_name = "password_reset_form.html"
 
     def form_valid(self, form):
         email = form.cleaned_data.get("email")
-        if not User.objects.filter(email=email).exists():  # Ahora apunta al modelo correcto
+        if not User.objects.filter(email=email).exists():
             messages.error(self.request, "El correo ingresado no está registrado.")
-            return redirect("password_reset")  
+            return redirect("password_reset")
         return super().form_valid(form)
+
+def registro(request):
+    if request.method == "POST":
+        email = request.POST.get("email", "").strip()
+        password = request.POST.get("password", "").strip()
+
+        if not email or not password:
+            messages.error(request, "Todos los campos son obligatorios.")
+            return redirect("registro")
+
+        if len(password) < 6:
+            messages.error(request, "La contraseña debe tener al menos 6 caracteres.")
+            return redirect("registro")
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "El correo ya está registrado.")
+            return redirect("registro")
+
+        user = User.objects.create_user(username=email, email=email, password=password)
+        messages.success(request, "Registro exitoso.")
+        return redirect("inicio")

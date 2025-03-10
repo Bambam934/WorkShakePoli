@@ -5,7 +5,7 @@ from FormularioRegistro import views
 
 urlpatterns = [
     path('iniciarSesion/', inicio, name='inicioSesion'),
-    path('inicioExitoso/', inicioExitoso, name='exito'),
+    path('inicioExitoso/', inicioExitoso, name='inicioExitoso'),
     path('registro/', views.registro, name='registro'),
     path('', views.home, name='home'),
 
