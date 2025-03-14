@@ -1,13 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Inicio de sesion Exitoso</title>
+    <title>Inicio de sesión Exitoso</title>
     <link rel="stylesheet" href="/static/inicioExitoso.css">
 </head>
 <body>
-    <div class= 'container'>
-        <h1>¡Inicio de sesion exitoso!</h1>
-        <p>Haz iniciado sesion correctamente</p>
+    <div class="container">
+        <h1>¡Inicio de sesión exitoso!</h1>
+        <p>Has iniciado sesión correctamente.</p>
+
+        <!-- Botón para ir al juego -->
+        <a href="{% url 'game' %}" class="btn">Iniciar Juego</a>
+
+        <!-- Opción 2: Cargar el juego automáticamente en la misma página -->
+        <iframe src="{% url 'game' %}" width="100%" height="500px" style="border:none; margin-top:20px;"></iframe>
+
         <a href="{% url 'home' %}" class="btn">Volver al inicio</a>
     </div>
 </body>

@@ -30,10 +30,9 @@ class Registro(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    is_superuser = models.BooleanField(default=False)  # Agrega este campo
+    is_superuser = models.BooleanField(default=False)  
     last_login = models.DateTimeField(default=timezone.now, null=True, blank=True)
 
-    # Campos requeridos por PermissionsMixin
     groups = models.ManyToManyField(Group, related_name="registro_groups", blank=True)
     user_permissions = models.ManyToManyField(Permission, related_name="registro_permissions", blank=True)
 
@@ -42,5 +41,9 @@ class Registro(AbstractBaseUser, PermissionsMixin):
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['nombre', 'apellido', 'nombreUsuario']
 
+    class Meta:
+        default_manager_name = "objects"  # ✅ Agregado aquí
+
     def __str__(self):
         return str(self.email)
+

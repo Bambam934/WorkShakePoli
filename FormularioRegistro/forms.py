@@ -7,6 +7,7 @@ class RegistroForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())  # Campo de contraseña
 
     class Meta:
+        
         model = Registro
         fields = ['nombre', 'nombreUsuario','apellido', 'email', 'password']
 

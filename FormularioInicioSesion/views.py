@@ -12,6 +12,7 @@ from .serializers import ResetPasswordRequestSerializer, ResetPasswordSerializer
 from .forms import InicioSesionForm
 from django.contrib.auth.views import PasswordResetView
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 User = get_user_model()
 
@@ -128,3 +129,6 @@ def registro(request):
         user = User.objects.create_user(username=email, email=email, password=password)
         messages.success(request, "Registro exitoso.")
         return redirect("inicio")
+@login_required
+def game_view(request):
+    return render(request, 'game.html')

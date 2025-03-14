@@ -2,14 +2,16 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import inicio, inicioExitoso, CustomPasswordResetView
 from FormularioRegistro import views
+from game.views import game_view 
 
 urlpatterns = [
     path('iniciarSesion/', inicio, name='inicioSesion'),
     path('inicioExitoso/', inicioExitoso, name='inicioExitoso'),
     path('registro/', views.registro, name='registro'),
     path('', views.home, name='home'),
+     path('game/', game_view, name='game'),
 
-    # 🌟 Restablecimiento de contraseña usando una vista personalizada
+   
     path('reset_password/', CustomPasswordResetView.as_view(
         template_name="password_reset_form.html",
         email_template_name="registration/password_reset_email.html",
