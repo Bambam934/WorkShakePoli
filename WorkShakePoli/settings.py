@@ -38,6 +38,9 @@ INSTALLED_APPS = [
     'game',
 ]
 
+#  bloquea la carga de la página dentro de un iframe
+X_FRAME_OPTIONS = 'ALLOWALL'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

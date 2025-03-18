@@ -1,0 +1,89 @@
+/* Fondo con gradiente */
+body {
+    background: linear-gradient(to right, #4b0082, #0000ff);
+    font-family: Arial, sans-serif;
+    color: white;
+    text-align: center;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenedor principal */
+.container {
+    width: 80%;
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Título */
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+/* Letras disponibles */
+.letras {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+/* Campo de entrada */
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 2px solid white;
+    border-radius: 5px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+/* Botón */
+button {
+    background: linear-gradient(to right, #6a11cb, #2575fc);
+    color: white;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 10px;
+}
+
+button:hover {
+    background: linear-gradient(to right, #2575fc, #6a11cb);
+}
+
+/* Puntuación */
+.puntos {
+    background: white;
+    color: black;
+    font-size: 1rem;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+/* Enlaces de historial y leaderboard */
+.historial {
+    margin-top: 20px;
+    font-size: 1rem;
+    color: white;
+}
+
+.historial a {
+    color: #00c3ff;
+    text-decoration: none;
+}
+
+.historial a:hover {
+    text-decoration: underline;
+}
