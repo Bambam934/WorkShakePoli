@@ -45,7 +45,15 @@ def inicio(request):
 
 
 def inicioExitoso(request):
+    """ Muestra la pantalla de inicio de sesión exitoso y permite ir al juego """
     return render(request, 'inicioExitoso.html')
+
+
+@login_required
+def game_view(request):
+    """ Carga el juego en una nueva página independiente """
+    return render(request, 'game.html')
+
 
 class RequestPasswordReset(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -129,6 +137,3 @@ def registro(request):
         user = User.objects.create_user(username=email, email=email, password=password)
         messages.success(request, "Registro exitoso.")
         return redirect("inicio")
-@login_required
-def game_view(request):
-    return render(request, 'game.html')
