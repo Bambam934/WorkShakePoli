@@ -11,14 +11,41 @@ body {
     align-items: center;
 }
 
-/* Contenedor principal */
-.container {
-    width: 80%;
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.1);
+
+.container.leaderboard {
+    width: 20%;
+    max-width: 250px;
+    background: #0118588e;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    left: 10px;
+    top: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.container.puntuaciones {
+    width: 20%;
+    max-width: 250px;
+    background: #0118588e;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.container.juego {
+    width: 80%;
+    max-width: 800px;
+    height: 600px;
+    background: #0118588e;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    top: 10px;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 /* Título */
@@ -36,13 +63,16 @@ h1 {
 
 /* Campo de entrada */
 input[type="text"] {
-    width: 100%;
+    width: 50%;
     padding: 10px;
     font-size: 1rem;
     border: 2px solid white;
     border-radius: 5px;
     margin-top: 10px;
     text-align: center;
+    position: absolute;
+    left: 25%;
+    bottom: 150px;
 }
 
 /* Botón */
@@ -56,10 +86,19 @@ button {
     cursor: pointer;
     transition: 0.3s;
     margin-top: 10px;
+    position: absolute;
+    left: 41%;
+    bottom: 100px;
 }
 
 button:hover {
     background: linear-gradient(to right, #2575fc, #6a11cb);
+}
+
+input::placeholder {
+    color: gray;
+    font-style: italic;
+    opacity: 1;
 }
 
 /* Puntuación */

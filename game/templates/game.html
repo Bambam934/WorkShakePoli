@@ -3,18 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>WordShake</title>
-    <link rel="stylesheet" href="/static/game.css">
+    <link rel="stylesheet" href="/static/games.css">
 </head>
 <body>
-    <h1>Bienvenido a WordShake</h1>
-    <p>Letras disponibles: {{ letters }}</p>
-
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Verificar palabra</button>
-    </form>
-
+    <div class="container juego">
+        <h1>Bienvenido a WordShake</h1>
+        <p>Letras disponibles: {{ letters }}</p>
+    
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Verificar palabra</button>
+        </form>
+    </div>
     {% if word_valid is not None %}
         {% if word_valid %}
             <p style="color: green;">Palabra válida. Puntos ganados: {{ score }}</p>
@@ -22,19 +23,21 @@
             <p style="color: red;">Palabra no válida.</p>
         {% endif %}
     {% endif %}
-
-    <h2>Historial de puntuaciones</h2>
-    <ul>
-        {% for score in user_scores %}
-            <li>{{ score.word }} - {{ score.points }} pts</li>
-        {% endfor %}
-    </ul>
-
-    <h2>Leaderboard</h2>
-    <ul>
-        {% for player in leaderboard %}
-            <li>{{ player.email }} - {{ player.total_puntos }} pts</li>
-        {% endfor %}
-    </ul>
+    <div class="container puntuaciones">
+        <h2>Historial de puntuaciones</h2>
+        <ul>
+            {% for score in user_scores %}
+                <li>{{ score.word }} - {{ score.points }} pts</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="container leaderboard">
+        <h2>Leaderboard</h2>
+        <ul>
+            {% for player in leaderboard %}
+                <li>{{ player.email }} - {{ player.total_puntos }} pts</li>
+            {% endfor %}
+        </ul>
+    </div>
 </body>
 </html>
