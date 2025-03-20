@@ -71,6 +71,7 @@ DATABASES = {
     }
 }
 
+LANGUAGE_CODE = 'es'
 
 
 # Cargar variables de entorno
