@@ -73,9 +73,25 @@ def get_leaderboard():
     print("Leaderboard data:", response.data)  # Debug para ver qué retorna Supabase
     return response.data
 
+from collections import Counter
+#Verificar que la palabra se haga con las letras del board
+def is_valid_word(word, board):
+    """Verifica si la palabra puede formarse con las letras del tablero."""
+    board_letters = Counter(board)  # Cuenta las letras disponibles
+    word_letters = Counter(word)    # Cuenta las letras en la palabra ingresada
+
+    for letter, count in word_letters.items():
+        if board_letters[letter] < count:  # Si falta alguna letra, es inválida
+            return False
+    return True
+
+
 # Vista principal del juego
 def game_view(request):
-    board = generate_board()
+    if "board" not in request.session:
+        request.session["board"] = generate_board()  # Guarda el tablero en la sesión
+
+    board = request.session["board"]
     form = WordForm()
     word_valid = None
     score = 0
@@ -89,13 +105,14 @@ def game_view(request):
         form = WordForm(request.POST)
         if form.is_valid():
             word = form.cleaned_data['word'].upper()
-            word_valid = check_word_api(word)  # Verificar con API
-            if word_valid:
-                score = calculate_score(word)
-                if request.user.is_authenticated:
-                    save_score(request.user.id, word, score)
-                user_scores = get_user_scores(request.user.id)
-                leaderboard = get_leaderboard()
+            if is_valid_word(word, board):  # Nueva función de validación
+                word_valid = check_word_api(word)
+                if word_valid:
+                    score = calculate_score(word)
+                    if request.user.is_authenticated:
+                        save_score(request.user.id, word, score)
+                    user_scores = get_user_scores(request.user.id)
+                    leaderboard = get_leaderboard()
 
     return render(request, 'game.html', {
         'board': board,
