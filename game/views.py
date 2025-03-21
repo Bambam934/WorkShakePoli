@@ -21,9 +21,10 @@ LETTER_POINTS = {
 }
 
 # Generar letras aleatorias para el tablero
-def generate_letters():
+def generate_board():
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    return random.sample(letters, 7)
+    board = [random.choice(letters) for _ in range(16)]
+    return "".join(board)
 
 # Verificar palabra usando API externa
 def check_word_api(word):
@@ -74,7 +75,7 @@ def get_leaderboard():
 
 # Vista principal del juego
 def game_view(request):
-    letters = generate_letters()
+    board = generate_board()
     form = WordForm()
     word_valid = None
     score = 0
@@ -97,7 +98,7 @@ def game_view(request):
                 leaderboard = get_leaderboard()
 
     return render(request, 'game.html', {
-        'letters': letters,
+        'board': board,
         'form': form,
         'word_valid': word_valid,
         'score': score,

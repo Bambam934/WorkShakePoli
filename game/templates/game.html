@@ -8,8 +8,11 @@
 <body>
     <div class="container juego">
         <h1>Bienvenido a WordShake</h1>
-        <p>Letras disponibles: {{ letters }}</p>
-    
+        <div class="grid">
+            {% for letter in board %}
+                <div class="cell">{{ letter }}</div>
+            {% endfor %}
+        </div>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
