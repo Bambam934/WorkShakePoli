@@ -40,12 +40,25 @@ body {
     width: 80%;
     max-width: 800px;
     height: 600px;
-    background: #ff00008e;
+    background: #001aff2a;
     padding: 20px;
     border-radius: 10px;
     position: absolute;
     top: 10px;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}   
+.shuffle-button {
+    gap: 8px;
+    left: 450px;
+}
+
+.shuffle-button:hover {
+    background-color: #45a049; /* Cambio de color al pasar el mouse */
+    transform: scale(1.05); /* Efecto de agrandado */
+}
+
+.shuffle-button:active {
+    transform: scale(0.95); /* Efecto de presión */
 }
 
 /* Título */
@@ -87,7 +100,7 @@ button {
     transition: 0.3s;
     margin-top: 10px;
     position: absolute;
-    left: 41%;
+    left: 31%;
     bottom: 100px;
 }
 
@@ -128,11 +141,14 @@ input::placeholder {
 }
 
 .grid { 
+    position:absolute;
+    left: 35%;
     display: grid; 
-    grid-template-columns: repeat(4, 1fr); /* Asegura 4 columnas de igual tamaño */
-    gap: 10px; /* Espaciado entre celdas */
-    justify-content: center; /* Centrar la tabla en la pantalla */
-    margin-top: 20px; 
+    grid-template-columns: repeat(5, 1fr); /* Mantiene 5 columnas */
+    gap: 0px; /* Elimina espacio entre celdas */
+    justify-content: center; /* Centra la tabla */
+    margin-top: 20px;
+    width: max-content; /* Ajusta el ancho al contenido */
 }
 
 .cell { 
@@ -145,6 +161,20 @@ input::placeholder {
     justify-content: center; 
     font-size: 1.5rem; 
     font-weight: bold; 
-    border-radius: 5px; 
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.5); 
+    border-radius: 5px; /* Evita esquinas redondeadas */
+    box-shadow: none; /* Elimina sombras */
+    border: 1px solid black;
+    padding: 0; /* Elimina cualquier padding extra */
+    margin: 0; /* Asegura que no haya separación */
+}
+
+.palabra .valida{
+    position: absolute;
+    bottom: 20px;
+    color: green;
+}
+.palabra .noValida{
+    position: absolute;
+    bottom: 20px;
+    color: rgb(255, 0, 0) !important;
 }

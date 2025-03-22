@@ -5,6 +5,16 @@ from django.conf import settings
 from django.shortcuts import render
 from .forms import WordForm
 from django.http import HttpResponse
+from pyrae import dle 
+import requests
+
+url = 'https://magicloops.dev/api/loop/b991aac7-d5ac-4e67-a42b-d777163a296e/run'
+payload = {"word": "casa"}
+
+response = requests.get(url, json=payload)
+responseJson = response.json()
+print(responseJson)
+
 
 def index(request):
     return HttpResponse("\u00a1Bienvenido a WordShake!")
@@ -20,24 +30,51 @@ LETTER_POINTS = {
     'X': 8, 'Y': 4, 'Z': 10
 }
 
+paises = [
+    "Argentina", "Brasil", "Colombia", "Mexico", "Peru", "Chile", "Ecuador", "Venezuela", "Bolivia"
+]
+def pais_existe(nombre_pais, lista_paises):
+    nombre_pais = nombre_pais.lower().replace("á", "a").replace("é", "e").replace("í", "i") \
+                                     .replace("ó", "o").replace("ú", "u").replace("ñ", "n")
+    
+    lista_normalizada = {p.lower().replace("á", "a").replace("é", "e").replace("í", "i")
+                            .replace("ó", "o").replace("ú", "u").replace("ñ", "n") for p in lista_paises}
+
+    return nombre_pais in lista_normalizada
+
 # Generar letras aleatorias para el tablero
 def generate_board():
+    MANDATORY_LETTERS = list("ABCDEGHILMNOPRSTUVXZ")
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    board = [random.choice(letters) for _ in range(16)]
-    return "".join(board)
+    
+    # Incluir las letras obligatorias
+    board = MANDATORY_LETTERS.copy()
 
+    # Rellenar con letras aleatorias hasta completar 25 letras
+    while len(board) < 25:
+        board.append(random.choice(letters))
+    
+    # Mezclar el tablero para que las letras obligatorias no estén siempre al inicio
+    random.shuffle(board)
+    print(board)
+    return "".join(board)
 # Verificar palabra usando API externa
-def check_word_api(word):
+"""def check_word_api(word):
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word.lower()}"
     response = requests.get(url)
     return response.status_code == 200  # Si la API responde con 200, la palabra es válida
-
+"""
 # Calcular la puntuación de una palabra
 def calculate_score(word):
     return sum(LETTER_POINTS.get(letter, 0) for letter in word)
 
 # Guardar puntuación en Supabase
-
+"""def veryfy_es(word):
+    res = dle.search_by_word(word=word)
+    if(res==None):
+        return False
+    else:
+        return True"""
 
 def save_score(user_id, word, score):
     data = {
@@ -76,7 +113,6 @@ def get_leaderboard():
 from collections import Counter
 #Verificar que la palabra se haga con las letras del board
 def is_valid_word(word, board):
-    """Verifica si la palabra puede formarse con las letras del tablero."""
     board_letters = Counter(board)  # Cuenta las letras disponibles
     word_letters = Counter(word)    # Cuenta las letras en la palabra ingresada
 
@@ -88,8 +124,8 @@ def is_valid_word(word, board):
 
 # Vista principal del juego
 def game_view(request):
-    if "board" not in request.session:
-        request.session["board"] = generate_board()  # Guarda el tablero en la sesión
+    if "board" not in request.session or "shuffle" in request.POST:
+        request.session["board"] = generate_board()  # Genera nuevo tablero si no existe o si se presiona el botón
 
     board = request.session["board"]
     form = WordForm()
@@ -101,12 +137,12 @@ def game_view(request):
     if request.user.is_authenticated:
         user_scores = get_user_scores(request.user.id)
 
-    if request.method == "POST":
+    if request.method == "POST" and "shuffle" not in request.POST:  # Evita que mezclar active validación de palabras
         form = WordForm(request.POST)
         if form.is_valid():
             word = form.cleaned_data['word'].upper()
-            if is_valid_word(word, board):  # Nueva función de validación
-                word_valid = check_word_api(word)
+            if is_valid_word(word, board): 
+                word_valid = pais_existe(word, paises)
                 if word_valid:
                     score = calculate_score(word)
                     if request.user.is_authenticated:
