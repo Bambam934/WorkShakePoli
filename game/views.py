@@ -5,14 +5,14 @@ from django.conf import settings
 from django.shortcuts import render
 from .forms import WordForm
 from django.http import HttpResponse
+from .models import Word, Category
+from django.core.cache import cache
 
 def index(request):
     return HttpResponse("\u00a1Bienvenido a WordShake!")
 
-# Obtener cliente de Supabase
 supabase = settings.SUPABASE_CLIENT
 
-# Puntos por letra
 LETTER_POINTS = {
     'A': 1, 'B': 3, 'C': 3, 'D': 2, 'E': 1, 'F': 4, 'G': 2, 'H': 4,
     'I': 1, 'J': 8, 'K': 8, 'L': 1, 'M': 3, 'N': 1, '\u00d1': 8, 'O': 1,
@@ -20,39 +20,59 @@ LETTER_POINTS = {
     'X': 8, 'Y': 4, 'Z': 10
 }
 
-# Generar letras aleatorias para el tablero
 def generate_board():
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    board = [random.choice(letters) for _ in range(16)]
-    return "".join(board)
+    return "".join(random.choice(letters) for _ in range(16))
 
-# Verificar palabra usando API externa
 def check_word_api(word):
+    word = word.upper()
+    cache_key = f'word_validation_{word}'
+    cached_result = cache.get(cache_key)
+    if cached_result is not None:
+        return cached_result
+    
+    try:
+        word_obj = Word.objects.get(text=word)
+        cache.set(cache_key, word_obj.is_validated, 86400)
+        return word_obj.is_validated
+    except Word.DoesNotExist:
+        pass
+    
     url = f"https://api.dictionaryapi.dev/api/v2/entries/en/{word.lower()}"
     response = requests.get(url)
-    return response.status_code == 200  # Si la API responde con 200, la palabra es válida
+    
+    if response.status_code == 200:
+        Word.objects.create(text=word, is_validated=True)
+        cache.set(cache_key, True, 86400)
+        return True
+    
+    cache.set(cache_key, False, 86400)
+    return False
 
-# Calcular la puntuación de una palabra
 def calculate_score(word):
-    return sum(LETTER_POINTS.get(letter, 0) for letter in word)
-
-# Guardar puntuación en Supabase
-
+    try:
+        word_obj = Word.objects.get(text=word.upper())
+        multiplier = 1.5 if any(category.name == 'Premium' for category in word_obj.categories.all()) else 1
+    except Word.DoesNotExist:
+        multiplier = 1
+    
+    base_score = sum(LETTER_POINTS.get(letter, 0) for letter in word.upper())
+    return int(base_score * multiplier)
 
 def save_score(user_id, word, score):
+    word_obj, created = Word.objects.get_or_create(text=word.upper())
+    
     data = {
         "user_id": user_id,
         "word": word,
         "points": score,
-        "timestamp": datetime.utcnow().isoformat(),  # Timestamp válido
-        "date": datetime.utcnow().date().isoformat()  # Fecha sin hora
+        "categories": [c.name for c in word_obj.categories.all()],
+        "timestamp": datetime.utcnow().isoformat(),
+        "date": datetime.utcnow().date().isoformat()
     }
-
+    
     supabase.table("game_score").insert(data).execute()
 
-
-
-# Obtener historial de puntuaciones de un usuario
 def get_user_scores(user_id):
     response = supabase.table("game_score") \
         .select("word, points, date") \
@@ -60,43 +80,47 @@ def get_user_scores(user_id):
         .order("date", desc=True) \
         .limit(5) \
         .execute()
-
     return response.data if response.data else []
 
-# Obtener ranking de jugadores con más puntos acumulados
 def get_leaderboard():
-    response = supabase.rpc("get_leaderboard").execute()  # Llamamos a la función SQL
+    response = supabase.rpc("get_leaderboard").execute()
+    return response.data if response.data else []
 
-    if not response.data:
-        return []
-
-    print("Leaderboard data:", response.data)  # Debug para ver qué retorna Supabase
-    return response.data
-
-# Vista principal del juego
 def game_view(request):
-    board = generate_board()
+    try:
+        category = Category.objects.get(name='Common')
+        words_in_category = Word.objects.filter(categories=category)
+    except Category.DoesNotExist:
+        words_in_category = []
+    
+    def generate_custom_game_board():
+        all_letters = ''.join([word.text for word in words_in_category])
+        if not all_letters:
+            all_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        return ''.join(random.choice(all_letters) for _ in range(16))
+    
+    board = generate_custom_game_board()
     form = WordForm()
     word_valid = None
     score = 0
     user_scores = []
     leaderboard = get_leaderboard()
-
+    
     if request.user.is_authenticated:
         user_scores = get_user_scores(request.user.id)
-
+    
     if request.method == "POST":
         form = WordForm(request.POST)
         if form.is_valid():
             word = form.cleaned_data['word'].upper()
-            word_valid = check_word_api(word)  # Verificar con API
+            word_valid = check_word_api(word)
             if word_valid:
                 score = calculate_score(word)
                 if request.user.is_authenticated:
                     save_score(request.user.id, word, score)
                 user_scores = get_user_scores(request.user.id)
                 leaderboard = get_leaderboard()
-
+    
     return render(request, 'game.html', {
         'board': board,
         'form': form,
@@ -105,3 +129,10 @@ def game_view(request):
         'user_scores': user_scores,
         'leaderboard': leaderboard
     })
+
+def obtener_palabras(categoria_nombre):
+    try:
+        categoria = Category.objects.get(name=categoria_nombre)
+        return Word.objects.filter(categories=categoria)
+    except Category.DoesNotExist:
+        return []

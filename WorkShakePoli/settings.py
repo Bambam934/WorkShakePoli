@@ -36,6 +36,8 @@ INSTALLED_APPS = [
     'FormularioInicioSesion',
     'rest_framework',
     'game',
+    'mptt',
+    
 ]
 
 #  bloquea la carga de la página dentro de un iframe

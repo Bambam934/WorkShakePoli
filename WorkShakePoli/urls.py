@@ -6,5 +6,6 @@ urlpatterns = [
     path('', include('FormularioRegistro.urls')),
     path('',include('FormularioInicioSesion.urls')),
     path('',include('game.urls')),
+    
 
 ]
