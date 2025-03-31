@@ -18,14 +18,20 @@
             {{ form.as_p }}
             <button type="submit">Verificar palabra</button>
         </form>
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" name="shuffle" class="shuffle-button">Mezclar letras</button>
+        </form>
+        <div class="palabra">
+            {% if word_valid is not None %}
+                {% if word_valid %}
+                    <p class="valida">Palabra válida. Puntos ganados: {{ score }}</p>
+                {% else %}
+                    <p class="noValida">Palabra no válida.</p>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
-    {% if word_valid is not None %}
-        {% if word_valid %}
-            <p style="color: green;">Palabra válida. Puntos ganados: {{ score }}</p>
-        {% else %}
-            <p style="color: red;">Palabra no válida.</p>
-        {% endif %}
-    {% endif %}
     <div class="container puntuaciones">
         <h2>Historial de puntuaciones</h2>
         <ul>

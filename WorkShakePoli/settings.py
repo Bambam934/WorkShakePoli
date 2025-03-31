@@ -22,6 +22,7 @@ SECRET_KEY = env("SECRET_KEY")
 # Seguridad en producción
 DEBUG = True
 ALLOWED_HOSTS = []
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 # Aplicaciones instaladas
 INSTALLED_APPS = [
