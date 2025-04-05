@@ -1,52 +1,47 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>WordShake</title>
-    <link rel="stylesheet" href="/static/games.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordShake Game</title>
+
+    <!-- Estilos personalizados -->
+    <link rel="stylesheet" href="{% static 'game.css' %}">
 </head>
+
 <body>
-    <div class="container juego">
-        <h1>Bienvenido a WordShake</h1>
-        <div class="grid">
-            {% for letter in board %}
-                <div class="cell">{{ letter }}</div>
-            {% endfor %}
+
+    <div class="container">
+        <h1>WordShake</h1>
+
+        <div class="puntos">
+            Puntos: <span id="score">0</span>
         </div>
-        <form method="post">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="verificar">Verificar palabra</button>
-        </form>
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" name="shuffle" class="shuffle-button">Mezclar letras</button>
-        </form>
-        <div class="palabra">
-            {% if word_valid is not None %}
-                {% if word_valid %}
-                    <p class="valida">Palabra válida. Puntos ganados: {{ score }}</p>
-                {% else %}
-                    <p class="noValida">Palabra no válida.</p>
-                {% endif %}
-            {% endif %}
+
+        <div class="grid" id="board">
+            <!-- Las letras se generan dinámicamente con JavaScript -->
+        </div>
+
+        <input type="text" id="wordInput" placeholder="Escribe tu palabra...">
+
+        <div>
+            <button class="verificar" onclick="verificarPalabra()">Verificar Palabra</button>
+            <button class="shuffle-button" onclick="mezclarLetras()">
+                🔄 Mezclar Letras
+            </button>
+        </div>
+
+        <div class="historial">
+            <h3>Palabras encontradas:</h3>
+            <ul id="historialPalabras">
+            </ul>
         </div>
     </div>
-    <div class="container puntuaciones">
-        <h2>Historial de puntuaciones</h2>
-        <ul>
-            {% for score in user_scores %}
-                <li>{{ score.word }} - {{ score.points }} pts</li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="container leaderboard">
-        <h2>Leaderboard</h2>
-        <ul>
-            {% for player in leaderboard %}
-                <li>{{ player.email }} - {{ player.total_puntos }} pts</li>
-            {% endfor %}
-        </ul>
-    </div>
+
+    <!-- Script del juego -->
+    <script src="{% static 'game.js' %}"></script>
+
 </body>
 </html>

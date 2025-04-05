@@ -37,6 +37,7 @@ class Word(models.Model):
     text = models.CharField("Palabra", max_length=50, unique=True)
     categories = models.ManyToManyField(Category, verbose_name="Categorías")
     is_from_api = models.BooleanField("De la API", default=False)
+    is_validated = models.BooleanField(default=False)
     
     def clean(self):
         if not self.text.isalpha():

@@ -23,7 +23,7 @@ SECRET_KEY = env("SECRET_KEY")
 DEBUG = True
 ALLOWED_HOSTS = []
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
+STATIC_URL = '/static/'
 # Aplicaciones instaladas
 INSTALLED_APPS = [
     'django.contrib.admin',
