@@ -1,13 +1,24 @@
+from mptt.admin import MPTTModelAdmin
 from django.contrib import admin
 from django.contrib import messages
 from .models import Category, Word
 import requests
 
-@admin.register(Category)
+
+
+"""@admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name', 'parent')
     search_fields = ('name',)
-    list_filter = ('parent',)
+    list_filter = ('categories',)"""
+class WordInline(admin.TabularInline):
+    model = Word.categories.through  # M2M intermedia
+    extra = 1
+
+@admin.register(Category)
+class CategoryAdmin(MPTTModelAdmin):
+    inlines = [WordInline]
+    list_display = ('name', 'parent')
 
 def validar_palabra(palabra):
     """Función helper para validar palabras con la API"""

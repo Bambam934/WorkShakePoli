@@ -59,7 +59,7 @@ def calculate_score(word):
     base_score = sum(LETTER_POINTS.get(letter, 0) for letter in word.upper())
     return int(base_score * multiplier)
 
-def save_score(user_id, word, score):
+"""def save_score(user_id, word, score):
     word_obj, created = Word.objects.get_or_create(text=word.upper())
     
     data = {
@@ -71,8 +71,19 @@ def save_score(user_id, word, score):
         "date": datetime.utcnow().date().isoformat()
     }
     
+    supabase.table("game_score").insert(data).execute()"""
+def save_score(user_id, word, score):
+    word_obj, created = Word.objects.get_or_create(text=word.upper())
+    
+    data = {
+        "user_id": user_id,
+        "word": word,
+        "points": score,
+        "timestamp": datetime.utcnow().isoformat(),
+        "date": datetime.utcnow().date().isoformat()
+    }
+    
     supabase.table("game_score").insert(data).execute()
-
 def get_user_scores(user_id):
     response = supabase.table("game_score") \
         .select("word, points, date") \
@@ -85,21 +96,39 @@ def get_user_scores(user_id):
 def get_leaderboard():
     response = supabase.rpc("get_leaderboard").execute()
     return response.data if response.data else []
+def generate_board_with_required_letters(words_queryset):
+    palabras = [word.text.upper() for word in words_queryset]
+    
+    if not palabras:
+        return generate_board()  # Fallback si no hay palabras
+
+    # Escoge una palabra aleatoria para asegurar que esté presente
+    palabra_objetivo = random.choice(palabras)
+    letras_requeridas = list(palabra_objetivo)
+
+    # Rellena hasta tener 25 letras
+    while len(letras_requeridas) < 25:
+        letras_requeridas.append(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+
+    random.shuffle(letras_requeridas)
+    return ''.join(letras_requeridas)
+
 
 def game_view(request):
     try:
-        category = Category.objects.get(name='Common')
-        words_in_category = Word.objects.filter(categories=category)
+        paises = Category.objects.get(name='PAISES')
+        nivel1 = Category.objects.get(name='NIVEL 1', parent=paises)
+        words_in_category = Word.objects.filter(categories=nivel1)
     except Category.DoesNotExist:
         words_in_category = []
     
-    def generate_custom_game_board():
-        all_letters = ''.join([word.text for word in words_in_category])
-        if not all_letters:
-            all_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        return ''.join(random.choice(all_letters) for _ in range(25))
+    """def generate_custom_game_board():
+        letras = ''.join(word.text.upper() for word in words_in_category)
+        if len(letras) < 25:
+            letras *= (25 // len(letras) + 1)
+        return ''.join(random.choice(letras) for _ in range(25))"""
     
-    board = generate_custom_game_board()
+    board = board = generate_board_with_required_letters(words_in_category)
     form = WordForm()
     word_valid = None
     score = 0
