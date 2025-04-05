@@ -22,7 +22,7 @@ LETTER_POINTS = {
 
 def generate_board():
     letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    return "".join(random.choice(letters) for _ in range(16))
+    return "".join(random.choice(letters) for _ in range(25))
 
 def check_word_api(word):
     word = word.upper()
@@ -97,7 +97,7 @@ def game_view(request):
         all_letters = ''.join([word.text for word in words_in_category])
         if not all_letters:
             all_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        return ''.join(random.choice(all_letters) for _ in range(16))
+        return ''.join(random.choice(all_letters) for _ in range(25))
     
     board = generate_custom_game_board()
     form = WordForm()
