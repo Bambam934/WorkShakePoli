@@ -39,6 +39,9 @@ class Word(models.Model):
     is_from_api = models.BooleanField("De la API", default=False)
     is_validated = models.BooleanField(default=False)
     
+    is_validated = models.BooleanField("¿Validada?", default=False)
+
+
     def clean(self):
         if not self.text.isalpha():
             raise ValidationError("Solo se permiten letras")
