@@ -4,14 +4,13 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.core.exceptions import ValidationError
 
 class Score(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # ✅ Relación corregida
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     word = models.CharField(max_length=50)
     points = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.email} - {self.word} ({self.points} pts)"  # ✅ Usamos email porque es el identificador
-
+        return f"{self.user.email} - {self.word} ({self.points} pts)"
 
 class Category(MPTTModel):
     name = models.CharField("Nombre", max_length=100, unique=True)
@@ -32,12 +31,13 @@ class Category(MPTTModel):
         verbose_name_plural = "Categorías"
 
     def __str__(self):
-        return str(self.text)
+        return str(self.name)  # ✅ Cambiado de 'text' a 'name'
 
 class Word(models.Model):
     text = models.CharField("Palabra", max_length=50, unique=True)
     categories = models.ManyToManyField(Category, verbose_name="Categorías")
     is_from_api = models.BooleanField("De la API", default=False)
+    
     def clean(self):
         if not self.text.isalpha():
             raise ValidationError("Solo se permiten letras")
