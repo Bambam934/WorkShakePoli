@@ -13,7 +13,7 @@ class Score(models.Model):
         return f"{self.user.email} - {self.word} ({self.points} pts)"
 
 class Category(MPTTModel):
-    name = models.CharField("Nombre", max_length=100, unique=True)
+    name = models.CharField("Nombre", max_length=100)
     parent = TreeForeignKey(
         'self',
         verbose_name="Categoría padre",
@@ -27,8 +27,7 @@ class Category(MPTTModel):
         order_insertion_by = ['name']
     
     class Meta:
-        verbose_name = "Categoría"
-        verbose_name_plural = "Categorías"
+        unique_together = ('parent', 'name')
 
     def __str__(self):
         return str(self.name)  # ✅ Cambiado de 'text' a 'name'
@@ -37,8 +36,6 @@ class Word(models.Model):
     text = models.CharField("Palabra", max_length=50, unique=True)
     categories = models.ManyToManyField(Category, verbose_name="Categorías")
     is_from_api = models.BooleanField("De la API", default=False)
-    is_validated = models.BooleanField(default=False)
-    
     is_validated = models.BooleanField("¿Validada?", default=False)
 
 
