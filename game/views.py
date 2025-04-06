@@ -167,4 +167,3 @@ def game_view(request):
         'user_scores': user_scores,
         'leaderboard': leaderboard
     })
-
