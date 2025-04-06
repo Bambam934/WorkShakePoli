@@ -177,3 +177,24 @@ button:hover {
         width: 90%;
     }
 }
+.tablero {
+    display: grid;
+    grid-template-columns: repeat(5, 50px); 
+    gap: 10px;
+    margin: 20px 0;
+    justify-content: center;
+}
+
+.tablero div {
+    width: 60px;
+    height: 60px;
+    background-color: #1e1e1e;
+    border: 2px solid #00ffff;
+    color: #00ffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    border-radius: 8px;
+    font-weight: bold;
+}

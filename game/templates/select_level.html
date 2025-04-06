@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Seleccionar categoría y nivel</title>
+</head>
+<body>
+    <h1>Selecciona una subcategoría y nivel</h1>
+
+    <form id="gameForm" method="get" onsubmit="return goToGame();">
+        <label for="categoria">Subcategoría:</label>
+        <select id="categoria" name="categoria" required onchange="updateNiveles()">
+            {% for cat in subcategorias %}
+                <option value="{{ cat.id }}">{{ cat.name }}</option>
+            {% endfor %}
+        </select>
+
+        <label for="nivel">Nivel:</label>
+        <select id="nivel" name="nivel" required>
+            <!-- Opciones se llenan con JS -->
+        </select>
+
+        <button type="submit">Jugar</button>
+    </form>
+
+    <script>
+        const nivelesPorCategoria = {{ niveles_por_categoria|safe }};
+
+        function updateNiveles() {
+            const categoriaId = document.getElementById("categoria").value;
+            const nivelSelect = document.getElementById("nivel");
+
+            // Limpiar niveles anteriores
+            nivelSelect.innerHTML = '';
+
+            // Agregar niveles nuevos
+            const niveles = nivelesPorCategoria[categoriaId] || [];
+            niveles.forEach(nivel => {
+                const option = document.createElement("option");
+                option.value = nivel;
+                option.textContent = nivel;
+                nivelSelect.appendChild(option);
+            });
+        }
+
+        function goToGame() {
+            const categoriaId = document.getElementById("categoria").value;
+            const nivel = document.getElementById("nivel").value;
+            const url = `/game/${categoriaId}/${nivel}/`;
+            window.location.href = url;
+            return false;
+        }
+
+        // Inicializar niveles al cargar
+        window.onload = updateNiveles;
+    </script>
+</body>
+</html>

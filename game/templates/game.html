@@ -19,11 +19,15 @@
         <div class="puntos">
             Puntos: <span id="score">0</span>
         </div>
-
-        <div class="grid" id="board">
-            <!-- Las letras se generan dinámicamente con JavaScript -->
-        </div>
-
+        <h1>Niveles de {{ categoria }}</h1>
+            <ul>
+                {% for nivel in niveles %}
+                    <li><a href="{% url 'game' categoria nivel.name %}">{{ nivel.name }}</a></li>
+                {% endfor %}
+            </ul>   
+            <div id="tablero" class="tablero">
+                
+            </div>    
         <input type="text" id="wordInput" placeholder="Escribe tu palabra...">
 
         <div>
@@ -32,14 +36,20 @@
                 🔄 Mezclar Letras
             </button>
         </div>
-
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
         <div class="historial">
             <h3>Palabras encontradas:</h3>
             <ul id="historialPalabras">
             </ul>
         </div>
     </div>
-
+    <script>
+        const letrasDesdeBackend = "{{ board }}".split('');
+        const diccionario = {{ valid_words|safe }};
+    </script>
+    
     <!-- Script del juego -->
     <script src="{% static 'game.js' %}"></script>
 

@@ -10,7 +10,7 @@ supabase = settings.SUPABASE_CLIENT
 
 LETTER_POINTS = {
     'A': 1, 'B': 3, 'C': 3, 'D': 2, 'E': 1, 'F': 4, 'G': 2, 'H': 4,
-    'I': 1, 'J': 8, 'K': 8, 'L': 1, 'M': 3, 'N': 1, 'Ñ': 8, 'O': 1,
+    'I': 1, 'J': 8, 'K': 8, 'L': 1, 'M': 3, 'N': 1, '\u00d1': 8, 'O': 1,
     'P': 3, 'Q': 5, 'R': 1, 'S': 1, 'T': 1, 'U': 1, 'V': 4, 'W': 10,
     'X': 8, 'Y': 4, 'Z': 10
 }
@@ -23,18 +23,42 @@ def generate_board():
 
 def generate_custom_game_board():
     try:
-        category = Category.objects.get(name='Common')
-        words_in_category = Word.objects.filter(categories=category)
+        paises = Category.objects.get(name='PAISES')
+        nivel1 = Category.objects.get(name='NIVEL 1', parent=paises)
+        words_in_category = Word.objects.filter(categories=nivel1)
     except Category.DoesNotExist:
         words_in_category = []
 
-    all_letters = ''.join([word.text for word in words_in_category])
-    if not all_letters:
-        all_letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    if words_in_category.exists():
+        return generate_board_with_required_letters(words_in_category)
+    else:
+        return generate_board()
 
-    return ''.join(random.choice(all_letters) for _ in range(25))
+
+
 
 logger = logging.getLogger(__name__)
+def generate_board_with_required_letters(words_queryset):
+    palabras = [word.text.upper() for word in words_queryset]
+
+    if not palabras:
+        return generate_board()
+
+    # Seleccionamos al azar 5 palabras (o menos si no hay suficientes)
+    random.shuffle(palabras)
+    palabras_seleccionadas = palabras[:5]
+
+    letras_requeridas = []
+    for palabra in palabras_seleccionadas:
+        letras_requeridas.extend(list(palabra))
+
+    # Completamos con letras al azar si faltan para llegar a 25
+    while len(letras_requeridas) < 25:
+        letras_requeridas.append(random.choice("ABCDEFGHIJKLMNOPQRSTUVWXYZ"))
+
+    random.shuffle(letras_requeridas)
+    return ''.join(letras_requeridas)
+
 
 def check_word_api(word):
     word = word.upper()
