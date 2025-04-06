@@ -210,24 +210,47 @@ function mezclarLetras() {
     generarTablero();  // regenerar con las letras mezcladas
 }
 
-let segundos = 0;
-let minutos = 0;
-const cronometroElemento = document.getElementById("cronometro");
+let tiempoTotal = 180; // 3 minutos = 180 segundos
+let tiempoRestante = tiempoTotal;
 
-function actualizarCronometro() {
-    segundos++;
-    if (segundos === 60) {
-        segundos = 0;
-        minutos++;
-    }
+const cronometroSpan = document.getElementById("cronometro");
+const barraProgreso = document.getElementById("barra-progreso");
 
-    const minStr = minutos < 10 ? "0" + minutos : minutos;
-    const segStr = segundos < 10 ? "0" + segundos : segundos;
+function iniciarCronometro() {
+    const intervalo = setInterval(() => {
+        if (tiempoRestante <= 0) {
+            clearInterval(intervalo);
+            cronometroSpan.textContent = "00:00";
+            barraProgreso.style.width = "0%";
+            barraProgreso.style.backgroundColor = "#ff4444";
+            alert("¡Tiempo terminado!");
+            return;
+        }
 
-    cronometroElemento.textContent = `${minStr}:${segStr}`;
+        tiempoRestante--;
+
+        const minutos = String(Math.floor(tiempoRestante / 60)).padStart(2, "0");
+        const segundos = String(tiempoRestante % 60).padStart(2, "0");
+        cronometroSpan.textContent = `${minutos}:${segundos}`;
+
+        const porcentaje = (tiempoRestante / tiempoTotal) * 100;
+        barraProgreso.style.width = `${porcentaje}%`;
+
+        // Cambio de color según porcentaje restante
+        if (porcentaje > 60) {
+            barraProgreso.style.backgroundColor = "#00ffcc"; // Cian
+        } else if (porcentaje > 30) {
+            barraProgreso.style.backgroundColor = "#ffcc00"; // Amarillo
+        } else {
+            barraProgreso.style.backgroundColor = "#ff4444"; // Rojo
+        }
+    }, 1000);
 }
 
-const intervaloCronometro = setInterval(actualizarCronometro, 1000);
+
+// Llamada al iniciar el juego
+iniciarCronometro();
+
 
 // Iniciar juego
 generarTablero();

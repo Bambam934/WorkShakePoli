@@ -7,52 +7,70 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WordShake Game</title>
 
+    <!-- Tipografía futurista -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    
     <!-- Estilos personalizados -->
     <link rel="stylesheet" href="{% static 'game.css' %}">
 </head>
 
 <body>
 
+    <!-- Fondo de partículas -->
+    <canvas id="particles"></canvas>
+
     <div class="container">
         <h1>WordShake</h1>
-        
-        <div class="puntos">
-            Puntos: <span id="score">0</span>
+
+        <div class="info-bar">
+            <div class="puntos">
+                Puntos: <span id="score">0</span>
+            </div>
+            <div class="cronometro">
+                Tiempo: <span id="cronometro">00:00</span>
+            </div>
         </div>
-        <div class="cronometro">
-            Tiempo: <span id="cronometro">00:00</span>
+
+        <div class="barra-tiempo">
+            <div id="barra-progreso"></div>
+        </div>        
+
+        <h2>Niveles de {{ categoria }}</h2>
+        <ul class="niveles">
+            {% for nivel in niveles %}
+                <li><a href="{% url 'game' categoria nivel.name %}">{{ nivel.name }}</a></li>
+            {% endfor %}
+        </ul>
+
+        <div id="tablero" class="tablero">
+            <!-- Aquí van las letras -->
         </div>
-        <h1>Niveles de {{ categoria }}</h1>
-            <ul>
-                {% for nivel in niveles %}
-                    <li><a href="{% url 'game' categoria nivel.name %}">{{ nivel.name }}</a></li>
-                {% endfor %}
-            </ul>   
-            <div id="tablero" class="tablero">
-                
-            </div>    
+
         <input type="text" id="wordInput" placeholder="Escribe tu palabra...">
 
-        <div>
+        <div class="botones">
             <button class="verificar" onclick="verificarPalabra()">Verificar Palabra</button>
-            <button class="shuffle-button" onclick="mezclarLetras()">
-                🔄 Mezclar Letras
-            </button>
+            <button class="shuffle-button" onclick="mezclarLetras()">🔄 Mezclar Letras</button>
         </div>
+
         {% if error %}
             <div class="error">{{ error }}</div>
         {% endif %}
+
         <div class="historial">
             <h3>Palabras encontradas:</h3>
-            <ul id="historialPalabras">
-            </ul>
+            <ul id="historialPalabras"></ul>
         </div>
     </div>
+
+    <!-- Variables desde Django -->
     <script>
         const letrasDesdeBackend = "{{ board }}".split('');
         const diccionario = {{ valid_words|safe }};
     </script>
-    <!-- Script del juego -->
+
+    <!-- Scripts -->
+    <script src="{% static 'particulas.js' %}"></script>
     <script src="{% static 'game.js' %}"></script>
 
 </body>
