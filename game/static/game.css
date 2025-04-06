@@ -198,3 +198,8 @@ button:hover {
     border-radius: 8px;
     font-weight: bold;
 }
+.cronometro {
+    font-size: 24px;
+    color: #00ffcc;
+    margin-top: 10px;
+}

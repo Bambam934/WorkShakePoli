@@ -210,5 +210,24 @@ function mezclarLetras() {
     generarTablero();  // regenerar con las letras mezcladas
 }
 
+let segundos = 0;
+let minutos = 0;
+const cronometroElemento = document.getElementById("cronometro");
+
+function actualizarCronometro() {
+    segundos++;
+    if (segundos === 60) {
+        segundos = 0;
+        minutos++;
+    }
+
+    const minStr = minutos < 10 ? "0" + minutos : minutos;
+    const segStr = segundos < 10 ? "0" + segundos : segundos;
+
+    cronometroElemento.textContent = `${minStr}:${segStr}`;
+}
+
+const intervaloCronometro = setInterval(actualizarCronometro, 1000);
+
 // Iniciar juego
 generarTablero();

@@ -1,12 +1,19 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Seleccionar categoría y nivel</title>
+    <link rel="stylesheet" href="{% static 'select_level.css' %}">
 </head>
 <body>
+    <!-- Fondo de partículas -->
+    <div id="particle-container"></div>
+
+    <!-- Título principal -->
     <h1>Selecciona una subcategoría y nivel</h1>
 
+    <!-- Formulario de selección -->
     <form id="gameForm" method="get" onsubmit="return goToGame();">
         <label for="categoria">Subcategoría:</label>
         <select id="categoria" name="categoria" required onchange="updateNiveles()">
@@ -17,23 +24,21 @@
 
         <label for="nivel">Nivel:</label>
         <select id="nivel" name="nivel" required>
-            <!-- Opciones se llenan con JS -->
+            <!-- Niveles se llenan con JS -->
         </select>
 
         <button type="submit">Jugar</button>
     </form>
 
+    <!-- Scripts -->
+    <script src="{% static 'particulas.js' %}"></script>
     <script>
         const nivelesPorCategoria = {{ niveles_por_categoria|safe }};
 
         function updateNiveles() {
             const categoriaId = document.getElementById("categoria").value;
             const nivelSelect = document.getElementById("nivel");
-
-            // Limpiar niveles anteriores
             nivelSelect.innerHTML = '';
-
-            // Agregar niveles nuevos
             const niveles = nivelesPorCategoria[categoriaId] || [];
             niveles.forEach(nivel => {
                 const option = document.createElement("option");
@@ -51,7 +56,6 @@
             return false;
         }
 
-        // Inicializar niveles al cargar
         window.onload = updateNiveles;
     </script>
 </body>

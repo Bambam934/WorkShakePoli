@@ -15,9 +15,12 @@
 
     <div class="container">
         <h1>WordShake</h1>
-
+        
         <div class="puntos">
             Puntos: <span id="score">0</span>
+        </div>
+        <div class="cronometro">
+            Tiempo: <span id="cronometro">00:00</span>
         </div>
         <h1>Niveles de {{ categoria }}</h1>
             <ul>
@@ -49,7 +52,6 @@
         const letrasDesdeBackend = "{{ board }}".split('');
         const diccionario = {{ valid_words|safe }};
     </script>
-    
     <!-- Script del juego -->
     <script src="{% static 'game.js' %}"></script>
 
