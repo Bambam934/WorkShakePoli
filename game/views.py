@@ -33,12 +33,12 @@ def levels_view(request, categoria):
         niveles = []
     return render(request, 'levels.html', {'categoria': categoria, 'niveles': niveles})
 
-def game_view(request, categoria, nivel):
+def game_view(request, categoria_id, nivel):
     try:
-        cat = Category.objects.get(name=categoria, parent=None) 
+        cat = Category.objects.get(name=categoria_id, parent=None) 
         nivel_obj = Category.objects.get(name=nivel, parent=cat)
         words = Word.objects.filter(categories=nivel_obj)
-        board = services.generate_board_with_required_letters(words)
+        board = services.generate_custom_game_board(categoria_id,nivel)
         valid_words = [word.text.upper() for word in words]
     # En game_view
     except Category.DoesNotExist:
@@ -51,7 +51,7 @@ def game_view(request, categoria, nivel):
     return render(request, 'game.html', {
         'board': board,
         'form': form,
-        'categoria': categoria,
+        'categoria': categoria_id,
         'nivel': nivel,
-        'valid_words': valid_words,  # <-- pasamos esto
+        'valid_words': valid_words, 
     })

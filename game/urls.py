@@ -9,5 +9,5 @@ urlpatterns = [
     path('game/', game_view, name='game'),
     path('', views.index, name='index'),
     path('game/<str:categoria>/', views.levels_view, name='levels'),
-    path('game/<str:categoria>/<str:nivel>/', views.game_view, name='game'),
+    path('game/<str:categoria_id>/<str:nivel>/', views.game_view, name='game'),
 ]
