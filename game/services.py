@@ -3,7 +3,8 @@ import requests
 from datetime import datetime
 from django.core.cache import cache
 from django.conf import settings
-from .models import Word, Category
+from categorias.models import Category
+from .models import Word
 import logging
 
 supabase = settings.SUPABASE_CLIENT

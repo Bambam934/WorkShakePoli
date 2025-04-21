@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'FormularioInicioSesion',
     'rest_framework',
     'game',
+    'categorias',
     'mptt',
     
 ]

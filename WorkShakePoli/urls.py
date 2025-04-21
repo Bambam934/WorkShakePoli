@@ -5,7 +5,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('FormularioRegistro.urls')),
     path('',include('FormularioInicioSesion.urls')),
-    path('',include('game.urls')),
-    
+    path('game/', include('game.urls', namespace='game')),
+    path('select/', include('categorias.urls', namespace='categorias')),
 
 ]

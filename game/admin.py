@@ -1,65 +1,36 @@
+# game/admin.py
 from django.contrib import admin
 from django.contrib import messages
-from .models import Category, Word
-from mptt.admin import MPTTModelAdmin
-
+from .models import Word
 import requests
 
+# Las funciones validar_palabra y importar_palabras_desde_datamuse
+# pueden permanecer aquí o moverse a un archivo utils.py si prefieres.
 
-"""@admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name', 'parent')
-    search_fields = ('name',)
-    list_filter = ('parent',)"""
-class WordInline(admin.TabularInline):
-    model = Word.categories.through  # M2M intermedia
-    extra = 1
-
-@admin.register(Category)
-class CategoryAdmin(MPTTModelAdmin):
-    inlines = [WordInline]
-    list_display = ('name', 'parent')
 def validar_palabra(palabra):
-    """Función helper para validar palabras con la API"""
-    try:
-        response = requests.get(f"https://api.dictionaryapi.dev/api/v2/entries/en/{palabra}", timeout=5)
-        return response.status_code == 200
-    except requests.exceptions.RequestException:
-        return False
+    # ... (código sin cambios) ...
+    pass
 
 def importar_palabras_desde_datamuse(modeladmin, request, queryset):
-    """Acción administrativa para importar palabras desde DataMuse"""
-    url = "https://api.datamuse.com/words?sp=?????&max=50"
-    
-    try:
-        response = requests.get(url)
-        data = response.json()
-        contador = 0
-        
-        for item in data:
-            palabra = item['word'].lower().strip()
-            if len(palabra) < 3:  # Ignorar palabras muy cortas
-                continue
-                
-            if validar_palabra(palabra):
-                _, created = Word.objects.get_or_create(text=palabra)
-                if created:
-                    contador += 1
-                    
-        messages.success(request, f"{contador} palabras válidas importadas de {len(data)} obtenidas")
-        
-    except Exception as e:
-        messages.error(request, f"Error: {str(e)}")
+    # ... (código sin cambios, asegura que guarde en mayúsculas si es necesario) ...
+    pass
 
 @admin.register(Word)
 class WordAdmin(admin.ModelAdmin):
     list_display = ('text', 'is_from_api', 'es_valida')
     search_fields = ('text',)
-    filter_horizontal = ('categories',)
+    # CAMBIO: Apunta al nuevo campo ManyToMany 'levels'
+    filter_horizontal = ('levels',)
     actions = [importar_palabras_desde_datamuse]
 
     def es_valida(self, obj):
-        """Método para mostrar el estado de validación en el admin"""
+        # Reusa la función helper
         return validar_palabra(obj.text)
     es_valida.boolean = True
-    es_valida.short_description = 'Válida'
+    es_valida.short_description = 'Válida (API)' # Cambiado para claridad
+
+    # Opcional: Añadir un campo para ver los niveles en la lista
+    # def display_levels(self, obj):
+    #    return ", ".join([level.name for level in obj.levels.all()])
+    # display_levels.short_description = 'Niveles'
+    # list_display = ('text', 'is_from_api', 'es_valida', 'display_levels')

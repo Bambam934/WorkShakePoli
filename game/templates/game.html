@@ -72,6 +72,22 @@
     <!-- Scripts -->
     <script src="{% static 'particulas.js' %}"></script>
     <script src="{% static 'game.js' %}"></script>
-
+    <script>
+        // Parsea los datos desde los scripts JSON generados por Django
+        const letrasDesdeBackend = JSON.parse(document.getElementById('letras-backend-data').textContent);
+        const diccionario = JSON.parse(document.getElementById('diccionario-data').textContent);
+    
+        // Añadir listener para tecla Enter (opcional pero bueno)
+        const wordInputField = document.getElementById('wordInput');
+        if (wordInputField) {
+            wordInputField.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    verificarPalabra();
+                }
+            });
+        }
+         // ... (código opcional para limpiar errores JS) ...
+    </script>
 </body>
 </html>
