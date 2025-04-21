@@ -22,16 +22,17 @@ def generate_board():
     return "".join(random.choice(letters) for _ in range(25))
 
 
-def generate_custom_game_board():
+def generate_custom_game_board(categoria_id,nivelC):
     try:
-        paises = Category.objects.get(name='PAISES')
-        nivel1 = Category.objects.get(name='NIVEL 1', parent=paises)
-        words_in_category = Word.objects.filter(categories=nivel1)
+        categoria = Category.objects.get(name=categoria_id)
+        nivel = Category.objects.get(name=nivelC, parent=categoria)
+        words_in_category = Word.objects.filter(categories=nivel)
+        diccionario = list(words_in_category.values_list("text", flat=True))
     except Category.DoesNotExist:
         words_in_category = []
 
     if words_in_category.exists():
-        return generate_board_with_required_letters(words_in_category)
+        return generate_board_with_required_letters(diccionario)
     else:
         return generate_board()
 

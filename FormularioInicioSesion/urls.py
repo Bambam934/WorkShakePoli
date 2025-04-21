@@ -1,8 +1,9 @@
-from django.urls import path
+from django.urls import path,include
 from django.contrib.auth import views as auth_views
 from .views import inicio, inicioExitoso, registro, CustomPasswordResetView
 from game.views import game_view  
-from FormularioRegistro.views import home  # Importamos `home` correctamente
+from FormularioRegistro.views import home  
+from perfil.views import perfilView
 
 urlpatterns = [
     # Rutas principales
@@ -11,7 +12,6 @@ urlpatterns = [
     path('registro/', registro, name='registro'),
     path('', home, name='home'),  # Página principal corregida
     path('game/', game_view, name='game'),  
-
     # Rutas para recuperación de contraseña
     path('reset_password/', CustomPasswordResetView.as_view(
         template_name="password_reset_form.html",

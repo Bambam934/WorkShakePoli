@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'game',
     'categorias',
     'mptt',
-    
+    'perfil'
 ]
 
 #  bloquea la carga de la página dentro de un iframe
@@ -147,7 +147,9 @@ DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL")
 PASSWORD_RESET_TIMEOUT = 3600 
 PASSWORD_RESET_EMAIL_TEMPLATE_NAME = "registration/password_reset_email.html"
 PASSWORD_RESET_SUBJECT_TEMPLATE_NAME = "registration/password_reset_subject.txt"
-
+#Recibir archivos multimedia
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Modelo de usuario personalizado
 AUTH_USER_MODEL = 'FormularioRegistro.Registro'
 
