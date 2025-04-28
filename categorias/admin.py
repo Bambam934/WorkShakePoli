@@ -1,25 +1,26 @@
 # categorias/admin.py
 from django.contrib import admin
-# Quita MPTTModelAdmin
-from .models import Category, Level # Importa ambos modelos
-# Quita la importación de Word y WordInline si no se usan aquí
+from .models import Category, Level # Importa los modelos aquí
 
-# Inline para mostrar/añadir niveles directamente en la página de Categoría
+# --- PEGA LevelInline AQUÍ ---
+# Inline para gestionar niveles desde la vista de Categoría
 class LevelInline(admin.TabularInline):
-    model = Level
+    model = Level # 'Level' sí está definido aquí porque lo importaste arriba
     extra = 1
-    ordering = ('order', 'name') # Ordena los inlines
+    fields = ('name', 'order')
+    ordering = ('order', 'name')
+# --- FIN de LevelInline ---
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin): # Usa admin.ModelAdmin normal
+class CategoryAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
-    inlines = [LevelInline] # Añade el inline para niveles
+    inlines = [LevelInline] # Ahora puede encontrar LevelInline
 
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):
     list_display = ('name', 'category', 'order')
-    list_filter = ('category',) # Filtra por categoría
+    list_filter = ('category',)
     search_fields = ('name', 'category__name')
-    list_editable = ('order',) # Permite editar el orden en la lista
+    list_editable = ('order',)
     ordering = ('category__name', 'order', 'name')
