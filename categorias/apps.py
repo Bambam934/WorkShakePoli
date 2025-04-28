@@ -1,10 +1,6 @@
-# categorias/apps.py
 from django.apps import AppConfig
 
 class CategoriasConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'categorias'
     verbose_name = 'Gestión de Categorías y Niveles'
-
-# ¡ASEGÚRATE DE QUE NO HAYA NADA MÁS AQUÍ ABAJO,
-# ESPECIALMENTE LA CLASE LevelInline!

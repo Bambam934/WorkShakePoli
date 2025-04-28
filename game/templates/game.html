@@ -1,67 +1,53 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>WordShake Game</title>
 
-    <!-- Tipografía futurista -->
+    <!-- Fuentes y CSS  -->
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
-    
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="{% static 'game.css' %}">
 </head>
-
 <body>
-
-    <!-- Fondo de partículas -->
+    <!-- █ 1. contenedor para partículas (evita error) -->
     <canvas id="particles"></canvas>
 
+    <!-- █ 2. UI principal -->
     <div class="container">
         <h1>WordShake</h1>
 
         <div class="info-bar">
-            <div class="puntos">
-                Puntos: <span id="score">0</span>
-            </div>
-            <div class="cronometro">
-                Tiempo: <span id="cronometro">00:00</span>
-            </div>
+            <div>Puntos: <span id="score">0</span></div>
+            <div>Tiempo: <span id="cronometro">00:00</span></div>
         </div>
 
-        <div class="barra-tiempo">
-            <div id="barra-progreso"></div>
-        </div>        
+        <div class="barra-tiempo"><div id="barra-progreso"></div></div>
 
-        <h2>Niveles de {{ categoria_name }}</h2>  <!-- Cambiar variable a categoria_name -->
-    <ul class="niveles">
-    {% for nivel in niveles %}
-        <li>
-            <a href="{% url 'game:play' categoria_name=categoria_name nivel_name=nivel.name %}">
-                {{ nivel.name }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-        <div id="tablero" class="tablero">
-            <!-- Aquí van las letras -->
-        </div>
+        <h2>Niveles de {{ categoria_name }}</h2>
+        <ul class="niveles">
+            {% for nivel in niveles %}
+            <li><a href="{% url 'game:play' categoria_name=categoria_name nivel_name=nivel.name %}">
+                {{ nivel.name }}</a></li>
+            {% endfor %}
+        </ul>
 
-        <input type="text" id="wordInput" placeholder="Escribe tu palabra...">
+        <div id="tablero" class="tablero"></div>
+
+        <input type="text" id="wordInput" placeholder="Escribe tu palabra…">
 
         <div class="botones">
-            <button class="verificar" onclick="verificarPalabra()">Verificar Palabra</button>
-            <button class="shuffle-button" onclick="mezclarLetras()">🔄 Mezclar Letras</button>
+            <button onclick="verificarPalabra()">Verificar Palabra</button>
+            <button onclick="mezclarLetras()">🔄 Mezclar Letras</button>
         </div>
 
         {% if error_message %}
-    <div class="alert error">
-        {{ error_message }}
-        <button onclick="this.parentElement.remove()">×</button>
-    </div>
-    {% endif %}
+        <div class="alert error">
+            {{ error_message }}
+            <button onclick="this.parentElement.remove()">×</button>
+        </div>
+        {% endif %}
 
         <div class="historial">
             <h3>Palabras encontradas:</h3>
@@ -69,31 +55,17 @@
         </div>
     </div>
 
-    <!-- Variables desde Django -->
-    <script>
-        const letrasDesdeBackend = "{{ board }}".split('');
-        const diccionario = {{ valid_words|safe }};
-    </script>
+    {# game.html — sección de variables #}
 
-    <!-- Scripts -->
+<script>
+    /* Sin comillas → se inserta como array JS */
+    const letrasDesdeBackend = {{ board_json|safe }};
+    const diccionario        = {{ valid_words_json|safe }};
+</script>
+
+    <!-- █ 5.  Scripts externos -->
     <script src="{% static 'particulas.js' %}"></script>
-    <script src="{% static 'game.js' %}"></script>
-    <script>
-        // Parsea los datos desde los scripts JSON generados por Django
-        const letrasDesdeBackend = JSON.parse(document.getElementById('letras-backend-data').textContent);
-        const diccionario = JSON.parse(document.getElementById('diccionario-data').textContent);
-    
-        // Añadir listener para tecla Enter (opcional pero bueno)
-        const wordInputField = document.getElementById('wordInput');
-        if (wordInputField) {
-            wordInputField.addEventListener('keypress', function(event) {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    verificarPalabra();
-                }
-            });
-        }
-         // ... (código opcional para limpiar errores JS) ...
-    </script>
+    <!--  game.js con defer garantiza que se ejecute DESPUÉS de este HTML -->
+    <script src="{% static 'game.js' %}" defer></script>
 </body>
 </html>

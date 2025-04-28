@@ -1,140 +1,108 @@
+/* static/game.js — cargado con defer */
 
-const letras = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-// const board = document.getElementById('board'); // Ya no se usa
+/* Elementos del DOM */
 const wordInput = document.getElementById('wordInput');
 const historialPalabras = document.getElementById('historialPalabras');
 const scoreElement = document.getElementById('score');
+const cronometroSpan = document.getElementById('cronometro');
+const barraProgreso = document.getElementById('barra-progreso');
 
 let score = 0;
 let letrasTablero = [];
 
-// Generar tablero con letras desde el backend
+/* ---------- Tablero ---------- */
 function generarTablero() {
-    letrasTablero = [...letrasDesdeBackend];  // Esto es importante para verificar palabras
+    if (!Array.isArray(letrasDesdeBackend) || letrasDesdeBackend.length === 0) {
+        console.error('letrasDesdeBackend no es un array:', letrasDesdeBackend);
+        return;
+    }
+    letrasTablero = [...letrasDesdeBackend];
 
     const board = document.createElement('div');
     board.className = 'tablero';
 
-    letrasDesdeBackend.forEach(letra => {
-        const letraElem = document.createElement('div');
-        letraElem.className = 'letra';
-        letraElem.textContent = letra.toUpperCase();
-        board.appendChild(letraElem);
+    letrasDesdeBackend.forEach(l => {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.textContent = l;
+        board.appendChild(cell);
     });
 
     const container = document.querySelector('.container');
-    const tableroExistente = document.querySelector('.tablero');
-    if (tableroExistente) {
-        container.removeChild(tableroExistente);
-    }
-
-    container.insertBefore(board, document.querySelector('#wordInput'));
+    const anterior = document.querySelector('.tablero');
+    if (anterior) container.removeChild(anterior);
+    container.insertBefore(board, wordInput);
 }
 
-// Verificar palabra ingresada
-function verificarPalabra() {
-    const palabra = wordInput.value.toUpperCase();
-
-    if (palabra === '') {
-        alert('Debes escribir una palabra');
-        return;
-    }
-
-    if (!puedeFormarseConLetras(palabra)) {
-        alert('La palabra no se puede formar con las letras del tablero');
-        return;
-    }
-
-    if (diccionario.includes(palabra)) {
-        agregarPalabraAlHistorial(palabra);
-        aumentarPuntaje(palabra.length * 10);
-    } else {
-        alert('Palabra no encontrada en el diccionario');
-    }
-
-    wordInput.value = '';
-}
-
-// Verificar que la palabra se forme con las letras del tablero
-function puedeFormarseConLetras(palabra) {
-    const letrasDisponibles = [...letrasTablero];
-
-    for (const letra of palabra) {
-        const index = letrasDisponibles.indexOf(letra);
-        if (index === -1) return false;
-        letrasDisponibles.splice(index, 1);
+/* ---------- Lógica de palabras ---------- */
+function puedeFormarseConLetras(pal) {
+    const disp = [...letrasTablero];
+    for (const l of pal) {
+        const i = disp.indexOf(l);
+        if (i === -1) return false;
+        disp.splice(i, 1);
     }
     return true;
 }
-
-// Mostrar palabra encontrada
-function agregarPalabraAlHistorial(palabra) {
-    if ([...historialPalabras.children].some(li => li.textContent === palabra)) {
-        alert('Ya encontraste esta palabra');
-        return;
-    }
-
+function agregarPalabra(pal) {
     const li = document.createElement('li');
-    li.textContent = palabra;
+    li.textContent = pal;
     historialPalabras.appendChild(li);
 }
+function aumentarPuntaje(p) { score += p; scoreElement.textContent = score; }
 
-// Aumentar puntaje
-function aumentarPuntaje(puntos) {
-    score += puntos;
-    scoreElement.textContent = score;
+function verificarPalabra() {
+    const pal = wordInput.value.trim().toUpperCase();
+    if (!pal) return alert('Debes escribir una palabra');
+    if (!puedeFormarseConLetras(pal)) return alert('No puedes formar esa palabra');
+    if (!diccionario.includes(pal)) return alert('Palabra no reconocida');
+    if ([...historialPalabras.children].some(li => li.textContent === pal))
+        return alert('Ya encontraste esta palabra');
+
+    agregarPalabra(pal);
+    aumentarPuntaje(pal.length * 10);
+    wordInput.value = '';
 }
 
-// Mezclar letras
 function mezclarLetras() {
     for (let i = letrasDesdeBackend.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
-        [letrasDesdeBackend[i], letrasDesdeBackend[j]] = [letrasDesdeBackend[j], letrasDesdeBackend[i]];
+        [letrasDesdeBackend[i], letrasDesdeBackend[j]] =
+            [letrasDesdeBackend[j], letrasDesdeBackend[i]];
     }
-    generarTablero();  // regenerar con las letras mezcladas
+    generarTablero();
 }
 
-let tiempoTotal = 180; // 3 minutos = 180 segundos
+/* ---------- Cronómetro ---------- */
+let tiempoTotal = 180;
 let tiempoRestante = tiempoTotal;
 
-const cronometroSpan = document.getElementById("cronometro");
-const barraProgreso = document.getElementById("barra-progreso");
-
 function iniciarCronometro() {
-    const intervalo = setInterval(() => {
-        if (tiempoRestante <= 0) {
-            clearInterval(intervalo);
-            cronometroSpan.textContent = "00:00";
-            barraProgreso.style.width = "0%";
-            barraProgreso.style.backgroundColor = "#ff4444";
-            alert("¡Tiempo terminado!");
+    const intv = setInterval(() => {
+        if (--tiempoRestante < 0) {
+            clearInterval(intv);
+            cronometroSpan.textContent = '00:00';
+            barraProgreso.style.width = '0%';
+            barraProgreso.style.backgroundColor = '#ff4444';
+            alert('¡Tiempo terminado!');
             return;
         }
+        const m = String(Math.floor(tiempoRestante / 60)).padStart(2, '0');
+        const s = String(tiempoRestante % 60).padStart(2, '0');
+        cronometroSpan.textContent = `${m}:${s}`;
 
-        tiempoRestante--;
-
-        const minutos = String(Math.floor(tiempoRestante / 60)).padStart(2, "0");
-        const segundos = String(tiempoRestante % 60).padStart(2, "0");
-        cronometroSpan.textContent = `${minutos}:${segundos}`;
-
-        const porcentaje = (tiempoRestante / tiempoTotal) * 100;
-        barraProgreso.style.width = `${porcentaje}%`;
-
-        // Cambio de color según porcentaje restante
-        if (porcentaje > 60) {
-            barraProgreso.style.backgroundColor = "#00ffcc"; // Cian
-        } else if (porcentaje > 30) {
-            barraProgreso.style.backgroundColor = "#ffcc00"; // Amarillo
-        } else {
-            barraProgreso.style.backgroundColor = "#ff4444"; // Rojo
-        }
+        const pct = (tiempoRestante / tiempoTotal) * 100;
+        barraProgreso.style.width = `${pct}%`;
+        barraProgreso.style.backgroundColor =
+            pct > 60 ? '#00ffcc' : pct > 30 ? '#ffcc00' : '#ff4444';
     }, 1000);
 }
 
-
-// Llamada al iniciar el juego
-iniciarCronometro();
-
-
-// Iniciar juego
-generarTablero();
+/* ---------- Init ---------- */
+document.addEventListener('DOMContentLoaded', () => {
+    generarTablero();
+    iniciarCronometro();
+    wordInput.addEventListener('keypress', e => {
+        if (e.key === 'Enter') { e.preventDefault(); verificarPalabra(); }
+    });
+});

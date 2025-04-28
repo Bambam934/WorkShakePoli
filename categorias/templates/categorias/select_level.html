@@ -5,17 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleccionar Categoría y Nivel - WordShake</title>
-    <link rel="stylesheet" href="{% static 'select_level.css' %}">
+
+    <link rel="stylesheet" href="{% static 'categorias/select_level.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- CONTENEDOR DE PARTÍCULAS: no lo movemos -->
     <div id="particle-container"></div>
 
     <h1 class="titulo">Selecciona una Subcategoría y Nivel</h1>
 
-    <!-- Form que hace GET a game:select -->
-    <form id="gameForm" method="get" action="{% url 'game:seleccionar' %}">
+    <form method="get" action="{% url 'categorias:start_game' %}">
         <div class="form-group">
             <label for="categoria">Subcategoría:</label>
             <select id="categoria"
@@ -23,7 +22,7 @@
                     required
                     onchange="updateNiveles()">
                 <option value="" disabled selected>-- Elige una categoría --</option>
-                {% for cat in subcategorias %}
+                {% for cat in categories %}
                     <option value="{{ cat.name }}">{{ cat.name }}</option>
                 {% endfor %}
             </select>
@@ -42,44 +41,37 @@
         <button type="submit">Jugar</button>
     </form>
 
-    <!-- Datos JSON para los niveles -->
-    {{ niveles_por_categoria|json_script:"niveles-por-categoria-data" }}
+    {{ levels_by_category|json_script:"levels-by-category-data" }}
 
-    <!-- Script de partículas (se queda igual) -->
     <script src="{% static 'particulas.js' %}"></script>
-
-    <!-- Lógica para poblar el select de niveles -->
     <script>
         const nivelesPorCategoria = JSON.parse(
-            document.getElementById('niveles-por-categoria-data').textContent
+            document.getElementById('levels-by-category-data').textContent
         );
 
         function updateNiveles() {
-            const cat   = document.getElementById('categoria').value;
-            const lvl   = document.getElementById('nivel');
-            // Reiniciamos
-            lvl.innerHTML = '<option value="" disabled selected>-- Elige un nivel --</option>';
+            const catSelect = document.getElementById('categoria');
+            const lvlSelect = document.getElementById('nivel');
+
+            // reset
+            lvlSelect.innerHTML =
+                '<option value="" disabled selected>-- Elige un nivel --</option>';
+
+            const cat = catSelect.value;
             if (cat && nivelesPorCategoria[cat]) {
-                nivelesPorCategoria[cat].forEach(name => {
-                    const o = document.createElement('option');
-                    o.value = name;
-                    o.textContent = name;
-                    lvl.appendChild(o);
+                nivelesPorCategoria[cat].forEach(n => {
+                    const opt = document.createElement('option');
+                    opt.value = n;
+                    opt.textContent = n;
+                    lvlSelect.appendChild(opt);
                 });
-                lvl.disabled = false;
+                lvlSelect.disabled = false;
             } else {
-                lvl.disabled = true;
+                lvlSelect.disabled = true;
             }
         }
 
-        window.addEventListener('DOMContentLoaded', () => {
-            // Inicializamos el formulario en estado adecuado
-            if (!document.getElementById('categoria').value) {
-                document.getElementById('nivel').disabled = true;
-            } else {
-                updateNiveles();
-            }
-        });
+        document.addEventListener('DOMContentLoaded', () => updateNiveles());
     </script>
 </body>
 </html>

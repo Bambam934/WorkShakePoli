@@ -3,9 +3,10 @@ import requests
 from datetime import datetime
 from django.core.cache import cache
 from django.conf import settings
-from categorias.models import Category
+from categorias.models import Category, Level
 from .models import Word
 import logging
+
 
 supabase = settings.SUPABASE_CLIENT
 
@@ -131,3 +132,21 @@ def get_user_scores(user_id):
 def get_leaderboard():
     response = supabase.rpc("get_leaderboard").execute()
     return response.data if response.data else []
+
+
+def generate_custom_game_board(categoria_name, nivel_name):
+    """
+    Genera un tablero obligando a incluir letras de palabras
+    del nivel indicado.  Si el nivel no tiene palabras, genera
+    un tablero aleatorio.
+    """
+    try:
+        categoria = Category.objects.get(name=categoria_name)
+        nivel     = Level.objects.get(name=nivel_name, category=categoria)
+        words_in_level = Word.objects.filter(levels=nivel)
+    except (Category.DoesNotExist, Level.DoesNotExist):
+        words_in_level = Word.objects.none()
+
+    if words_in_level.exists():
+        return generate_board_with_required_letters(words_in_level)
+    return generate_board()
