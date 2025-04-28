@@ -1,12 +1,13 @@
 # game/views.py
 import json
-from django.shortcuts import render, Http404
+from django.shortcuts import render, Http404, redirect
 from django.contrib.auth.decorators import login_required
-from categorias.models import Level, Category  # Añadir Category si es necesario
+from categorias.models import Level
 from .models import Word
 from .forms import WordForm
 from . import services
-
+from django.shortcuts import render
+from categorias.models import Category, Level
 @login_required
 def game_view(request, categoria_name, nivel_name):
     """
@@ -49,11 +50,36 @@ def game_view(request, categoria_name, nivel_name):
 
     form = WordForm()
 
-    return render(request, 'game/game.html', {
+    return render(request, 'game.html', {
         'board_json': board_json,
         'valid_words_json': valid_words_json,
         'form': form,
         'categoria_name': categoria_name,
         'nivel_name': nivel_name,
-        'error_message': error_message
+        'error_message': error_message,
+        'niveles': Level.objects.filter(category__name=categoria_name),
+    })
+
+@login_required
+def select_level_view(request):
+    # -- Traemos categorías y construimos el dict de niveles por categoría --
+    subcategorias = Category.objects.all().order_by('name')
+    niveles_por_categoria = {
+        cat.name: list(
+            cat.levels.order_by('order')  # related_name='levels'
+               .values_list('name', flat=True)
+        )
+        for cat in subcategorias
+    }
+
+    # -- Si vienen parámetros por GET, redirigimos a la partida --
+    cat_name = request.GET.get('categoria_name')
+    lvl_name = request.GET.get('nivel')
+    if cat_name and lvl_name:
+        return redirect('game:play', categoria_name=cat_name, nivel_name=lvl_name)
+
+    # -- Si no, renderizamos el formulario --
+    return render(request, 'select_level.html', {
+        'subcategorias': subcategorias,
+        'niveles_por_categoria': niveles_por_categoria,
     })

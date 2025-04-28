@@ -35,13 +35,16 @@
             <div id="barra-progreso"></div>
         </div>        
 
-        <h2>Niveles de {{ categoria }}</h2>
-        <ul class="niveles">
-            {% for nivel in niveles %}
-                <li><a href="{% url 'game' categoria nivel.name %}">{{ nivel.name }}</a></li>
-            {% endfor %}
-        </ul>
-
+        <h2>Niveles de {{ categoria_name }}</h2>  <!-- Cambiar variable a categoria_name -->
+    <ul class="niveles">
+    {% for nivel in niveles %}
+        <li>
+            <a href="{% url 'game:play' categoria_name=categoria_name nivel_name=nivel.name %}">
+                {{ nivel.name }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
         <div id="tablero" class="tablero">
             <!-- Aquí van las letras -->
         </div>
@@ -53,9 +56,12 @@
             <button class="shuffle-button" onclick="mezclarLetras()">🔄 Mezclar Letras</button>
         </div>
 
-        {% if error %}
-            <div class="error">{{ error }}</div>
-        {% endif %}
+        {% if error_message %}
+    <div class="alert error">
+        {{ error_message }}
+        <button onclick="this.parentElement.remove()">×</button>
+    </div>
+    {% endif %}
 
         <div class="historial">
             <h3>Palabras encontradas:</h3>

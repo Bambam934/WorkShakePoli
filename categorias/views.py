@@ -22,7 +22,7 @@ def select_level_view(request):
 
     # Pasamos las categorías para el primer select
     # y el diccionario mapeado para el JS (usando json_script en la plantilla)
-    return render(request, 'categorias/select_level.html', {
+    return render(request, 'select_level.html', {
         'categories': categories,
         'levels_by_category': levels_by_category_name,
     })

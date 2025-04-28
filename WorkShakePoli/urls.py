@@ -8,9 +8,10 @@ urlpatterns = [
     path('', include('FormularioRegistro.urls')),
     path('',include('FormularioInicioSesion.urls')),
 
-    path('game/', include('game.urls', namespace='game')),
-    path('select/', include('categorias.urls', namespace='categorias')),
+    path('game/', include(('game.urls','game'), namespace='game')),
 
+    path('select/', include('categorias.urls', namespace='categorias')),
+    path('game/', include('game.urls')),
     path('',include('game.urls')),
     path('',include('perfil.urls')),
 

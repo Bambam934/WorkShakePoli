@@ -9,15 +9,20 @@
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- CONTENEDOR DE PARTÍCULAS: no lo movemos -->
     <div id="particle-container"></div>
 
     <h1 class="titulo">Selecciona una Subcategoría y Nivel</h1>
 
-    <form id="gameForm" method="get" action="{% url 'categorias:start_game' %}">
+    <!-- Form que hace GET a game:select -->
+    <form id="gameForm" method="get" action="{% url 'game:seleccionar' %}">
         <div class="form-group">
             <label for="categoria">Subcategoría:</label>
-            <select id="categoria" name="categoria_name" required onchange="updateNiveles()">
-                <option value="" disabled selected>-- Elige una categoría --</option> {# Opción inicial #}
+            <select id="categoria"
+                    name="categoria_name"
+                    required
+                    onchange="updateNiveles()">
+                <option value="" disabled selected>-- Elige una categoría --</option>
                 {% for cat in subcategorias %}
                     <option value="{{ cat.name }}">{{ cat.name }}</option>
                 {% endfor %}
@@ -26,54 +31,55 @@
 
         <div class="form-group">
             <label for="nivel">Nivel:</label>
-            <select id="nivel" name="nivel" required>
-                <option value="" disabled selected>-- Elige un nivel --</option> {# Opción inicial #}
+            <select id="nivel"
+                    name="nivel"
+                    required
+                    disabled>
+                <option value="" disabled selected>-- Elige un nivel --</option>
             </select>
         </div>
 
         <button type="submit">Jugar</button>
     </form>
 
+    <!-- Datos JSON para los niveles -->
     {{ niveles_por_categoria|json_script:"niveles-por-categoria-data" }}
 
-    <script src="{% static 'particulas.js' %}"></script> {# Script de partículas #}
+    <!-- Script de partículas (se queda igual) -->
+    <script src="{% static 'particulas.js' %}"></script>
+
+    <!-- Lógica para poblar el select de niveles -->
     <script>
-        // Parsea los datos de niveles pasados por Django
-        const nivelesPorCategoria = JSON.parse(document.getElementById('niveles-por-categoria-data').textContent);
+        const nivelesPorCategoria = JSON.parse(
+            document.getElementById('niveles-por-categoria-data').textContent
+        );
 
         function updateNiveles() {
-            const categoriaSelect = document.getElementById("categoria");
-            const categoriaNombre = categoriaSelect.value; // El valor del select es el nombre de la categoría
-            const nivelSelect = document.getElementById("nivel");
-
-            // Limpiar opciones anteriores (excepto la primera opción deshabilitada si la hubiera)
-            nivelSelect.innerHTML = '<option value="" disabled selected>-- Elige un nivel --</option>';
-
-            if (categoriaNombre && nivelesPorCategoria[categoriaNombre]) {
-                const niveles = nivelesPorCategoria[categoriaNombre];
-                niveles.forEach(nivelNombre => {
-                    const option = document.createElement("option");
-                    option.value = nivelNombre; // El valor es el nombre del nivel
-                    option.textContent = nivelNombre;
-                    nivelSelect.appendChild(option);
+            const cat   = document.getElementById('categoria').value;
+            const lvl   = document.getElementById('nivel');
+            // Reiniciamos
+            lvl.innerHTML = '<option value="" disabled selected>-- Elige un nivel --</option>';
+            if (cat && nivelesPorCategoria[cat]) {
+                nivelesPorCategoria[cat].forEach(name => {
+                    const o = document.createElement('option');
+                    o.value = name;
+                    o.textContent = name;
+                    lvl.appendChild(o);
                 });
-                nivelSelect.disabled = false; // Habilita el select de nivel
+                lvl.disabled = false;
             } else {
-                 nivelSelect.disabled = true; // Deshabilita si no hay categoría o niveles
+                lvl.disabled = true;
             }
         }
 
-        // Llama a updateNiveles cuando la página carga para establecer el estado inicial
-        // y deshabilita el select de nivel si no hay categoría seleccionada inicialmente.
-        window.onload = function() {
-            updateNiveles(); // Llama para inicializar correctamente
-             // Opcional: si quieres deshabilitar nivel al inicio si no hay cat seleccionada
-            if (!document.getElementById("categoria").value) {
-                 document.getElementById("nivel").disabled = true;
+        window.addEventListener('DOMContentLoaded', () => {
+            // Inicializamos el formulario en estado adecuado
+            if (!document.getElementById('categoria').value) {
+                document.getElementById('nivel').disabled = true;
+            } else {
+                updateNiveles();
             }
-        };
-
-        // Ya no se necesita la función goToGame() porque el form hace el submit normal.
+        });
     </script>
 </body>
 </html>

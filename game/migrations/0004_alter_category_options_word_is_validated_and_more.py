@@ -10,22 +10,10 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='category',
-            options={},
-        ),
         migrations.AddField(
             model_name='word',
             name='is_validated',
             field=models.BooleanField(default=False, verbose_name='¿Validada?'),
         ),
-        migrations.AlterField(
-            model_name='category',
-            name='name',
-            field=models.CharField(max_length=100, verbose_name='Nombre'),
-        ),
-        migrations.AlterUniqueTogether(
-            name='category',
-            unique_together={('parent', 'name')},
-        ),
+
     ]

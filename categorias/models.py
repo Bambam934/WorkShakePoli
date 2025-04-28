@@ -1,42 +1,60 @@
-# categorias/models.py
 from django.db import models
 
-# Modelo simplificado para Categorías Principales
-class Category(models.Model):
-    name = models.CharField("Nombre", max_length=100, unique=True)
+# Juego de Wordshake\ n# (Tabla temporalmente creada con FK null para migraciones)
+class Game(models.Model):
+    name = models.CharField("Juego", max_length=100, unique=True)
 
     class Meta:
-        # Puedes quitar db_table si quieres que la tabla se llame 'categorias_category'
-        # Si la tabla 'categorias_category' ya existe y tiene datos de categorías
-        # principales que quieres conservar, mantenla. Si no, quítala.
-        # db_table = "categorias_category"
-        verbose_name = "Categoría Principal"
-        verbose_name_plural = "Categorías Principales"
-        ordering = ['name'] # Ordenar por nombre
+        verbose_name = "Juego"
+        verbose_name_plural = "Juegos"
+        ordering = ['name']
 
     def __str__(self):
-        return str(self.name)
+        return self.name
 
-# Nuevo modelo para Niveles
+
+class Category(models.Model):
+    """
+    Categoría asociada a un Juego de Wordshake.
+    """
+    game = models.ForeignKey(
+        Game,
+        on_delete=models.CASCADE,
+        related_name='categories',
+        verbose_name="Juego",
+        null=True,
+        blank=True  # Permite NULL temporalmente para migraciones
+    )
+    name = models.CharField("Nombre Categoría", max_length=100)
+
+    class Meta:
+        unique_together = ('game', 'name')
+        verbose_name = "Categoría"
+        verbose_name_plural = "Categorías"
+        ordering = ['game__name', 'name']
+
+    def __str__(self):
+        return f"{self.game.name if self.game else 'sin juego'} - {self.name}"
+
+
 class Level(models.Model):
-    name = models.CharField("Nombre Nivel", max_length=100)
+    """
+    Nivel dentro de una Categoría.
+    """
     category = models.ForeignKey(
         Category,
-        on_delete=models.CASCADE, # Borrar niveles si se borra la categoría
-        related_name='levels',    # Cómo acceder a niveles desde Category (category.levels.all())
-        verbose_name="Categoría Principal"
+        on_delete=models.CASCADE,
+        related_name='levels',
+        verbose_name="Categoría"
     )
-    # Campo opcional para ordenar niveles
+    name = models.CharField("Nombre Nivel", max_length=100)
     order = models.PositiveIntegerField("Orden", default=0)
 
     class Meta:
-        # Nombre de nivel único DENTRO de su categoría
         unique_together = ('category', 'name')
-        # Orden por defecto: por categoría, luego por orden, luego por nombre
-        ordering = ['category__name', 'order', 'name']
         verbose_name = "Nivel"
         verbose_name_plural = "Niveles"
-        # La tabla por defecto será 'categorias_level'
+        ordering = ['category__game__name', 'category__name', 'order', 'name']
 
     def __str__(self):
         return f"{self.category.name} - {self.name}"
