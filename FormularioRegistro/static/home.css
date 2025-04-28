@@ -1,60 +1,105 @@
+/* Estilo futurista corregido y unificado */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
 /* Estilos generales */
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    font-family: 'Orbitron', sans-serif;
+    background: #000;
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    color: #333;
+    min-height: 100vh;
+    color: #00ffcc;
 }
 
-/* Contenedor del formulario */
+/* Contenedor principal */
 .container {
-    background: rgba(255, 255, 255, 0.95);
+    background: rgba(20, 20, 20, 0.95);
     padding: 40px;
     border-radius: 20px;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
-    backdrop-filter: blur(15px);
+    box-shadow: 0 0 30px #00ffcc55;
+    backdrop-filter: blur(10px);
     width: 100%;
     max-width: 450px;
     text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 2px solid #00ffcc55;
 }
 
 /* Título */
 h1 {
-    font-size: 2.5rem;
-    color: #333;
+    font-size: 2rem;
+    color: #00ffcc;
     margin-bottom: 25px;
     font-weight: 700;
-    letter-spacing: -0.5px;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc88;
 }
 
-/* Estilos para los botones */
-.container .btn {
-    background: linear-gradient(135deg, #6a11cb, #2575fc);
-    color: white;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 8px;
+/* Formulario */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* separación entre campos */
+}
+
+/* TODOS los inputs */
+form input {
+    background: #000;
+    color: #00ffcc;
+    border: 1px solid #00ffcc55;
+    padding: 12px;
+    border-radius: 10px;
     font-size: 16px;
-    font-weight: 500;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    box-sizing: border-box;
+}
+
+form input:focus {
+    background: #0a0a0a;
+    border-color: #00ffcc;
+    box-shadow: 0 0 10px #00ffcc;
+    outline: none;
+}
+
+/* Campo especial para contraseña */
+form input[type="password"] {
+    letter-spacing: 1px;
+}
+
+/* Etiquetas */
+form label {
+    text-align: left;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #00e6b8;
+    display: block;
+}
+
+/* Botón de registro */
+form button {
+    background: #00ffcc;
+    color: #000;
+    padding: 12px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background 0.3s ease, transform 0.2s ease;
-    margin: 10px;
-    text-decoration: none;
-    display: inline-block;
+    margin-top: 10px;
+    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    box-shadow: 0 0 12px #00ffcc88;
 }
 
-.container .btn:hover {
-    background: linear-gradient(135deg, #2575fc, #6a11cb);
+form button:hover {
+    background: #00e6b8;
     transform: translateY(-2px);
+    box-shadow: 0 0 20px #00ffcc;
 }
 
-.container .btn:active {
+form button:active {
     transform: translateY(0);
 }
 
@@ -63,29 +108,39 @@ h1 {
     color: #ff4d4d;
     list-style: none;
     padding: 0;
-    margin: 0 0 20px 0;
+    margin: 0 0 15px 0;
 }
 
 .errorlist li {
-    margin-bottom: 8px;
-    font-size: 0.9rem;
+    margin-bottom: 5px;
 }
 
 /* Pie de página */
 .footer {
     text-align: center;
-    margin-top: 25px;
-    color: #777;
+    margin-top: 20px;
+    color: #555;
     font-size: 0.9rem;
 }
 
 .footer a {
-    color: #6a11cb;
+    color: #00ffcc;
     text-decoration: none;
     font-weight: 600;
     transition: color 0.3s ease;
 }
 
 .footer a:hover {
-    color: #2575fc;
+    color: #00e6b8;
+}
+
+/* Para inputs autocompletados */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
+    -webkit-text-fill-color: #00ffcc !important;
+    caret-color: #00ffcc !important;
+    border: 1px solid #00ffcc55;
 }
