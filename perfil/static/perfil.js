@@ -1,40 +1,28 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const body = document.body;
-    const userCard = document.querySelector('.user-card');
-    const imageContainer = document.querySelector('.image-container');
-    const username = document.querySelector('.username');
-    const lightModeButton = document.getElementById('light-mode');
-    const darkModeButton = document.getElementById('dark-mode');
-    const blueModeButton = document.getElementById('blue-mode');
+    const root = document.documentElement;
 
-    lightModeButton.addEventListener('click', () => {
-        body.className = '';
-        userCard.className = 'user-card';
-        imageContainer.className = 'image-container';
-        username.className = 'username';
-    });
+    const neonButtons = {
+        'red-theme': '#ff4d4d',
+        'white-theme': '#f4f4f4',
+        'green-theme': '#00ff66',
+        'blue-theme': '#00aaff'
+    };
 
-    darkModeButton.addEventListener('click', () => {
-        body.className = 'dark-theme';
-        userCard.className = 'user-card dark-theme';
-        imageContainer.className = 'image-container dark-theme';
-        username.className = 'username dark-theme';
-    });
+    for (const [id, color] of Object.entries(neonButtons)) {
+        const btn = document.getElementById(id);
+        if (btn) {
+            btn.addEventListener('click', () => {
+                root.style.setProperty('--neon-color', color);
+            });
+        }
+    }
 
-    blueModeButton.addEventListener('click', () => {
-        body.className = 'blue-theme';
-        userCard.className = 'user-card blue-theme';
-        imageContainer.className = 'image-container blue-theme';
-        username.className = 'username blue-theme';
-    });
-});
-document.addEventListener('DOMContentLoaded', function() {
+    // Subida automática de imagen
     const profilePictureInput = document.getElementById('profile-picture-input');
-    const uploadForm = document.querySelector('form'); // Selecciona el formulario
+    const uploadForm = document.querySelector('form');
 
     if (profilePictureInput) {
         profilePictureInput.addEventListener('change', function() {
-            // Enviar el formulario automáticamente cuando se selecciona un archivo
             uploadForm.submit();
         });
     }

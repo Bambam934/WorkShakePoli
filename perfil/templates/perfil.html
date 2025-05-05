@@ -10,7 +10,7 @@
 <body>
     <div class="user-card">
         <div class="image-container">
-            <img class="profile-image" src="{% if user.userprofile.profile_picture %} {{ user.userprofile.profile_picture.url }} {% else %} {% static 'default_profile.png' %} {% endif %}" alt="Foto de perfil">
+            <img class="profile-image" src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" alt="Foto de perfil">
             <div class="camera-overlay">
                 <i class="fas fa-camera"></i>
             </div>
@@ -24,10 +24,12 @@
             <button type="submit" class="btn" style="display: none; margin-top: 10px;">Subir nueva foto</button>
         </form>
 
-        <div class="theme-switcher">
-            <button id="light-mode">Claro</button>
-            <button id="dark-mode">Oscuro</button>
-            <button id="blue-mode">Azul</button>
+        <!-- Botones de color neón -->
+        <div class="theme-switcher" style="margin-top: 15px;">
+            <button id="red-theme">Rojo</button>
+            <button id="white-theme">Blanco</button>
+            <button id="green-theme">Verde</button>
+            <button id="blue-theme">Azul</button>
         </div>
     </div>
 
