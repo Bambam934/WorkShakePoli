@@ -28,6 +28,8 @@ class Registro(AbstractBaseUser, PermissionsMixin):
     apellido = models.CharField(max_length=100)
     nombreUsuario = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
+    neon_color = models.CharField(max_length=7, default="#00ffcc")  
+
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)  
@@ -42,8 +44,9 @@ class Registro(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['nombre', 'apellido', 'nombreUsuario']
 
     class Meta:
-        default_manager_name = "objects"  # ✅ Agregado aquí
+        default_manager_name = "objects"
 
     def __str__(self):
         return str(self.email)
+
 

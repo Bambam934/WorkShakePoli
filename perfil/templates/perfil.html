@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
     <link rel="stylesheet" href="{% static 'perfil.css' %}">
+    <style>
+      :root {
+        --neon-color: {{ neon_color|default:'#00ffcc' }};
+      }
+    </style>
 </head>
 <body>
     <div class="user-card">
@@ -24,7 +29,6 @@
             <button type="submit" class="btn" style="display: none; margin-top: 10px;">Subir nueva foto</button>
         </form>
 
-        <!-- Botones de color neón -->
         <div class="theme-switcher" style="margin-top: 15px;">
             <button id="red-theme">Rojo</button>
             <button id="white-theme">Blanco</button>
@@ -34,6 +38,7 @@
     </div>
 
     <script src="{% static 'perfil.js' %}"></script>
+    {# Recuerda reemplazar 'your_fontawesome_kit.js' con tu ID de kit real de Font Awesome #}
     <script src="https://kit.fontawesome.com/your_fontawesome_kit.js" crossorigin="anonymous"></script>
 </body>
 </html>

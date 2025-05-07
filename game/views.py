@@ -3,16 +3,60 @@ import json
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from categorias.models import Level
+# Asegúrate que la importación de UserProfile sea correcta
+from perfil.models import UserProfile # Ajusta 'perfil' si el nombre de tu app es otro
 from . import services
-
 
 @login_required
 def game_view(request, categoria_name, nivel_name):
-    """Carga el tablero y las palabras válidas para el nivel elegido."""
     error_message = None
     board_list: list[str] = []
     valid_words_list: list[str] = []
+    
+    # Valor por defecto inicial, por si algo falla
+    user_neon_color = '#00ffcc' 
 
+    if request.user.is_authenticated:
+        print(f"\n--- Depuración en game_view ---")
+        print(f"Usuario: {request.user.nombreUsuario}") # O request.user.email
+        try:
+            # Intenta obtener el UserProfile existente o crea uno nuevo si no existe.
+            # Si se crea (created=True), tomará el 'default' del modelo UserProfile.
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+            
+            print(f"UserProfile ID: {profile.id}, ¿Fue creado ahora?: {created}")
+            print(f"Color en UserProfile desde BD: '{profile.neon_color}' (Tipo: {type(profile.neon_color)})")
+            
+            # Asignar el color del perfil si existe y no está vacío.
+            # Si profile.neon_color es None o una cadena vacía, y el campo lo permitiera,
+            # aquí se podría caer al default. Pero CharField con default usualmente no es None.
+            if profile.neon_color: 
+                user_neon_color = profile.neon_color
+            else:
+                # Si profile.neon_color está vacío (y el campo lo permite con blank=True)
+                # o si por alguna razón es None (y el campo lo permite con null=True),
+                # podrías querer forzar el default del modelo aquí.
+                # Actualmente, tu modelo UserProfile tiene un default y no es blank=True ni null=True.
+                print(f"ADVERTENCIA: profile.neon_color es vacío o None. Usando el default del modelo.")
+                user_neon_color = UserProfile._meta.get_field('neon_color').default
+
+            print(f"Color neón final que se pasará al contexto: '{user_neon_color}'")
+
+        except UserProfile.DoesNotExist:
+            # Esto no debería ocurrir si usas get_or_create, pero es un buen seguro.
+            print(f"ERROR CRÍTICO: UserProfile.DoesNotExist para el usuario {request.user.username}. Usando default del modelo.")
+            user_neon_color = UserProfile._meta.get_field('neon_color').default
+        except Exception as e:
+            print(f"EXCEPCIÓN al obtener UserProfile en game_view: {e}. Usando default.")
+            # En caso de una excepción inesperada, intenta usar el default del modelo.
+            try:
+                user_neon_color = UserProfile._meta.get_field('neon_color').default
+            except Exception as e_default:
+                print(f"No se pudo obtener el default del modelo: {e_default}")
+                user_neon_color = '#00ffcc' # Último recurso
+        print(f"--- Fin depuración en game_view ---\n")
+    
+    # ... (resto de tu lógica para cargar el juego: level_obj, words_for_level, etc.)
     try:
         level_obj = (
             Level.objects
@@ -29,24 +73,25 @@ def game_view(request, categoria_name, nivel_name):
                 f"Aún no hay palabras para «{nivel_name}» en «{categoria_name}»."
             )
             board = services.generate_board()
-
         board_list = list(board)
-
     except Level.DoesNotExist:
         error_message = (
             f"El nivel «{nivel_name}» en la categoría «{categoria_name}» no existe."
         )
         board_list = list(services.generate_board())
+    except Exception as e:
+        error_message = "Ocurrió un error al cargar la información del juego."
+        print(f"Error en lógica de juego (game_view): {e}")
+        board_list = list(services.generate_board()) # Fallback seguro
 
-    return render(
-        request,
-        "game.html",
-        {
-            "board_json":       json.dumps(board_list),        # ← 25 letras
-            "valid_words_json": json.dumps(valid_words_list),  # ← diccionario
-            "categoria_name":   categoria_name,
-            "nivel_name":       nivel_name,
-            "error_message":    error_message,
-            "niveles":          Level.objects.filter(category__name=categoria_name),
-        },
-    )
+
+    context = {
+        "board_json":       json.dumps(board_list),
+        "valid_words_json": json.dumps(valid_words_list),
+        "categoria_name":   categoria_name,
+        "nivel_name":       nivel_name,
+        "error_message":    error_message,
+        "niveles":          Level.objects.filter(category__name=categoria_name),
+        "user_color":       user_neon_color, # Esta es la clave que usa tu game.html
+    }
+    return render(request, "game.html", context)
