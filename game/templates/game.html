@@ -77,5 +77,8 @@
     <script src="{% static 'particulas.js' %}"></script>
     <!--  game.js con defer garantiza que se ejecute DESPUÉS de este HTML -->
     <script src="{% static 'game.js' %}" defer></script>
+    <script>
+        const redireccionURL = "{% url 'categorias:select_level' %}";
+    </script>
 </body>
 </html>

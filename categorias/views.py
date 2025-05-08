@@ -16,7 +16,7 @@ def select_level_view(request):
     levels_by_category = {
         cat.name: [
             lvl.name for lvl in sorted(cat.levels.all(),
-                                       key=lambda x: (x.order, x.name))
+            key=lambda x: (x.order, x.name))
         ]
         for cat in categories
     }

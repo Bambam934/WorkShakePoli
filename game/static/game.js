@@ -74,7 +74,7 @@ function mezclarLetras() {
 }
 
 /* ---------- Cronómetro ---------- */
-let tiempoTotal = 180;
+let tiempoTotal = 180; // 3 minutos
 let tiempoRestante = tiempoTotal;
 
 function iniciarCronometro() {
@@ -85,6 +85,9 @@ function iniciarCronometro() {
             barraProgreso.style.width = '0%';
             barraProgreso.style.backgroundColor = '#ff4444';
             alert('¡Tiempo terminado!');
+
+            // Redirigir a select_level.html usando la URL pasada desde el template
+            window.location.href = redireccionURL;  
             return;
         }
         const m = String(Math.floor(tiempoRestante / 60)).padStart(2, '0');
@@ -97,6 +100,8 @@ function iniciarCronometro() {
             pct > 60 ? '#00ffcc' : pct > 30 ? '#ffcc00' : '#ff4444';
     }, 1000);
 }
+
+
 
 /* ---------- Init ---------- */
 document.addEventListener('DOMContentLoaded', () => {
