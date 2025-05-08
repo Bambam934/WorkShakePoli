@@ -1,11 +1,10 @@
-/* Estilo futurista corregido y unificado */
+/* Estilo futurista para formulario */
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
-/* Estilos generales */
 body {
     font-family: 'Orbitron', sans-serif;
-    background: #000;
+    background-color: #000; /* Fondo oscuro */
     margin: 0;
     padding: 0;
     display: flex;
@@ -13,95 +12,154 @@ body {
     align-items: center;
     min-height: 100vh;
     color: #00ffcc;
+    position: relative;
 }
 
-/* Contenedor principal */
-.container {
-    background: rgba(20, 20, 20, 0.95);
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0 0 30px #00ffcc55;
-    backdrop-filter: blur(10px);
+/* Contenedor de partículas */
+#particle-container {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.particle {
+    position: absolute;
+    color: #00ffcc;
+    font-weight: bold;
+    opacity: 0.4;
+    animation: floatWord linear infinite;
+    white-space: nowrap;
+}
+
+/* Contenedor del formulario */
+.container {
+    background: rgba(20, 20, 20, 0.85);
+    border: 2px solid #00ffcc55;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px #00ffcc55;
+    backdrop-filter: blur(10px);
+    width: 90%;
     max-width: 450px;
     text-align: center;
-    border: 2px solid #00ffcc55;
+    z-index: 1;
+    /* Añadido display flex y gap para centrar y separar los botones */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centra los elementos horizontalmente */
+    gap: 15px; /* Espacio entre los elementos hijos */
 }
 
 /* Título */
 h1 {
-    font-size: 2rem;
+    font-size: 2.5rem;
     color: #00ffcc;
-    margin-bottom: 25px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    margin-bottom: 20px; /* Puedes ajustar este margin-bottom ya que el gap del container ya da espacio */
+    font-weight: bold;
     text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc88;
+    animation: fadeIn 1s ease-in-out;
 }
 
-/* Formulario */
+/* Formulario (estos estilos seguirán funcionando si añades un formulario) */
 form {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* separación entre campos */
+    gap: 1rem;
 }
 
-/* TODOS los inputs */
+form p {
+    margin-bottom: 15px;
+}
+
+form label {
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+    display: block;
+    color: #00ffcc;
+}
+
+/* Inputs */
 form input {
-    background: #000;
+    width: 100%;
+    padding: 12px;
+    background-color: #111;
     color: #00ffcc;
     border: 1px solid #00ffcc55;
-    padding: 12px;
     border-radius: 10px;
-    font-size: 16px;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
-    box-sizing: border-box;
+    font-size: 1rem;
+    box-shadow: inset 0 0 6px #00ffcc33;
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 form input:focus {
-    background: #0a0a0a;
     border-color: #00ffcc;
-    box-shadow: 0 0 10px #00ffcc;
+    box-shadow: 0 0 8px #00ffcc;
     outline: none;
 }
 
-/* Campo especial para contraseña */
+/* Campo contraseña extra */
 form input[type="password"] {
     letter-spacing: 1px;
 }
 
-/* Etiquetas */
-form label {
-    text-align: left;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: #00e6b8;
-    display: block;
-}
-
-/* Botón de registro */
+/* Botón dentro de formulario (si lo tienes) */
 form button {
     background: #00ffcc;
-    color: #000;
+    color: #111;
     padding: 12px;
-    border: none;
+    border: 1px solid #00ffcc55;
     border-radius: 10px;
-    font-size: 16px;
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: bold;
     cursor: pointer;
+    box-shadow: 0 0 8px #00ffcc33;
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     margin-top: 10px;
-    transition: background 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-    box-shadow: 0 0 12px #00ffcc88;
 }
 
 form button:hover {
     background: #00e6b8;
+    box-shadow: 0 0 15px #00ffcc;
     transform: translateY(-2px);
-    box-shadow: 0 0 20px #00ffcc;
 }
 
 form button:active {
     transform: translateY(0);
 }
+
+/* Estilo para los enlaces-botón con clase 'btn' */
+.btn {
+    /* Propiedades para hacer que parezca un botón */
+    display: inline-block; /* Permite aplicar padding y margin verticalmente */
+    background: #00ffcc; /* Color de fondo como el botón principal */
+    color: #111 !important; /* Color del texto oscuro (usamos !important por si hay otro estilo compitiendo) */
+    padding: 8px 15px; /* Padding para darle espacio al texto */
+    border: 1px solid #00ffcc55; /* Borde similar al botón */
+    border-radius: 8px; /* Bordes redondeados */
+    font-weight: bold; /* Texto en negrita */
+    text-decoration: none; /* Quita el subrayado */
+    font-size: 1rem; /* Tamaño de fuente similar al input */
+    cursor: pointer; /* Indicador de cursor */
+    box-shadow: 0 0 8px #00ffcc33; /* Sombra */
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* Transiciones suaves */
+    margin: 0 5px; /* Margen para separar los dos "botones" */
+}
+
+.btn:hover {
+    background: #00e6b8; /* Color de fondo al pasar el ratón */
+    box-shadow: 0 0 15px #00ffcc; /* Sombra al pasar el ratón */
+    transform: translateY(-2px); /* Efecto de elevación al pasar el ratón */
+    color: #111 !important; /* Asegura el color del texto al pasar el ratón */
+}
+
+.btn:active {
+    transform: translateY(0); /* Vuelve a la posición original al hacer clic */
+}
+
 
 /* Mensajes de error */
 .errorlist {
@@ -115,26 +173,99 @@ form button:active {
     margin-bottom: 5px;
 }
 
-/* Pie de página */
+/* Pie de página (si lo añades más tarde, puedes usar esta regla) */
 .footer {
     text-align: center;
     margin-top: 20px;
-    color: #555;
-    font-size: 0.9rem;
+    color: #777;
 }
 
 .footer a {
-    color: #00ffcc;
+    color: #00ffcc; /* Color de enlace normal si hay otros enlaces en el footer */
     text-decoration: none;
-    font-weight: 600;
-    transition: color 0.3s ease;
+    font-weight: bold;
+    transition: color 0.3s;
 }
 
 .footer a:hover {
     color: #00e6b8;
 }
 
-/* Para inputs autocompletados */
+/* Estilos para grupos de formularios */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #00ffcc;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 10px;
+    background-color: #111;
+    color: #00ffcc;
+    border: 1px solid #00ffcc55;
+    border-radius: 8px;
+    font-size: 1rem;
+    box-shadow: inset 0 0 6px #00ffcc33;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #00ffcc;
+    box-shadow: 0 0 8px #00ffcc;
+}
+
+/* Animaciones */
+@keyframes floatWord {
+    0% {
+        transform: translateY(0);
+        opacity: 0.4;
+    }
+    100% {
+        transform: translateY(-100vh);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 20px;
+        /* En pantallas pequeñas, los elementos en el container pueden apilarse */
+        flex-direction: column;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    /* Ajuste de margen para los botones con clase 'btn' en pantallas pequeñas */
+    .btn {
+        margin: 5px 0; /* Más margen vertical, menos horizontal */
+        width: 80%; /* Haz que ocupen un poco más de ancho */
+        max-width: 200px; /* Limita el ancho máximo */
+    }
+}
+
+
+/* Solución para el autocompletado que cambia colores */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
