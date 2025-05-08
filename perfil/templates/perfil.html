@@ -13,6 +13,8 @@
     </style>
 </head>
 <body>
+    <a href="{% url 'inicioExitoso' %}" class="neon-button volver-button">← Volver</a>
+
     <div class="user-card">
         <div class="image-container">
             <img class="profile-image" src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" alt="Foto de perfil">
