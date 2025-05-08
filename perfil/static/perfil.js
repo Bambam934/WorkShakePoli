@@ -51,13 +51,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     }
-
-    // Subida automática de imagen
+});
+document.addEventListener('DOMContentLoaded', function() {
     const profilePictureInput = document.getElementById('profile-picture-input');
-    const uploadForm = document.querySelector('form');
+    const uploadForm = document.querySelector('form'); // Selecciona el formulario
 
     if (profilePictureInput) {
         profilePictureInput.addEventListener('change', function() {
+            // Enviar el formulario automáticamente cuando se selecciona un archivo
             uploadForm.submit();
         });
     }

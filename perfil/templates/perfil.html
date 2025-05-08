@@ -17,12 +17,14 @@
 
     <div class="user-card">
         <div class="image-container">
-            <img class="profile-image" src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" alt="Foto de perfil">
-            <div class="camera-overlay">
-                <i class="fas fa-camera"></i>
-            </div>
-            <label for="profile-picture-input" class="change-photo-label"></label>
-        </div>
+            <label for="profile-picture-input" class="change-photo-label" style="cursor: pointer;">
+                <img class="profile-image" src="{% if user.userprofile.profile_picture %}{{ user.userprofile.profile_picture.url }}{% else %}{% static 'default_profile.png' %}{% endif %}" alt="Foto de perfil">
+                <div class="camera-overlay">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </label>
+        </div>  
+        
         <h2 class="username">{{ user.nombreUsuario }}</h2>
         
         <form method="post" enctype="multipart/form-data" class="upload-button-container" action="{% url 'upload_profile_picture' %}">
