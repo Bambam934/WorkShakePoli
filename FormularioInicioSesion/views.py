@@ -13,7 +13,7 @@ from .forms import InicioSesionForm
 from django.contrib.auth.views import PasswordResetView
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
+from perfil.models import UserProfile 
 User = get_user_model()
 
 def inicio(request):
@@ -46,7 +46,28 @@ def inicio(request):
 
 def inicioExitoso(request):
     """ Muestra la pantalla de inicio de sesión exitoso y permite ir al juego """
-    return render(request, 'inicioExitoso.html')
+    user_neon_color = '#00ffcc' 
+
+    if request.user.is_authenticated:
+        try:
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+            if profile.neon_color: 
+                user_neon_color = profile.neon_color
+                print(user_neon_color)
+            else:
+                user_neon_color = UserProfile._meta.get_field('neon_color').default
+
+        except UserProfile.DoesNotExist:
+            user_neon_color = UserProfile._meta.get_field('neon_color').default
+        except Exception as e:
+            try:
+                user_neon_color = UserProfile._meta.get_field('neon_color').default
+            except Exception as e_default:
+                user_neon_color = '#00ffcc'
+        context = {
+        "neon_color": user_neon_color, # Esta es la clave que usa tu game.html
+        }
+    return render(request, 'inicioExitoso.html', context)
 
 
 @login_required

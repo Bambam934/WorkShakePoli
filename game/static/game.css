@@ -1,14 +1,11 @@
 /* =====================  GAME.CSS  ===================== */
 
 /* ---------- Layout principal ---------- */
-:root {
-    --neon-color: #05bb97; /* valor por defecto */
-}
 body {
     margin: 0;
     font-family: 'Orbitron', sans-serif;
     background-color: #0d0d0d !important;
-    color: var(--neon-color);
+    color: var(--neon-color)!important;
     overflow: hidden;
 
     /* Centro todo vertical y horizontal */
@@ -34,7 +31,7 @@ body {
 #particle-container .particle {
     position: absolute;
     /* evita que empuje el layout */
-    color: var(--neon-color);
+    color: var(--neon-color)!important;
     font-weight: bold;
     opacity: 0.4;
     white-space: nowrap;
@@ -71,14 +68,14 @@ canvas#particles {
     padding: 2rem;
     background: rgba(20, 20, 20, 0.85);
     border-radius: 20px;
-    box-shadow: 0 0 25px var(--neon-color);
+    box-shadow: 0 0 25px var(--neon-color)!important;
 }
 
 /* ---------- Títulos ---------- */
 h1,
 h2 {
     text-align: center;
-    text-shadow: 0 0 10px var(--neon-color);
+    text-shadow: 0 0 10px var(--neon-color)!important;
 }
 
 /* ---------- Barra de info ---------- */
@@ -94,19 +91,19 @@ h2 {
     width: 100%;
     height: 12px;
     background-color: #1a1a1a;
-    border: 2px solid var(--neon-color);
+    border: 2px solid var(--neon-color)!important;
     border-radius: 10px;
     overflow: hidden;
     margin: 20px 0;
-    box-shadow: 0 0 10px var(--neon-color);
+    box-shadow: 0 0 10px var(--neon-color)!important;
 }
 
 #barra-progreso {
     height: 100%;
-    background-color: var(--neon-color);
+    background-color: var(--neon-color)!important;
     width: 100%;
     transition: width 1s linear;
-    box-shadow: 0 0 15px var(--neon-color);
+    box-shadow: 0 0 15px var(--neon-color)!important;
 }
 
 /* ---------- Lista de niveles ---------- */
@@ -120,19 +117,19 @@ h2 {
 }
 
 .niveles a {
-    color: var(--neon-color);
+    color: var(--neon-color)!important;
     background: #111;
     padding: 6px 12px;
     border-radius: 10px;
     text-decoration: none;
-    box-shadow: 0 0 8px var(--neon-color);
+    box-shadow: 0 0 8px var(--neon-color)!important;
     transition: 0.3s;
 }
 
 .niveles a:hover {
-    background: var(--neon-color);
+    background: var(--neon-color)!important;
     color: #111;
-    box-shadow: 0 0 15px var(--neon-color);
+    box-shadow: 0 0 15px var(--neon-color)!important;
 }
 
 /* ---------- Tablero ---------- */
@@ -146,19 +143,19 @@ h2 {
 
 .tablero .cell {
     background: #111;
-    border: 1px solid var(--neon-color);
+    border: 1px solid var(--neon-color)!important;
     font-size: 1.5rem;
     text-align: center;
     line-height: 60px;
     border-radius: 10px;
     transition: 0.2s;
-    box-shadow: 0 0 8px var(--neon-color);
+    box-shadow: 0 0 8px var(--neon-color)!important;
 }
 
 .tablero .cell:hover {
     background: #00ffcc22;
     transform: scale(1.1);
-    box-shadow: 0 0 15px var(--neon-color);
+    box-shadow: 0 0 15px var(--neon-color)!important;
 }
 
 /* ---------- Input ---------- */
@@ -167,7 +164,7 @@ input#wordInput {
     padding: 10px;
     font-size: 1.2rem;
     background: #111;
-    border: 1px solid var(--neon-color);
+    border: 1px solid var(--neon-color)!important;
     color: var(--neon-color);
     border-radius: 10px;
     margin-bottom: 15px;
@@ -183,20 +180,20 @@ input#wordInput {
 
 button {
     background: #111;
-    color: var(--neon-color);
+    color: var(--neon-color)!important;
     padding: 10px 20px;
-    border: 1px solid var(--neon-color);
+    border: 1px solid var(--neon-color)!important;
     border-radius: 10px;
     cursor: pointer;
     font-size: 1rem;
     transition: 0.3s;
-    box-shadow: 0 0 8px var(--neon-color);
+    box-shadow: 0 0 8px var(--neon-color)!important;
 }
 
 button:hover {
-    background: var(--neon-color);
+    background: var(--neon-color)!important;
     color: #111;
-    box-shadow: 0 0 15px var(--neon-color);
+    box-shadow: 0 0 15px var(--neon-color)!important;
 }
 
 /* ---------- Historial ---------- */
@@ -206,7 +203,7 @@ button:hover {
     border-radius: 10px;
     max-height: 200px;
     overflow-y: auto;
-    box-shadow: inset 0 0 10px var(--neon-color);
+    box-shadow: inset 0 0 10px var(--neon-color)!important;
 }
 
 /* ---------- Avisos ---------- */

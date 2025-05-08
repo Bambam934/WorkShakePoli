@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from .forms import RegistroForm
 from .models import Registro
 from django.contrib.auth.hashers import make_password 
-
 def home(request):
     """
     Vista para la página de inicio.

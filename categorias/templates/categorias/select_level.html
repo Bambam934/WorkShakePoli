@@ -5,7 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleccionar Categoría y Nivel - WordShake</title>
-
+    <style>
+        :root {
+          --neon-color: {{ neon_color|default:'#00ffcc' }};
+        }
+    </style>
     <link rel="stylesheet" href="{% static 'categorias/select_level.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
 </head>

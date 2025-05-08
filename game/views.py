@@ -17,44 +17,21 @@ def game_view(request, categoria_name, nivel_name):
     user_neon_color = '#00ffcc' 
 
     if request.user.is_authenticated:
-        print(f"\n--- Depuración en game_view ---")
-        print(f"Usuario: {request.user.nombreUsuario}") # O request.user.email
         try:
-            # Intenta obtener el UserProfile existente o crea uno nuevo si no existe.
-            # Si se crea (created=True), tomará el 'default' del modelo UserProfile.
             profile, created = UserProfile.objects.get_or_create(user=request.user)
-            
-            print(f"UserProfile ID: {profile.id}, ¿Fue creado ahora?: {created}")
-            print(f"Color en UserProfile desde BD: '{profile.neon_color}' (Tipo: {type(profile.neon_color)})")
-            
-            # Asignar el color del perfil si existe y no está vacío.
-            # Si profile.neon_color es None o una cadena vacía, y el campo lo permitiera,
-            # aquí se podría caer al default. Pero CharField con default usualmente no es None.
             if profile.neon_color: 
                 user_neon_color = profile.neon_color
+                print(user_neon_color)
             else:
-                # Si profile.neon_color está vacío (y el campo lo permite con blank=True)
-                # o si por alguna razón es None (y el campo lo permite con null=True),
-                # podrías querer forzar el default del modelo aquí.
-                # Actualmente, tu modelo UserProfile tiene un default y no es blank=True ni null=True.
-                print(f"ADVERTENCIA: profile.neon_color es vacío o None. Usando el default del modelo.")
                 user_neon_color = UserProfile._meta.get_field('neon_color').default
 
-            print(f"Color neón final que se pasará al contexto: '{user_neon_color}'")
-
         except UserProfile.DoesNotExist:
-            # Esto no debería ocurrir si usas get_or_create, pero es un buen seguro.
-            print(f"ERROR CRÍTICO: UserProfile.DoesNotExist para el usuario {request.user.username}. Usando default del modelo.")
             user_neon_color = UserProfile._meta.get_field('neon_color').default
         except Exception as e:
-            print(f"EXCEPCIÓN al obtener UserProfile en game_view: {e}. Usando default.")
-            # En caso de una excepción inesperada, intenta usar el default del modelo.
             try:
                 user_neon_color = UserProfile._meta.get_field('neon_color').default
             except Exception as e_default:
-                print(f"No se pudo obtener el default del modelo: {e_default}")
                 user_neon_color = '#00ffcc' # Último recurso
-        print(f"--- Fin depuración en game_view ---\n")
     
     # ... (resto de tu lógica para cargar el juego: level_obj, words_for_level, etc.)
     try:
@@ -92,6 +69,6 @@ def game_view(request, categoria_name, nivel_name):
         "nivel_name":       nivel_name,
         "error_message":    error_message,
         "niveles":          Level.objects.filter(category__name=categoria_name),
-        "user_color":       user_neon_color, # Esta es la clave que usa tu game.html
+        "neon_color":       user_neon_color, # Esta es la clave que usa tu game.html
     }
     return render(request, "game.html", context)

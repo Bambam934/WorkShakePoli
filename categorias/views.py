@@ -3,7 +3,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import Category, Level
-
+from perfil.models import UserProfile
 
 @login_required
 def select_level_view(request):
@@ -28,15 +28,30 @@ def select_level_view(request):
         return redirect('game:play',
                         categoria_name=cat_name,
                         nivel_name=lvl_name)
+    user_neon_color = '#00ffcc' 
 
-    return render(
-        request,
-        'categorias/select_level.html',
-        {
-            'categories': categories,
-            'levels_by_category': levels_by_category,
+    if request.user.is_authenticated:
+        try:
+            profile, created = UserProfile.objects.get_or_create(user=request.user)
+            if profile.neon_color: 
+                user_neon_color = profile.neon_color
+                print(user_neon_color)
+            else:
+                user_neon_color = UserProfile._meta.get_field('neon_color').default
+
+        except UserProfile.DoesNotExist:
+            user_neon_color = UserProfile._meta.get_field('neon_color').default
+        except Exception as e:
+            try:
+                user_neon_color = UserProfile._meta.get_field('neon_color').default
+            except Exception as e_default:
+                user_neon_color = '#00ffcc' # Último recurso
+        context = {
+        'categories': categories,
+        'levels_by_category': levels_by_category,
+        'neon_color':       user_neon_color, # Esta es la clave que usa tu game.html
         }
-    )
+    return render(request, 'categorias/select_level.html', context)
 
 
 @login_required
