@@ -39,7 +39,11 @@ INSTALLED_APPS = [
     'game',
     'categorias',
     'mptt',
-    'perfil'
+    'perfil',
+    'achievements',
+    'channels',
+
+    
 ]
 
 #  bloquea la carga de la página dentro de un iframe
@@ -128,12 +132,17 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Configuración de archivos estáticos
-STATIC_URL = 'static/'
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+STATIC_URL = '/static/'
+
+# Carpeta global opcional (déjala vacía si no usas una)
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'FormularioInicioSesion/static'),
+    BASE_DIR / 'static',          #  <proyecto>/static/
 ]
 
+# Donde `collectstatic` copiará todo al desplegar
+STATIC_ROOT = BASE_DIR / 'staticfiles'   # por ejemplo
 # Configuración del correo
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env("EMAIL_HOST")
@@ -175,3 +184,29 @@ AUTHENTICATION_BACKENDS = [
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 SESSION_COOKIE_AGE = 1209600  # 2 semanas
+
+
+BASE_DIR = Path(__file__).resolve().parent.parent  # o como lo tengas ya definido
+
+MEDIA_URL  = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
+
+ASGI_APPLICATION = 'WorkShakePoli.asgi.application'
+
+CHANNEL_LAYERS = {
+  'default': {
+    'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    # para Redis:
+    # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
+    # 'CONFIG': { 'hosts': [('127.0.0.1', 6379)] }
+  }
+}
+
+ASGI_APPLICATION = 'WorkShakePoli.asgi.application'
+
+CHANNEL_LAYERS = {
+  'default': {
+    'BACKEND': 'channels.layers.InMemoryChannelLayer',
+  }
+}

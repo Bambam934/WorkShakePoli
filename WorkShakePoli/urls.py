@@ -20,6 +20,7 @@ urlpatterns = [
 
     # Juego (partida)
     path('game/', include(('game.urls', 'game'), namespace='game')),
+    path('logros/', include('achievements.urls', namespace='achievements')),
 ]
 
 # Archivos multimedia (solo en desarrollo)

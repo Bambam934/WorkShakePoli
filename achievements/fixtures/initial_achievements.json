@@ -1,0 +1,27 @@
+[
+    {
+        "model": "achievements.achievement",
+        "pk": 1,
+        "fields": {
+            "slug": "first-500",
+            "name": "¡500 puntos!",
+            "description": "Alcanza 500 puntos acumulados",
+            "icon": "achievements/icons/medal_500.png",
+            "trigger_type": "score",
+            "target_value": 500
+        }
+    },
+    {
+        "model": "achievements.challenge",
+        "pk": 1,
+        "fields": {
+            "slug": "weekly-2k",
+            "name": "Reto Semanal 2 000 pts",
+            "description": "Consigue 2 000 puntos esta semana",
+            "metric": "daily_score",
+            "start": "2025-05-12T00:00:00Z",
+            "end": "2025-05-19T00:00:00Z",
+            "target_value": 2000
+        }
+    }
+]

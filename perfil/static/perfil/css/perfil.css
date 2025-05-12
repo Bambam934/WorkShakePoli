@@ -1,0 +1,383 @@
+:root {
+    --neon-color: #00ffcc;
+    /* valor inicial (cyan) */
+}
+
+body {
+    font-family: 'Orbitron', sans-serif;
+    background-color: #000;
+    color: var(--neon-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+}
+
+/* Tarjeta de usuario */
+.user-card {
+    background: rgba(20, 20, 20, 0.9);
+    border: 2px solid color-mix(in srgb, var(--neon-color) 50%, transparent);
+    border-radius: 20px;
+    box-shadow: 0 0 25px color-mix(in srgb, var(--neon-color) 30%, transparent);
+    padding: 30px;
+    text-align: center;
+    max-width: 400px;
+    backdrop-filter: blur(10px);
+    color: var(--neon-color);
+}
+
+/* Imagen de perfil */
+.image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    border: 2px solid var(--neon-color);
+    background-color: #111;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.camera-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: var(--neon-color);
+    font-size: 26px;
+}
+
+.image-container:hover .camera-overlay {
+    opacity: 1;
+}
+
+#profile-picture-input {
+    display: none;
+}
+
+.change-photo-label {
+    cursor: pointer;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Nombre de usuario */
+.username {
+    font-size: 1.5rem;
+    color: var(--neon-color);
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px color-mix(in srgb, var(--neon-color) 60%, transparent);
+}
+
+/* Botones de cambio de tema */
+.theme-switcher {
+    margin-top: 20px;
+}
+
+.theme-switcher button {
+    padding: 10px 20px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px var(--neon-color);
+    color: #111;
+}
+
+#red-theme {
+    background-color: #ff4d4d;
+}
+
+#white-theme {
+    background-color: #f4f4f4;
+    color: #333;
+}
+
+#green-theme {
+    background-color: #00ff66;
+}
+
+#blue-theme {
+    background-color: #00aaff;
+}
+
+.theme-switcher button:hover {
+    transform: translateY(-2px);
+}
+
+.neon-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px var(--neon-color);
+    background-color: var(--neon-color);
+    color: #111;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.neon-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--neon-color);
+}
+
+/* Posicionamiento en la esquina superior izquierda */
+.volver-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+
+/* perfil/css/perfil.css */
+
+/* ---------- Reset / Base ---------- */
+body {
+    margin: 0;
+    padding: 2rem;
+    font-family: 'Orbitron', sans-serif;
+    background: #0d0d0d;
+    color: var(--neon-color);
+}
+
+a.neon-button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background: #111;
+    color: var(--neon-color);
+    border: 2px solid var(--neon-color);
+    border-radius: 6px;
+    text-decoration: none;
+    box-shadow: 0 0 8px var(--neon-color);
+    margin-bottom: 1.5rem;
+}
+
+/* ---------- Tarjeta de usuario ---------- */
+.user-card {
+    max-width: 360px;
+    margin: 0 auto 2rem auto;
+    padding: 1.6rem;
+    background: rgba(20, 20, 20, 0.8);
+    border: 2px solid var(--neon-color);
+    border-radius: 16px;
+    box-shadow: 0 0 12px var(--neon-color);
+    text-align: center;
+}
+
+.image-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 1rem auto;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid var(--neon-color);
+}
+
+.camera-overlay {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: var(--neon-color);
+    color: #111;
+    padding: 6px;
+    border-radius: 50%;
+}
+
+.username {
+    margin: 0.5rem 0;
+    font-size: 1.4rem;
+}
+
+.theme-switcher button {
+    margin: 0.2rem;
+    padding: 0.4rem 0.8rem;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 0 6px var(--neon-color);
+}
+
+.theme-switcher #red-theme {
+    background: #ff4444;
+    color: #111;
+}
+
+.theme-switcher #white-theme {
+    background: #fff;
+    color: #111;
+}
+
+.theme-switcher #green-theme {
+    background: #00ff66;
+    color: #111;
+}
+
+.theme-switcher #blue-theme {
+    background: #00ccff;
+    color: #111;
+}
+
+/* ---------- Monedas ---------- */
+.user-card p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
+/* ---------- Logros (Badges) ---------- */
+.achievements {
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+.badge-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+    gap: 1rem;
+    justify-items: center;
+}
+
+.badge {
+    width: 80px;
+    height: 80px;
+    background: #111;
+    border: 2px solid var(--neon-color);
+    border-radius: 12px;
+    position: relative;
+    filter: grayscale(1) brightness(0.4);
+    transition: filter 0.3s, box-shadow 0.3s;
+}
+
+.badge.unlocked {
+    filter: none;
+    box-shadow: 0 0 12px var(--neon-color);
+}
+
+.badge img {
+    display: block;
+    width: 60%;
+    margin: 10% auto 0 auto;
+}
+
+.tooltip {
+    position: absolute;
+    bottom: -4rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.8);
+    padding: 0.6rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    color: var(--neon-color);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s, bottom 0.2s;
+}
+
+.badge:hover .tooltip {
+    opacity: 1;
+    bottom: -3.2rem;
+}
+
+/* ---------- Desafíos activos ---------- */
+.challenges {
+    max-width: 900px;
+    margin: 2rem auto;
+}
+
+.challenge-card {
+    display: flex;
+    align-items: center;
+    background: #111;
+    border: 2px solid var(--neon-color);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 0 8px var(--neon-color);
+}
+
+.challenge-card img {
+    width: 48px;
+    height: 48px;
+    margin-right: 1rem;
+}
+
+.challenge-card .text {
+    flex: 1;
+}
+
+.challenge-card .bar {
+    width: 100%;
+    height: 8px;
+    background: #222;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 0.5rem 0;
+}
+
+.challenge-card .bar span {
+    display: block;
+    height: 100%;
+    background: var(--neon-color);
+}
+
+.challenge-card button.neon-btn {
+    margin-left: 1rem;
+}
+
+.challenge-card .badge.won {
+    margin-left: 1rem;
+    color: var(--neon-color);
+    font-size: 1.5rem;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 600px) {
+    .challenge-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .challenge-card img {
+        margin-bottom: 0.5rem;
+    }
+
+    .badge-grid {
+        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+    }
+}

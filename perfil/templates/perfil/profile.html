@@ -1,0 +1,175 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil de Usuario</title>
+
+  {# 1) CSS de perfil #}
+  <link rel="stylesheet" href="{% static 'perfil/css/perfil.css' %}">
+
+  {# 2) Font Awesome (sin integrity) #}
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
+
+  {# 3) Toastify CSS #}
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+  />
+
+  <style>
+    :root { --neon-color: {{ neon_color|default:'#00ffcc' }}; }
+  </style>
+</head>
+<body>
+  <!-- Volver al inicio -->
+  <a href="{% url 'inicioExitoso' %}" class="neon-button volver-button">← Volver</a>
+
+  <!-- Tarjeta de usuario -->
+  <div class="user-card">
+    <div class="image-container">
+      <label for="profile-picture-input" class="change-photo-label">
+        <img
+          class="profile-image"
+          src="{% if user.userprofile.profile_picture %}
+                 {{ user.userprofile.profile_picture.url }}
+               {% else %}
+                 {% static 'perfil/img/default.jpg' %}
+               {% endif %}"
+          alt="Foto de perfil"
+        >
+        <div class="camera-overlay">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+      </label>
+      <form
+        id="form-upload"
+        method="post"
+        action="{% url 'upload_profile_picture' %}"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+        <input
+          type="file"
+          name="profile_picture"
+          id="profile-picture-input"
+          accept="image/*"
+          style="display: none;"
+        >
+      </form>
+    </div>
+
+    <h2 class="username">{{ user.username }}</h2>
+
+    <!-- Cambiar tema -->
+    <div class="theme-switcher">
+      <button id="red-theme">Rojo</button>
+      <button id="white-theme">Blanco</button>
+      <button id="green-theme">Verde</button>
+      <button id="blue-theme">Azul</button>
+    </div>
+
+    <!-- Monedas -->
+    <p>💰 Monedas: <strong>{{ user.userprofile.coins }}</strong></p>
+  </div>
+
+  <!-- SECCIÓN: LOGROS -->
+  <section class="achievements">
+    <h2>Logros</h2>
+    <div class="badge-grid">
+      {% for ach in all_achievements %}
+        <div class="badge {% if ach.id in user_achievements %}unlocked{% else %}locked{% endif %}">
+          <img src="{{ ach.icon.url }}" alt="{{ ach.name }}">
+          <span class="tooltip">
+            {{ ach.name }} · {{ ach.description }}
+          </span>
+        </div>
+      {% empty %}
+        <p>No hay logros definidos.</p>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- SECCIÓN: DESAFÍOS ACTIVOS -->
+  <section class="challenges">
+    <h2>Desafíos activos</h2>
+    {% if challenges_progress %}
+      {% for prog in challenges_progress %}
+        <div class="challenge-card">
+          <img src="{{ prog.icon_url }}" alt="{{ prog.name }}">
+          <div class="text">
+            <strong>{{ prog.name }}</strong>
+            <small>{{ prog.description }}</small>
+            <div class="bar">
+              <span style="width:{{ prog.percent }}%"></span>
+            </div>
+            <small>{{ prog.progress }} / {{ prog.target }}</small>
+          </div>
+          {% if prog.completed and not prog.claimed %}
+            <form action="{% url 'achievements:claim' prog.id %}" method="post">
+              {% csrf_token %}
+              <button class="neon-btn">Reclamar</button>
+            </form>
+          {% elif prog.completed %}
+            <span class="badge won">✔</span>
+          {% endif %}
+        </div>
+      {% endfor %}
+    {% else %}
+      <p>No hay desafíos activos.</p>
+    {% endif %}
+  </section>
+
+  <!-- SECCIÓN: SKINS -->
+  <section class="skins">
+    <h2>Skins disponibles</h2>
+    <div class="skin-grid">
+      {% for skin in all_skins %}
+        <div class="skin-card {% if skin.id in owned_skins %}owned{% endif %}">
+          <img src="{{ skin.icon.url }}" alt="{{ skin.name }}">
+          <span class="tooltip">{{ skin.name }}</span>
+          {% if skin.id in owned_skins %}
+            {% if request.user.userprofile.active_skin and request.user.userprofile.active_skin.id == skin.id %}
+              <button disabled>Equipado</button>
+            {% else %}
+              <form action="{% url 'perfil:equip_skin' skin.id %}" method="post">
+                {% csrf_token %}
+                <button>Equipar</button>
+              </form>
+            {% endif %}
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+
+  <!-- Toastify JS -->
+  <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+  <!-- WebSocket + Toastify -->
+  <script>
+    const wsScheme = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const wsPath   = wsScheme + '://' + window.location.host + '/ws/notifications/';
+    const socket   = new WebSocket(wsPath);
+
+    socket.onmessage = event => {
+      const data = JSON.parse(event.data);
+      Toastify({
+        text: `¡Logro desbloqueado: ${data.name}!`,
+        duration: 4000,
+        gravity: "top",
+        position: "right",
+        style: { background: "var(--neon-color)" }
+      }).showToast();
+    };
+  </script>
+
+  <!-- Perfil JS (tema + upload) -->
+  <script src="{% static 'perfil/js/perfil.js' %}"></script>
+</body>
+</html>

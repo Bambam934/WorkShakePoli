@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Logros</title>
+  <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
+</head>
+<body>
+  <main class="page-achievements">
+    <h1>🏆 Mejores puntajes</h1>
+    <section id="leaderboard"></section>
+    <a href="{% url 'menu-principal' %}" class="neon-btn">Volver</a>
+  </main>
+
+  <script type="module" src="{% static 'game/js/leaderboard.js' %}"></script>
+  <script type="module">
+    import { getScores } from "{% static 'game/js/leaderboard.js' %}";
+    const data = getScores();
+    const box  = document.getElementById('leaderboard');
+    box.innerHTML = data.length
+      ? `<ol>${data.map(e=>`<li>${e.name} – ${e.score}</li>`).join('')}</ol>`
+      : 'No hay puntajes registrados.';
+  </script>
+</body>
+</html>

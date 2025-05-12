@@ -1,0 +1,22 @@
+[
+    {
+        "model": "achievements.skin",
+        "pk": 1,
+        "fields": {
+            "slug": "neon-blue",
+            "name": "Skin Azul Neón",
+            "icon": "skins/icons/skin_blue.png",
+            "description": "Fondo y partículas en azul neón."
+        }
+    },
+    {
+        "model": "achievements.skin",
+        "pk": 2,
+        "fields": {
+            "slug": "retro-green",
+            "name": "Skin Verde Retro",
+            "icon": "skins/icons/skin_green.png",
+            "description": "Estilo 8-bits verde."
+        }
+    }
+]

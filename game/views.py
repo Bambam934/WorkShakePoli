@@ -71,4 +71,9 @@ def game_view(request, categoria_name, nivel_name):
         "niveles":          Level.objects.filter(category__name=categoria_name),
         "neon_color":       user_neon_color, # Esta es la clave que usa tu game.html
     }
-    return render(request, "game.html", context)
+    return render(request, "game/game.html", context)
+
+def achievements(request):
+    return render(request, 'game/achievements.html')
+
+

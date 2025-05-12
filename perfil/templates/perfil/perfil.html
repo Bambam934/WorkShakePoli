@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
-    <link rel="stylesheet" href="{% static 'perfil.css' %}">
+    <link rel="stylesheet" href="{% static 'perfil/css/perfil.css' %}">
     <style>
       :root {
         --neon-color: {{ neon_color|default:'#00ffcc' }};
@@ -40,8 +40,8 @@
             <button id="blue-theme">Azul</button>
         </div>
     </div>
-
-    <script src="{% static 'perfil.js' %}"></script>
+    <p>💰 Monedas: <strong>{{ request.user.userprofile.coins }}</strong></p>
+    <script src="{% static 'perfil/js/perfil.js' %}"></script>
     {# Recuerda reemplazar 'your_fontawesome_kit.js' con tu ID de kit real de Font Awesome #}
     <script src="https://kit.fontawesome.com/your_fontawesome_kit.js" crossorigin="anonymous"></script>
 </body>

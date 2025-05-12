@@ -1,0 +1,93 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>WordShake Game</title>
+
+    <!-- ====== Fuentes y CSS ====== -->
+    <style>
+        :root {
+            --neon-color: {{ neon_color|default:'#00ffcc' }};
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'game/css/game.css' %}">
+</head>
+
+<body>
+    <!-- ====== Botón / foto de perfil ====== -->
+    <div class="profile-container" onclick="window.location.href='{% url 'Perfil' %}'">
+        <div class="profile-button-image-container">
+            <img class="profile-button-image"
+                 src="{% if user.is_authenticated and user.userprofile.profile_picture %}
+                          {{ user.userprofile.profile_picture.url }}
+                      {% else %}
+                          {% static 'game/img/default_profile.png' %}
+                      {% endif %}"
+                 alt="Foto de perfil">
+        </div>
+    </div>
+
+    <!-- ====== Fondo de partículas ====== -->
+    <div id="particle-container"></div>     <!-- contenedor que usa particulas.js -->
+    <canvas id="particles"></canvas>        <!-- tu canvas opcional -->
+
+    <!-- ====== UI principal ====== -->
+    <div class="container">
+        <h1>WordShake</h1>
+
+        <div class="info-bar">
+            <div>Puntos: <span id="score">0</span></div>
+            <div>Tiempo: <span id="cronometro">00:00</span></div>
+        </div>
+
+        <div class="barra-tiempo"><div id="barra-progreso"></div></div>
+
+        <h2>Niveles de {{ categoria_name }}</h2>
+        <ul class="niveles">
+            {% for nivel in niveles %}
+                <li>
+                    <a href="{% url 'game:play' categoria_name=categoria_name nivel_name=nivel.name %}">
+                        {{ nivel.name }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <div id="tablero" class="tablero"></div>
+
+        <input type="text" id="wordInput" placeholder="Escribe tu palabra…">
+
+        <div class="botones">
+            <button onclick="verificarPalabra()">Verificar Palabra</button>
+            <button onclick="mezclarLetras()">🔄 Mezclar Letras</button>
+        </div>
+
+        {% if error_message %}
+            <div class="alert error">
+                {{ error_message }}
+                <button onclick="this.parentElement.remove()">×</button>
+            </div>
+        {% endif %}
+
+        <div class="historial">
+            <h3>Palabras encontradas:</h3>
+            <ul id="historialPalabras"></ul>
+        </div>
+    </div>
+
+    <!-- ====== Variables que llegan del backend ====== -->
+    <script>
+        /* se insertan como valores JS reales */
+        const letrasDesdeBackend = {{ board_json|safe }};
+        const diccionario        = {{ valid_words_json|safe }};
+        const redireccionURL     = "{% url 'categorias:select_level' %}";
+    </script>
+
+    <!-- ====== Scripts ====== -->
+    <script src="{% static 'game/js/particulas.js' %}"></script>
+    <script type="module" src="{% static 'game/js/game.js' %}"></script>
+</body>
+</html>
