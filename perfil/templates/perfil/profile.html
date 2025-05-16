@@ -47,11 +47,10 @@
           <i class="fa-solid fa-camera"></i>
         </div>
       </label>
-      <form
-        id="form-upload"
-        method="post"
-        action="{% url 'upload_profile_picture' %}"
-        enctype="multipart/form-data"
+      <form id="form-upload"
+      method="post"
+      action="{% url 'perfil:upload_profile' %}"
+      enctype="multipart/form-data">
       >
         {% csrf_token %}
         <input
@@ -77,7 +76,11 @@
     <!-- Monedas -->
     <p>💰 Monedas: <strong>{{ user.userprofile.coins }}</strong></p>
   </div>
+    <h2 class="username">
+    {{ user.nombreUsuario|default:user.email }}
+  </h2>
 
+    <small style="opacity:.6;">ID: {{ request.user.id }}</small>
   <!-- SECCIÓN: LOGROS -->
   <section class="achievements">
     <h2>Logros</h2>
@@ -168,7 +171,7 @@
       }).showToast();
     };
   </script>
-
+ 
   <!-- Perfil JS (tema + upload) -->
   <script src="{% static 'perfil/js/perfil.js' %}"></script>
 </body>

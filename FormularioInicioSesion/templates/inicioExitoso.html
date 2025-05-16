@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="{% static 'inicioExitoso.css' %}">
 </head>
 <body>
-    <div class="profile-container" onclick="window.location.href='{% url 'Perfil' %}'">
+    <div class="profile-container"
+     onclick="window.location.href='{% url 'perfil:detalle' %}'">
         <div class="profile-button-image-container">
             <img class="profile-button-image" src="{% if user.is_authenticated and user.userprofile.profile_picture %} {{ user.userprofile.profile_picture.url }} {% else %} {% static 'default_profile.png' %} {% endif %}" alt="Foto de perfil">
         </div>

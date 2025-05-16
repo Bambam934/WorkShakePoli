@@ -10,14 +10,14 @@
           --neon-color: {{ neon_color|default:'#00ffcc' }};
         }
     </style>
-    <link rel="stylesheet" href="{% static 'categorias/select_level.css' %}">
+    <link rel="stylesheet" href="{% static 'categorias/css/select_level.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron&display=swap" rel="stylesheet">
 </head>
 <body>
     <a href="{% url 'inicioExitoso' %}" class="neon-button volver-button">← Volver</a>
     <div id="particle-container"></div>
 
-    <h1 class="titulo">Selecciona una Subcategoría y Nivel</h1>
+    <h1 class="titulo">CATEGROIAS y NIVELES</h1>
 
     <form method="get" action="{% url 'categorias:start_game' %}">
         <div class="form-group">
@@ -48,7 +48,7 @@
 
     {{ levels_by_category|json_script:"levels-by-category-data" }}
 
-    <script src="{% static 'particulas.js' %}"></script>
+    <script src="{% static 'categorias/js/particulas.js' %}"></script>
     <script>
         const nivelesPorCategoria = JSON.parse(
             document.getElementById('levels-by-category-data').textContent

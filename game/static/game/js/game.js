@@ -1,13 +1,11 @@
-/*  game.js  (se carga como <script type="module">)
- *  -----------------------------------------------
- *  Lógica principal del juego WordShake.
- *  • Importa saveScore() de leaderboard.js.
- *  • Usa addEventListener en lugar de atributos onclick.
- *  • Expone opcionalmente las funciones al ámbito global
- *    por si en el futuro quieres llamarlas desde consola.
- */
-
+// static/game/js/game.js
 import { saveScore } from './leaderboard.js';
+
+/* ---------- Inyectados desde game.html ---------- */
+const partidaUrl = window.partidaUrl;
+const redireccionURL = window.redireccionURL;
+const letrasDesdeBackend = window.letrasDesdeBackend;
+const diccionario = window.diccionario;
 
 /* ---------- Elementos del DOM ---------- */
 const wordInput = document.getElementById('wordInput');
@@ -16,30 +14,23 @@ const scoreElement = document.getElementById('score');
 const cronometroSpan = document.getElementById('cronometro');
 const barraProgreso = document.getElementById('barra-progreso');
 
-const btnVerificar = document.getElementById('btn-verificar');
-const btnMezclar = document.getElementById('btn-mezclar');
-
 /* ---------- Variables de juego ---------- */
 let score = 0;
 let letrasTablero = [];
 let palabraActual = "";
 
-/* ====================================================== */
-/*                        TABLERO                         */
-/* ====================================================== */
+/* ---------- TABLERO ---------- */
 function generarTablero() {
     if (!Array.isArray(letrasDesdeBackend) || !letrasDesdeBackend.length) {
         console.error('letrasDesdeBackend no es un array:', letrasDesdeBackend);
         return;
     }
-
     letrasTablero = [...letrasDesdeBackend];
     palabraActual = "";
     wordInput.value = "";
 
     const board = document.createElement('div');
     board.className = 'tablero';
-
     letrasDesdeBackend.forEach(letra => {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -56,7 +47,6 @@ function generarTablero() {
 
 function toggleCell(cell, letra) {
     cell.classList.toggle('selected');
-
     if (cell.classList.contains('selected')) {
         palabraActual += letra;
     } else {
@@ -68,9 +58,7 @@ function toggleCell(cell, letra) {
     wordInput.value = palabraActual;
 }
 
-/* ====================================================== */
-/*                LÓGICA DE PALABRAS                      */
-/* ====================================================== */
+/* ---------- LÓGICA DE PALABRAS ---------- */
 function puedeFormarseConLetras(pal) {
     const disp = [...letrasTablero];
     for (const l of pal) {
@@ -102,8 +90,6 @@ function verificarPalabra() {
 
     agregarPalabra(pal);
     aumentarPuntaje(pal.length * 10);
-
-    // Reinicia selección
     palabraActual = "";
     wordInput.value = "";
     document.querySelectorAll('.cell.selected')
@@ -116,16 +102,13 @@ function mezclarLetras() {
         [letrasDesdeBackend[i], letrasDesdeBackend[j]] =
             [letrasDesdeBackend[j], letrasDesdeBackend[i]];
     }
-    generarTablero();   // repinta
+    generarTablero();
 }
 
-/* ====================================================== */
-/*                      CRONÓMETRO                        */
-/* ====================================================== */
-const tiempoTotal = 180;       // 3 minutos
+/* ---------- CRONÓMETRO ---------- */
+const tiempoTotal = 180;
 let tiempoRestante = tiempoTotal;
 let cronometroIntv = null;
-
 function iniciarCronometro() {
     cronometroIntv = setInterval(() => {
         if (--tiempoRestante < 0) {
@@ -134,15 +117,12 @@ function iniciarCronometro() {
             barraProgreso.style.width = '0%';
             barraProgreso.style.background = '#ff4444';
             alert('¡Tiempo terminado!');
-            endGame(score);                // guarda puntaje
-            window.location.href = redireccionURL;
+            endGame(score);
             return;
         }
-
         const m = String(Math.floor(tiempoRestante / 60)).padStart(2, '0');
         const s = String(tiempoRestante % 60).padStart(2, '0');
         cronometroSpan.textContent = `${m}:${s}`;
-
         const pct = (tiempoRestante / tiempoTotal) * 100;
         barraProgreso.style.width = `${pct}%`;
         barraProgreso.style.backgroundColor =
@@ -150,43 +130,37 @@ function iniciarCronometro() {
     }, 1000);
 }
 
-/* ====================================================== */
-/*                       INIT                             */
-/* ====================================================== */
+/* ---------- INICIALIZACIÓN ---------- */
 document.addEventListener('DOMContentLoaded', () => {
     generarTablero();
     iniciarCronometro();
-
     wordInput.addEventListener('keypress', e => {
         if (e.key === 'Enter') {
             e.preventDefault();
             verificarPalabra();
         }
     });
-
-    btnVerificar.addEventListener('click', verificarPalabra);
-    btnMezclar.addEventListener('click', mezclarLetras);
+    document.getElementById('btn-verificar')
+        .addEventListener('click', verificarPalabra);
+    document.getElementById('btn-mezclar')
+        .addEventListener('click', mezclarLetras);
 });
 
-
-
-/* ====================================================== */
-/*                 FIN DE PARTIDA & PUNTAJE               */
-/* ====================================================== */
+/* ---------- CSRF Helper ---------- */
 function getCookie(name) {
     return document.cookie.split('; ')
-        .find(row => row.startsWith(name + '='))?.split('=')[1];
+        .find(row => row.startsWith(name + '='))
+        ?.split('=')[1];
 }
 const csrftoken = getCookie('csrftoken');
 
-/* ---------- Fin de partida ---------- */
+/* ---------- FIN DE PARTIDA & PUNTAJE ---------- */
 async function endGame(finalScore) {
     const name = prompt('Ingresa tu nombre:');
-    if (name) saveScore(name, finalScore);    // leaderboard local
+    if (name) saveScore(name, finalScore);
 
-    /* 🔸 Envía la partida al backend */
     try {
-        await fetch('/api/partida/', {
+        const resp = await fetch(partidaUrl, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -197,16 +171,16 @@ async function endGame(finalScore) {
                 words: historialPalabras.children.length,
             }),
         });
+        if (!resp.ok) console.error('Error guardando partida:', resp.status);
     } catch (err) {
-        console.error('Error enviando partida:', err);
+        console.error('Error de red al enviar partida:', err);
     }
 
-    // Redirige o muestra popup de “fin de juego”:
+    // al terminar, redirigimos fuera del juego
     window.location.href = redireccionURL;
 }
 
-/* Expón para usar en otros módulos o consola */
+// Exponer endGame globalmente (lo llama el cronómetro)
 window.endGame = endGame;
-/* — Opcional: expón funciones globalmente por facilidad de depuración — */
 window.verificarPalabra = verificarPalabra;
 window.mezclarLetras = mezclarLetras;

@@ -1,0 +1,11 @@
+/* Azul Neón */
+.skin-neon-blue {
+    --neon-color: #00aaff;
+    background-image: url('/static/game/skins/neon_blue_bg.png');
+}
+
+/* Verde retro */
+.skin-retro-green {
+    --neon-color: #00ff66;
+    background-image: url('/static/game/skins/retro_green_bg.png');
+}

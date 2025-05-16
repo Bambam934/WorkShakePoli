@@ -26,12 +26,15 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 STATIC_URL = '/static/'
 # Aplicaciones instaladas
 INSTALLED_APPS = [
+    # apps de Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.staticfiles',   # ① staticfiles primero
+    'channels',                     # ② channels inmediatamente después
+    # apps de tu proyecto
     'WorkShakePoli',
     'FormularioRegistro',
     'FormularioInicioSesion',
@@ -41,9 +44,6 @@ INSTALLED_APPS = [
     'mptt',
     'perfil',
     'achievements',
-    'channels',
-
-    
 ]
 
 #  bloquea la carga de la página dentro de un iframe
@@ -178,35 +178,34 @@ TEMPLATES = [
     },
 ]
 AUTHENTICATION_BACKENDS = [
-    'FormularioInicioSesion.backends.EmailAuthBackend',  # Nuevo backend
-    'django.contrib.auth.backends.ModelBackend',  # Mantener el backend original por si acaso
+    'FormularioInicioSesion.backends.EmailAuthBackend',  
+    'django.contrib.auth.backends.ModelBackend',  #
 ]
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_AGE = 1209600  # 2 semanas
+SESSION_COOKIE_AGE = 1209600  
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent  # o como lo tengas ya definido
-
+BASE_DIR = Path(__file__).resolve().parent.parent  
 MEDIA_URL  = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
-ASGI_APPLICATION = 'WorkShakePoli.asgi.application'
-
 CHANNEL_LAYERS = {
-  'default': {
-    'BACKEND': 'channels.layers.InMemoryChannelLayer',
-    # para Redis:
-    # 'BACKEND': 'channels_redis.core.RedisChannelLayer',
-    # 'CONFIG': { 'hosts': [('127.0.0.1', 6379)] }
-  }
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],   
+        },
+    }
 }
 
-ASGI_APPLICATION = 'WorkShakePoli.asgi.application'
-
-CHANNEL_LAYERS = {
-  'default': {
-    'BACKEND': 'channels.layers.InMemoryChannelLayer',
-  }
+LOGGING = {
+    "version": 1,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "loggers": {
+        "channels_redis.core": {"handlers": ["console"], "level": "INFO"},
+    },
 }

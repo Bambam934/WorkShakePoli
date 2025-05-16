@@ -5,7 +5,7 @@
         "fields": {
             "slug": "neon-blue",
             "name": "Skin Azul Neón",
-            "icon": "skins/icons/skin_blue.png",
+            "icon": "skins/neon_blue_bg.png",
             "description": "Fondo y partículas en azul neón."
         }
     },
@@ -15,7 +15,7 @@
         "fields": {
             "slug": "retro-green",
             "name": "Skin Verde Retro",
-            "icon": "skins/icons/skin_green.png",
+            "icon": "skins/retro_green_bg.png",
             "description": "Estilo 8-bits verde."
         }
     }

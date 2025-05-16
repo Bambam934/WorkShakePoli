@@ -117,12 +117,16 @@ def claim_reward(request, progress_id):
     return redirect('Perfil')
 
 
+
 @login_required
 def equip_skin(request, skin_id):
-    skin = get_object_or_404(Skin, id=skin_id)
-    profile = request.user.userprofile
+    skin     = get_object_or_404(Skin, id=skin_id)
+    profile  = request.user.userprofile
+
     if skin in profile.owned_skins.all():
         profile.active_skin = skin
         profile.save()
         messages.success(request, f"{skin.name} equipado.")
-    return redirect('Perfil')
+
+    # ⬇ redirige a la página de perfil (namespace + name)
+    return redirect("perfil:detalle")

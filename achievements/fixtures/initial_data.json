@@ -1,0 +1,40 @@
+[
+    {
+        "model": "achievements.achievement",
+        "pk": 1,
+        "fields": {
+            "name": "¡500 puntos!",
+            "slug": "first-500",
+            "description": "Alcanza 500 puntos acumulados",
+            "trigger_type": "score",
+            "target_value": 500,
+            "icon": "achievements/icons/medal_500.png"
+        }
+    },
+    {
+        "model": "achievements.achievement",
+        "pk": 2,
+        "fields": {
+            "name": "¡20 palabras!",
+            "slug": "first-20-words",
+            "description": "Encuentra 20 palabras",
+            "trigger_type": "words",
+            "target_value": 20,
+            "icon": "achievements/icons/medal_20.png"
+        }
+    },
+    {
+        "model": "achievements.challenge",
+        "pk": 1,
+        "fields": {
+            "name": "Desafío diario: 100 ptos",
+            "slug": "daily-100",
+            "description": "Gana 100 puntos en un día",
+            "metric": "score",
+            "start": "2025-01-01T00:00:00Z",
+            "end": "2025-12-31T23:59:59Z",
+            "target_value": 100,
+            "icon": "achievements/icons/daily100.png"
+        }
+    }
+]

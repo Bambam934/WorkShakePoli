@@ -1,6 +1,8 @@
 from django.contrib import admin
-from .models import Achievement, UserAchievement, Challenge, UserChallengeProgress
-from .models import Skin
+from django.contrib.auth import get_user_model
+from .models import Achievement, UserAchievement, Challenge, UserChallengeProgress, Skin
+
+User = get_user_model()
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
@@ -11,24 +13,22 @@ class AchievementAdmin(admin.ModelAdmin):
 
 @admin.register(UserAchievement)
 class UserAchievementAdmin(admin.ModelAdmin):
-    list_display = ('user', 'achievement', 'unlocked_at')
-    # autocomplete_fields = ('user', 'achievement')  # opcional
+    list_display        = ('user', 'achievement', 'unlocked_at')
+    autocomplete_fields = ('user', 'achievement')
 
 @admin.register(Challenge)
 class ChallengeAdmin(admin.ModelAdmin):
-    list_display  = ('name', 'metric', 'start', 'end', 'target_value')
-    list_filter   = ('metric',)
-    search_fields = ('name', 'description', 'slug')
-    ordering      = ('-start',)
+    list_display    = ('name', 'metric', 'start', 'end', 'target_value')
+    list_filter     = ('metric',)
+    search_fields   = ('name', 'description', 'slug')
+    ordering        = ('-start',)
 
 @admin.register(UserChallengeProgress)
 class UserChallengeProgressAdmin(admin.ModelAdmin):
-    list_display = ('user', 'challenge', 'progress', 'completed', 'claimed')
-    # autocomplete_fields = ('user', 'challenge')   # opcional
-
-
+    list_display        = ('user', 'challenge', 'progress', 'completed', 'claimed')
+    autocomplete_fields = ('user', 'challenge')
 
 @admin.register(Skin)
 class SkinAdmin(admin.ModelAdmin):
-    list_display = ('name','slug')
-    search_fields = ('name','slug')
+    list_display    = ('name', 'slug')
+    search_fields   = ('name', 'slug')

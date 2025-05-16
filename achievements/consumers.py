@@ -1,16 +1,22 @@
+# achievements/consumers.py
 from channels.generic.websocket import AsyncJsonWebsocketConsumer
 
 class NotificationConsumer(AsyncJsonWebsocketConsumer):
     async def connect(self):
-        if self.scope['user'].is_anonymous:
-            return await self.close()
-        self.group = f"user_{self.scope['user'].id}"
-        await self.channel_layer.group_add(self.group, self.channel_name)
+        if self.scope["user"].is_anonymous:
+            print("⛔ Anónimo, cerrando WS")
+            await self.close()
+            return
+
+        self.group_name = f"user_{self.scope['user'].id}"
+        print("✅ WS conectado, grupo:", self.group_name)
+        await self.channel_layer.group_add(self.group_name, self.channel_name)
         await self.accept()
 
     async def disconnect(self, code):
-        await self.channel_layer.group_discard(self.group, self.channel_name)
+        print("🔌 WS desconectado")
+        await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
-    # Este método se invocará cuando enviemos el evento tipo "achievement.unlocked"
     async def achievement_unlocked(self, event):
-        await self.send_json(event['data'])
+        print("📨 Recibido evento en consumer:", event)
+        await self.send_json(event["data"])
