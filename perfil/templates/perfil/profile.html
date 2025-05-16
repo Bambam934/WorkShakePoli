@@ -37,10 +37,10 @@
         <img
           class="profile-image"
           src="{% if user.userprofile.profile_picture %}
-                 {{ user.userprofile.profile_picture.url }}
-               {% else %}
-                 {% static 'perfil/img/default.jpg' %}
-               {% endif %}"
+                {{ user.userprofile.profile_picture.url }}
+              {% else %}
+                {% static 'perfil/img/default.jpg' %}
+              {% endif %}"
           alt="Foto de perfil"
         >
         <div class="camera-overlay">

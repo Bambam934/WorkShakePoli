@@ -1,44 +1,88 @@
 :root {
     --neon-color: #00ffcc;
-    /* valor inicial (cyan) */
+    --bg-color: #0d0d0d;
+    --card-bg: rgba(20, 20, 20, 0.9);
+    --text-color: #ffffff;
+    --border-color: color-mix(in srgb, var(--neon-color) 50%, transparent);
+    --shadow-color: color-mix(in srgb, var(--neon-color) 30%, transparent);
 }
 
+/* ---------- Base Styles ---------- */
 body {
     font-family: 'Orbitron', sans-serif;
-    background-color: #000;
+    background-color: var(--bg-color);
     color: var(--neon-color);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
     margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* Tarjeta de usuario */
+.main-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* ---------- Header & Navigation ---------- */
+.volver-button {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 8px var(--neon-color);
+    background-color: var(--neon-color);
+    color: #111;
+    text-decoration: none;
+}
+
+.volver-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px var(--neon-color);
+}
+
+/* ---------- User Card ---------- */
 .user-card {
-    background: rgba(20, 20, 20, 0.9);
-    border: 2px solid color-mix(in srgb, var(--neon-color) 50%, transparent);
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
     border-radius: 20px;
-    box-shadow: 0 0 25px color-mix(in srgb, var(--neon-color) 30%, transparent);
+    box-shadow: 0 0 25px var(--shadow-color);
     padding: 30px;
     text-align: center;
     max-width: 400px;
+    width: 100%;
+    margin: 60px auto 30px;
     backdrop-filter: blur(10px);
-    color: var(--neon-color);
+    position: relative;
 }
 
-/* Imagen de perfil */
+/* Profile Image */
 .image-container {
     position: relative;
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     overflow: hidden;
     margin: 0 auto 20px;
-    border: 2px solid var(--neon-color);
+    border: 3px solid var(--neon-color);
     background-color: #111;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.image-container:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px var(--shadow-color);
 }
 
 .profile-image {
@@ -60,7 +104,7 @@ body {
     opacity: 0;
     transition: opacity 0.3s ease;
     color: var(--neon-color);
-    font-size: 26px;
+    font-size: 2rem;
 }
 
 .image-container:hover .camera-overlay {
@@ -71,33 +115,32 @@ body {
     display: none;
 }
 
-.change-photo-label {
-    cursor: pointer;
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Nombre de usuario */
+/* User Info */
 .username {
-    font-size: 1.5rem;
+    font-size: 1.8rem;
     color: var(--neon-color);
-    margin-bottom: 15px;
-    text-shadow: 0 0 10px color-mix(in srgb, var(--neon-color) 60%, transparent);
+    margin: 10px 0;
+    text-shadow: 0 0 10px var(--shadow-color);
 }
 
-/* Botones de cambio de tema */
+.user-id {
+    display: block;
+    font-size: 0.8rem;
+    opacity: 0.6;
+    margin-bottom: 15px;
+}
+
+/* Theme Switcher */
 .theme-switcher {
-    margin-top: 20px;
+    margin: 25px 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
 }
 
 .theme-switcher button {
     padding: 10px 20px;
-    margin: 0 5px;
     border: none;
     border-radius: 10px;
     font-weight: bold;
@@ -106,278 +149,300 @@ body {
     transition: all 0.3s ease;
     box-shadow: 0 0 8px var(--neon-color);
     color: #111;
+    min-width: 80px;
 }
 
-#red-theme {
-    background-color: #ff4d4d;
-}
-
-#white-theme {
-    background-color: #f4f4f4;
-    color: #333;
-}
-
-#green-theme {
-    background-color: #00ff66;
-}
-
-#blue-theme {
-    background-color: #00aaff;
-}
+#red-theme { background-color: #ff4d4d; }
+#white-theme { background-color: #f4f4f4; color: #333; }
+#green-theme { background-color: #00ff66; }
+#blue-theme { background-color: #00aaff; }
 
 .theme-switcher button:hover {
-    transform: translateY(-2px);
-}
-
-.neon-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 8px var(--neon-color);
-    background-color: var(--neon-color);
-    color: #111;
-    text-decoration: none;
-    display: inline-block;
-}
-
-.neon-button:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: 0 0 15px var(--neon-color);
 }
 
-/* Posicionamiento en la esquina superior izquierda */
-.volver-button {
-    position: fixed;
-    top: 20px;
-    left: 20px;
-    z-index: 1000;
-}
-
-
-/* perfil/css/perfil.css */
-
-/* ---------- Reset / Base ---------- */
-body {
-    margin: 0;
-    padding: 2rem;
-    font-family: 'Orbitron', sans-serif;
-    background: #0d0d0d;
-    color: var(--neon-color);
-}
-
-a.neon-button {
+/* Coins */
+.coins-display {
+    font-size: 1.2rem;
+    margin: 15px 0;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
     display: inline-block;
-    padding: 0.5rem 1rem;
-    background: #111;
+}
+
+.coins-display strong {
     color: var(--neon-color);
-    border: 2px solid var(--neon-color);
-    border-radius: 6px;
-    text-decoration: none;
-    box-shadow: 0 0 8px var(--neon-color);
-    margin-bottom: 1.5rem;
+    text-shadow: 0 0 8px var(--shadow-color);
 }
 
-/* ---------- Tarjeta de usuario ---------- */
-.user-card {
-    max-width: 360px;
-    margin: 0 auto 2rem auto;
-    padding: 1.6rem;
-    background: rgba(20, 20, 20, 0.8);
-    border: 2px solid var(--neon-color);
-    border-radius: 16px;
-    box-shadow: 0 0 12px var(--neon-color);
-    text-align: center;
-}
-
-.image-container {
-    position: relative;
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 1rem auto;
-}
-
-.profile-image {
+/* ---------- Sections ---------- */
+section {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 15px;
+    box-shadow: 0 0 20px var(--shadow-color);
+    padding: 25px;
+    margin: 30px auto;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 50%;
-    border: 2px solid var(--neon-color);
-}
-
-.camera-overlay {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    background: var(--neon-color);
-    color: #111;
-    padding: 6px;
-    border-radius: 50%;
-}
-
-.username {
-    margin: 0.5rem 0;
-    font-size: 1.4rem;
-}
-
-.theme-switcher button {
-    margin: 0.2rem;
-    padding: 0.4rem 0.8rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    box-shadow: 0 0 6px var(--neon-color);
-}
-
-.theme-switcher #red-theme {
-    background: #ff4444;
-    color: #111;
-}
-
-.theme-switcher #white-theme {
-    background: #fff;
-    color: #111;
-}
-
-.theme-switcher #green-theme {
-    background: #00ff66;
-    color: #111;
-}
-
-.theme-switcher #blue-theme {
-    background: #00ccff;
-    color: #111;
-}
-
-/* ---------- Monedas ---------- */
-.user-card p {
-    margin-top: 1rem;
-    font-size: 1.1rem;
-}
-
-/* ---------- Logros (Badges) ---------- */
-.achievements {
     max-width: 900px;
-    margin: 2rem auto;
+    backdrop-filter: blur(5px);
 }
 
+section h2 {
+    color: var(--neon-color);
+    text-shadow: 0 0 10px var(--shadow-color);
+    margin-top: 0;
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+}
+
+/* Achievements */
 .badge-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
-    gap: 1rem;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 20px;
     justify-items: center;
 }
 
 .badge {
-    width: 80px;
-    height: 80px;
+    width: 100px;
+    height: 100px;
     background: #111;
     border: 2px solid var(--neon-color);
-    border-radius: 12px;
+    border-radius: 15px;
     position: relative;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.badge.locked {
     filter: grayscale(1) brightness(0.4);
-    transition: filter 0.3s, box-shadow 0.3s;
 }
 
 .badge.unlocked {
-    filter: none;
-    box-shadow: 0 0 12px var(--neon-color);
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 
 .badge img {
-    display: block;
     width: 60%;
-    margin: 10% auto 0 auto;
+    height: 60%;
+    object-fit: contain;
 }
 
 .tooltip {
     position: absolute;
-    bottom: -4rem;
+    bottom: -50px;
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.8);
-    padding: 0.6rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.75rem;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
     color: var(--neon-color);
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s, bottom 0.2s;
+    transition: all 0.3s ease;
+    min-width: max-content;
 }
 
 .badge:hover .tooltip {
     opacity: 1;
-    bottom: -3.2rem;
+    bottom: -40px;
 }
 
-/* ---------- Desafíos activos ---------- */
-.challenges {
-    max-width: 900px;
-    margin: 2rem auto;
-}
-
+/* Challenges */
 .challenge-card {
     display: flex;
     align-items: center;
     background: #111;
     border: 2px solid var(--neon-color);
     border-radius: 12px;
-    padding: 1rem;
-    margin-bottom: 1rem;
-    box-shadow: 0 0 8px var(--neon-color);
+    padding: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.challenge-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px var(--shadow-color);
 }
 
 .challenge-card img {
-    width: 48px;
-    height: 48px;
-    margin-right: 1rem;
+    width: 60px;
+    height: 60px;
+    margin-right: 15px;
+    object-fit: contain;
 }
 
 .challenge-card .text {
     flex: 1;
 }
 
+.challenge-card .text small {
+    display: block;
+    margin-top: 5px;
+    opacity: 0.8;
+}
+
 .challenge-card .bar {
     width: 100%;
-    height: 8px;
+    height: 10px;
     background: #222;
-    border-radius: 4px;
+    border-radius: 5px;
     overflow: hidden;
-    margin: 0.5rem 0;
+    margin: 10px 0;
 }
 
 .challenge-card .bar span {
     display: block;
     height: 100%;
     background: var(--neon-color);
+    transition: width 0.5s ease;
 }
 
 .challenge-card button.neon-btn {
-    margin-left: 1rem;
+    margin-left: 15px;
+    padding: 8px 15px;
+    background: var(--neon-color);
+    color: #111;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.challenge-card button.neon-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 10px var(--shadow-color);
 }
 
 .challenge-card .badge.won {
-    margin-left: 1rem;
+    margin-left: 15px;
     color: var(--neon-color);
-    font-size: 1.5rem;
+    font-size: 1.8rem;
 }
 
-/* ---------- Responsive ---------- */
-@media (max-width: 600px) {
+/* Skins */
+.skin-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+}
+
+.skin-card {
+    background: #111;
+    border: 2px solid var(--neon-color);
+    border-radius: 12px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.skin-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 15px var(--shadow-color);
+}
+
+.skin-card img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
+    margin-bottom: 10px;
+}
+
+.skin-card button {
+    margin-top: 10px;
+    padding: 6px 12px;
+    background: var(--neon-color);
+    color: #111;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.skin-card button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px var(--shadow-color);
+}
+
+.skin-card button:disabled {
+    background: #666;
+    color: #ccc;
+    cursor: not-allowed;
+}
+
+/* ---------- Responsive Design ---------- */
+@media (max-width: 768px) {
+    .main-container {
+        padding: 15px;
+    }
+    
+    .user-card {
+        padding: 20px;
+        margin-top: 50px;
+    }
+    
+    .image-container {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .badge-grid {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+        gap: 15px;
+    }
+    
+    .badge {
+        width: 80px;
+        height: 80px;
+    }
+    
     .challenge-card {
         flex-direction: column;
-        align-items: flex-start;
+        text-align: center;
     }
-
+    
     .challenge-card img {
-        margin-bottom: 0.5rem;
+        margin-right: 0;
+        margin-bottom: 10px;
     }
+    
+    .challenge-card button.neon-btn,
+    .challenge-card .badge.won {
+        margin: 10px 0 0 0;
+    }
+}
 
-    .badge-grid {
-        grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+@media (max-width: 480px) {
+    .theme-switcher {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .theme-switcher button {
+        width: 100%;
+    }
+    
+    .volver-button {
+        top: 10px;
+        left: 10px;
+        padding: 8px 15px;
+        font-size: 12px;
+    }
+    
+    section {
+        padding: 15px;
     }
 }
