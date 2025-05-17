@@ -26,6 +26,7 @@ STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesSto
 STATIC_URL = '/static/'
 # Aplicaciones instaladas
 INSTALLED_APPS = [
+    'jazzmin',                     # ① jazmin primero
     # apps de Django
     'django.contrib.admin',
     'django.contrib.auth',

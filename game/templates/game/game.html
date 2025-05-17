@@ -55,16 +55,7 @@
 
     <div class="barra-tiempo"><div id="barra-progreso"></div></div>
 
-    <h2>Niveles de {{ categoria_name }}</h2>
-    <ul class="niveles">
-      {% for nivel in niveles %}
-        <li>
-          <a href="{% url 'game:play' categoria_name=categoria_name nivel_name=nivel.name %}">
-            {{ nivel.name }}
-          </a>
-        </li>
-      {% endfor %}
-    </ul>
+    <h2>{{ categoria_name }} — {{ nivel_name }}</h2>
 
     <div id="tablero" class="tablero"></div>
 
