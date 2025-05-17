@@ -59,7 +59,7 @@ def perfilView(request):
             'id':         prog.id,
             'name':       prog.challenge.name,
             'description':prog.challenge.description,
-            'icon_url':   prog.challenge.icon.url,
+            'icon_url':   prog.challenge.icon.url if prog.challenge.icon else '/static/img/default_icon.png',
             'progress':   prog.progress,
             'target':     prog.challenge.target_value,
             'completed':  prog.completed,

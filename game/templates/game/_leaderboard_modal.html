@@ -1,13 +1,17 @@
 {% load static %}
-<button id="btn-show-leaderboard" class="neon-btn">🏆 Ver logros</button>
+<button id="btn-show-leaderboard" class="neon-btn leaderboard-float-btn">🏆 Ver logros</button>
 
 <dialog id="dlg-leaderboard">
   <form method="dialog">
-    <h2>Top 10</h2>
-    <section id="dlg-content"></section>
-    <menu><button class="neon-btn">Cerrar</button></menu>
+    <header class="modal-header">
+      <h2 id="leaderboard-title">🏆 Mejores Puntajes</h2>
+      <link rel="stylesheet" href="{% static 'game/css/modal.css' %}">
+    </header>
+    <section id="dlg-content" class="modal-content"></section>
+    <menu class="modal-actions">
+      <button class="neon-btn">Cerrar</button>
+    </menu>
   </form>
 </dialog>
 
 <script type="module" src="{% static 'game/js/modal.js' %}"></script>
-
