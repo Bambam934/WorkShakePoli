@@ -21,7 +21,7 @@ SECRET_KEY = env("SECRET_KEY")
 
 # Seguridad en producción
 DEBUG = True
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['workshakepoli.onrender.com']
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 # Aplicaciones instaladas
