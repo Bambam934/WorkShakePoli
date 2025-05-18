@@ -26,6 +26,7 @@ djangorestframework==3.16.0
 filelock==3.18.0
 frozenlist==1.6.0
 gotrue==2.12.0
+gunicorn==23.0.0
 h11==0.16.0
 h2==4.2.0
 hpack==4.1.0
