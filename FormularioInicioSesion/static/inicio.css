@@ -1,21 +1,54 @@
-/* Estilo futurista para formulario */
+/* inicio.css */
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
+/* Definición de Variables CSS Globales */
+:root {
+    --color-primary: #00ffcc;
+    --color-primary-hover: #00e6b8;
+    
+    /* Otras variables de color del diseño original que podrías querer centralizar */
+    --color-primary-border: #00ffcc55; /* Usado para bordes, alpha ~0.33 */
+    --color-primary-shadow-soft: #00ffcc33; /* Usado para sombras suaves/inset, alpha ~0.2 */
+    --color-primary-shadow-strong: #00ffcc88; /* Usado para text-shadow más intenso, alpha ~0.53 */
+
+    --color-background-body: #000;
+    --color-background-container: rgba(20, 20, 20, 0.85);
+    --color-background-input: #111;
+    --color-text-on-primary-bg: #111; /* Texto oscuro para botones con fondo primario */
+    
+    --color-text-body: var(--color-primary);
+    --color-error: #ff4d4d;
+    --color-text-footer: #777;
+
+    --font-primary: 'Orbitron', sans-serif; /* Fuente principal ya definida en body */
+    --blur-backdrop: blur(10px);
+}
+
+/* Reseteos globales y defaults (opcional pero recomendado) */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    /* margin: 0; ya lo tienes en body */
+    /* padding: 0; ya lo tienes en body */
+}
+
 body {
-    font-family: 'Orbitron', sans-serif;
-    background-color: #000; /* Fondo oscuro */
+    font-family: var(--font-primary); /* Usando variable de fuente */
+    background-color: var(--color-background-body); /* Fondo oscuro */
     margin: 0;
     padding: 0;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    color: #00ffcc;
+    color: var(--color-text-body); /* Usando variable de color de texto */
     position: relative;
+    overflow-x: hidden; /* Para asegurar que no haya scroll horizontal por las luces */
 }
 
-/* Contenedor de partículas */
+/* Contenedor de partículas (si aún lo usas en alguna parte, si no, puedes eliminarlo) */
 #particle-container {
     position: fixed;
     top: 0;
@@ -23,12 +56,12 @@ body {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 0;
+    z-index: 0; /* Mismo z-index que #dynamic-background, considera si ambos son necesarios */
 }
 
 .particle {
     position: absolute;
-    color: #00ffcc;
+    color: var(--color-primary);
     font-weight: bold;
     opacity: 0.4;
     animation: floatWord linear infinite;
@@ -37,25 +70,26 @@ body {
 
 /* Contenedor del formulario */
 .container {
-    background: rgba(20, 20, 20, 0.85);
-    border: 2px solid #00ffcc55;
+    background: var(--color-background-container);
+    border: 2px solid var(--color-primary-border);
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 0 25px #00ffcc55;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 0 25px var(--color-primary-border);
+    backdrop-filter: var(--blur-backdrop);
+    -webkit-backdrop-filter: var(--blur-backdrop); /* Para Safari */
     width: 90%;
     max-width: 450px;
     text-align: center;
-    z-index: 1;
+    z-index: 1; /* Asegura que el contenido esté sobre el fondo */
 }
 
 /* Título */
 h1 {
     font-size: 2.5rem;
-    color: #00ffcc;
+    color: var(--color-primary);
     margin-bottom: 20px;
     font-weight: bold;
-    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc88;
+    text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary-shadow-strong);
     animation: fadeIn 1s ease-in-out;
 }
 
@@ -66,59 +100,133 @@ form {
     gap: 1rem;
 }
 
-form p {
+form p { /* Considera si este selector es suficientemente específico */
     margin-bottom: 15px;
+    text-align: left;
 }
 
-form label {
+form label { /* Estilo general para etiquetas de formulario */
     font-size: 1.2rem;
     margin-bottom: 5px;
     display: block;
-    color: #00ffcc;
+    color: var(--color-primary);
+    text-align: left;
 }
 
-/* Inputs */
-form input {
+/* Inputs generales del formulario */
+form input:not([type="checkbox"]):not([type="radio"]) {
     width: 100%;
     padding: 12px;
-    background-color: #111;
-    color: #00ffcc;
-    border: 1px solid #00ffcc55;
+    background-color: var(--color-background-input);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
     border-radius: 10px;
     font-size: 1rem;
-    box-shadow: inset 0 0 6px #00ffcc33;
+    font-family: var(--font-primary);
+    box-shadow: inset 0 0 6px var(--color-primary-shadow-soft);
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 form input:focus {
-    border-color: #00ffcc;
-    box-shadow: 0 0 8px #00ffcc;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
     outline: none;
 }
 
-/* Campo contraseña extra */
 form input[type="password"] {
     letter-spacing: 1px;
 }
 
-/* Botón de registro */
+/* Estilos para .form-group (usado en tu HTML de inicio.html) */
+.form-group {
+    margin-bottom: 1rem; /* Ajustado para consistencia con el gap del form */
+    text-align: left;
+}
+
+.form-group label { /* Hereda de 'form label', pero puedes especificar si es diferente */
+    /* font-size: 1.2rem; ya heredado */
+    /* margin-bottom: 5px; ya heredado */
+    /* display: block; ya heredado */
+    /* color: var(--color-primary); ya heredado */
+    font-weight: bold; /* Añadido/confirmado */
+}
+
+.form-group input:not([type="checkbox"]):not([type="radio"]) {
+    /* Hereda de 'form input', pero puedes especificar si es diferente.
+       Tu CSS original tenía ligeras diferencias aquí.
+       Si las diferencias son intencionales, mantenlas.
+       Si no, puedes eliminar esta regla y dejar que herede de 'form input'
+    */
+    width: 100%;
+    padding: 10px; /* Ligeramente diferente de 'form input' (12px) */
+    background-color: var(--color-background-input);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
+    border-radius: 8px; /* Ligeramente diferente de 'form input' (10px) */
+    font-size: 1rem;
+    font-family: var(--font-primary);
+    box-shadow: inset 0 0 6px var(--color-primary-shadow-soft);
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus { /* Hereda de form input:focus */
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
+    outline: none;
+}
+
+/* Estilo para el input checkbox dentro de .form-group */
+.form-group input[type="checkbox"] {
+    margin-right: 8px;
+    vertical-align: middle;
+    /* Estilos futuristas para checkbox si se desea */
+    appearance: none;
+    -webkit-appearance: none;
+    background-color: var(--color-background-input);
+    border: 1px solid var(--color-primary-border);
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    cursor: pointer;
+    position: relative;
+}
+
+.form-group input[type="checkbox"]:checked {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+}
+
+.form-group input[type="checkbox"]:checked::before {
+    content: '✓'; /* O un icono SVG */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--color-background-input); /* Color del checkmark */
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
+/* Botón de registro/inicio de sesión */
 form button {
-    background: #00ffcc;
-    color: #111;
+    background: var(--color-primary);
+    color: var(--color-text-on-primary-bg);
     padding: 12px;
-    border: 1px solid #00ffcc55;
+    border: 1px solid var(--color-primary-border); /* Usando variable */
     border-radius: 10px;
     font-size: 1.1rem;
     font-weight: bold;
+    font-family: var(--font-primary);
     cursor: pointer;
-    box-shadow: 0 0 8px #00ffcc33;
+    box-shadow: 0 0 8px var(--color-primary-shadow-soft); /* Usando variable */
     transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     margin-top: 10px;
 }
 
 form button:hover {
-    background: #00e6b8;
-    box-shadow: 0 0 15px #00ffcc;
+    background: var(--color-primary-hover); /* Usando variable */
+    box-shadow: 0 0 15px var(--color-primary); /* Usando variable */
     transform: translateY(-2px);
 }
 
@@ -127,62 +235,60 @@ form button:active {
 }
 
 /* Mensajes de error */
-.errorlist {
-    color: #ff4d4d;
+/* Tu HTML usa .alert.alert-danger, no .errorlist, para los errores del formulario. */
+/* Puedes mantener .errorlist si se usa en otra parte, o adaptar/eliminar. */
+.errorlist { /* Si se usa para non-field errors de Django o similar */
+    color: var(--color-error);
     list-style: none;
     padding: 0;
-    margin: 0 0 15px 0;
+    margin: 15px 0; /* Añadido un margin superior e inferior */
+    text-align: left;
 }
 
 .errorlist li {
     margin-bottom: 5px;
 }
 
+/* Estilos para la clase .alert.alert-danger que usas en el HTML */
+.alert.alert-danger {
+    color: var(--color-error); /* Rojo para errores */
+    background-color: rgba(255, 77, 77, 0.1); /* Fondo rojo muy transparente */
+    border: 1px solid var(--color-error);
+    padding: 10px 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+    text-align: left;
+}
+.alert.alert-danger p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+}
+.alert.alert-danger strong {
+    color: var(--color-primary); /* Para destacar el nombre del campo */
+}
+
+
 /* Pie de página */
 .footer {
     text-align: center;
     margin-top: 20px;
-    color: #777;
+    color: var(--color-text-footer);
+    font-size: 0.9rem;
+}
+
+.footer p {
+    margin-bottom: 8px;
 }
 
 .footer a {
-    color: #00ffcc;
+    color: var(--color-primary);
     text-decoration: none;
     font-weight: bold;
     transition: color 0.3s;
 }
 
 .footer a:hover {
-    color: #00e6b8;
-}
-
-/* Estilos para grupos de formularios */
-.form-group {
-    margin-bottom: 20px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: bold;
-    color: #00ffcc;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 10px;
-    background-color: #111;
-    color: #00ffcc;
-    border: 1px solid #00ffcc55;
-    border-radius: 8px;
-    font-size: 1rem;
-    box-shadow: inset 0 0 6px #00ffcc33;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-    border-color: #00ffcc;
-    box-shadow: 0 0 8px #00ffcc;
+    color: var(--color-primary-hover);
 }
 
 /* Animaciones */
@@ -211,12 +317,23 @@ form button:active {
 /* Responsive */
 @media (max-width: 600px) {
     .container {
-        width: 90%;
+        /* width: 90%; Ya está definido */
         padding: 20px;
+        margin: 20px auto; /* Añade margen vertical en pantallas pequeñas */
     }
 
     h1 {
         font-size: 2rem;
+    }
+
+    form input:not([type="checkbox"]):not([type="radio"]),
+    .form-group input:not([type="checkbox"]):not([type="radio"]) {
+        padding: 10px; /* Unifica padding para consistencia en móvil */
+    }
+
+    form button {
+        padding: 10px;
+        font-size: 1rem;
     }
 }
 
@@ -225,10 +342,11 @@ input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    -webkit-text-fill-color: #00ffcc !important;
-    caret-color: #00ffcc !important;
-    border: 1px solid #00ffcc55;
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-background-body) inset !important; /* Usando variable */
+    -webkit-text-fill-color: var(--color-primary) !important; /* Usando variable */
+    caret-color: var(--color-primary) !important; /* Usando variable */
+    border: 1px solid var(--color-primary-border); /* Usando variable */
+    font-family: var(--font-primary); /* Asegura la fuente */
 }
 
 /* --- INICIO: Fondo Dinámico de Luces de Neón --- */
@@ -238,25 +356,22 @@ input:-webkit-autofill:active {
     left: 0;
     width: 100%;
     height: 100%;
-    pointer-events: none; /* Para que no interfiera con el contenido */
-    z-index: 0; /* Mismo nivel que el #particle-container original, o -1 si no tienes otros fondos */
-    overflow: hidden; /* Evita barras de scroll si alguna luz se sale un poco */
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
 }
 
 .neon-light {
     position: absolute;
     border-radius: 50%;
-    background-color: var(--color-primary);
-    opacity: 0; /* Comienzan invisibles, la animación las muestra */
+    background-color: var(--color-primary); /* Variable ya definida */
+    opacity: 0;
     animation-iteration-count: infinite;
-    animation-timing-function: linear; /* Para el movimiento */
-    /* animación combinada: nombre-movimiento duracion-movimiento timing-movimiento delay-movimiento,
-                           nombre-brillo duracion-brillo timing-brillo delay-brillo */
-    animation: moveLight var(--duration-move, 20s) ease-in-out var(--delay, 0s) infinite alternate, /* Movimiento más orgánico */
-               flickerNeon var(--duration-flicker, 3s) ease-in-out var(--delay, 0s) infinite alternate; /* Parpadeo */
+    /* animation-timing-function: linear; No es necesario aquí, se define en cada animación */
+    animation: moveLight var(--duration-move, 20s) ease-in-out var(--delay, 0s) infinite alternate,
+               flickerNeon var(--duration-flicker, 3s) ease-in-out var(--delay, 0s) infinite alternate;
 }
 
-/* Tipos de luces para variar tamaños y brillos */
 .neon-light.type1 {
     width: 3px;
     height: 3px;
@@ -273,15 +388,14 @@ input:-webkit-autofill:active {
                 0 0 25px var(--color-primary-hover);
 }
 
-.neon-light.type3 { /* Un poco más sutil */
+.neon-light.type3 {
     width: 2px;
     height: 2px;
-    background-color: var(--color-primary-hover); /* Color base ligeramente diferente */
+    background-color: var(--color-primary-hover);
     box-shadow: 0 0 4px var(--color-primary-hover),
                 0 0 8px var(--color-primary-hover),
                 0 0 12px var(--color-primary);
 }
-
 
 @keyframes moveLight {
     0% {
@@ -297,36 +411,22 @@ input:-webkit-autofill:active {
         transform: translate(calc(var(--random-x, 30) * 1px), calc(var(--random-y, -15) * 1px)) scale(1.2);
     }
     100% {
-        transform: translate(0px, 0px) scale(0.8); /* Vuelve cerca del origen para un bucle más suave */
+        transform: translate(0px, 0px) scale(0.8);
     }
 }
 
 @keyframes flickerNeon {
-    0%, 100% { /* Estado base */
+    0%, 100% {
         opacity: 0.7;
-        /* El box-shadow se mantiene el del tipo de luz */
     }
     20% {
         opacity: 0.4;
-         /* Podrías reducir el box-shadow aquí para un parpadeo más notable del brillo */
     }
-    50% { /* Punto de máximo brillo/opacidad */
+    50% {
         opacity: 1;
     }
     80% {
         opacity: 0.5;
     }
 }
-
-/* Para usar las variables en la animación moveLight, puedes definirlas en cada .neon-light si quieres un control más fino */
-/* Ejemplo para un .neon-light específico (esto ya está en el HTML con style): */
-/*
-.neon-light:nth-child(1) {
-    --random-x: 40;
-    --random-y: -25;
-    top: 10%; left: 15%;
-    animation-delay: -0.5s;
-    animation-duration: 15s, 4s; // Duración para moveLight, duración para flickerNeon
-}
-*/
 /* --- FIN: Fondo Dinámico de Luces de Neón --- */
