@@ -22,7 +22,7 @@ SECRET_KEY = env("SECRET_KEY")
 # Seguridad en producción
 DEBUG = True
 ALLOWED_HOSTS = ['workshakepoli.onrender.com']
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 # Aplicaciones instaladas
 INSTALLED_APPS = [
@@ -52,6 +52,7 @@ X_FRAME_OPTIONS = 'ALLOWALL'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
