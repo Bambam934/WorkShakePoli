@@ -4,13 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inicio - Wordshake</title>
-    <link rel="stylesheet" href="/static/home.css"> <!-- Enlace corregido al CSS -->
-</head>
-<body>
+    <link rel="stylesheet" href="/static/home.css"> </head>
+<body>  
+    <div id="dynamic-background">
+    <div class="neon-light type1" style="top: 10%; left: 15%; animation-delay: -0.5s; animation-duration: 15s, 4s;"></div>
+    <div class="neon-light type2" style="top: 20%; left: 80%; animation-delay: -1s; animation-duration: 18s, 3s;"></div>
+    <div class="neon-light type1" style="top: 30%; left: 50%; animation-delay: -1.5s; animation-duration: 12s, 5s;"></div>
+    <div class="neon-light type3" style="top: 5%; left: 40%; animation-delay: -3s; animation-duration: 20s, 3.5s;"></div>
+
+    <div class="neon-light type2" style="top: 50%; left: 20%; animation-delay: -2s; animation-duration: 16s, 3s;"></div>
+    <div class="neon-light type1" style="top: 60%; left: 90%; animation-delay: -2.5s; animation-duration: 14s, 4.5s;"></div>
+    <div class="neon-light type3" style="top: 75%; left: 5%; animation-delay: -3.5s; animation-duration: 19s, 3s;"></div>
+
+    <div class="neon-light type1" style="top: 80%; left: 65%; animation-delay: -4s; animation-duration: 13s, 4s;"></div>
+    <div class="neon-light type2" style="top: 90%; left: 35%; animation-delay: -0.8s; animation-duration: 17s, 3.5s;"></div>
+    <div class="neon-light type3" style="top: 65%; left: 45%; animation-delay: -1.2s; animation-duration: 22s, 4s;"></div>
+    <div class="neon-light type1" style="top: 55%; left: 75%; animation-delay: -2.2s; animation-duration: 12s, 5s;"></div>
+    <div class="neon-light type2" style="top: 35%; left: 5%; animation-delay: -3.8s; animation-duration: 20s, 3s;"></div>
+    </div>
+
     <div class="container">
         <h1>Bienvenido a Wordshake</h1>
         <a href="{% url 'registro' %}" class="btn">Regístrate</a>
         <a href="{% url 'inicio' %}" class="btn">Inicia sesión</a>
-    </div>
-</body>
-</html>
+        </div>
+
+    </body> </html>

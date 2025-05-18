@@ -230,3 +230,103 @@ input:-webkit-autofill:active {
     caret-color: #00ffcc !important;
     border: 1px solid #00ffcc55;
 }
+
+/* --- INICIO: Fondo Dinámico de Luces de Neón --- */
+#dynamic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Para que no interfiera con el contenido */
+    z-index: 0; /* Mismo nivel que el #particle-container original, o -1 si no tienes otros fondos */
+    overflow: hidden; /* Evita barras de scroll si alguna luz se sale un poco */
+}
+
+.neon-light {
+    position: absolute;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    opacity: 0; /* Comienzan invisibles, la animación las muestra */
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; /* Para el movimiento */
+    /* animación combinada: nombre-movimiento duracion-movimiento timing-movimiento delay-movimiento,
+                           nombre-brillo duracion-brillo timing-brillo delay-brillo */
+    animation: moveLight var(--duration-move, 20s) ease-in-out var(--delay, 0s) infinite alternate, /* Movimiento más orgánico */
+               flickerNeon var(--duration-flicker, 3s) ease-in-out var(--delay, 0s) infinite alternate; /* Parpadeo */
+}
+
+/* Tipos de luces para variar tamaños y brillos */
+.neon-light.type1 {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 5px var(--color-primary),
+                0 0 10px var(--color-primary),
+                0 0 15px var(--color-primary-hover);
+}
+
+.neon-light.type2 {
+    width: 5px;
+    height: 5px;
+    box-shadow: 0 0 7px var(--color-primary),
+                0 0 15px var(--color-primary),
+                0 0 25px var(--color-primary-hover);
+}
+
+.neon-light.type3 { /* Un poco más sutil */
+    width: 2px;
+    height: 2px;
+    background-color: var(--color-primary-hover); /* Color base ligeramente diferente */
+    box-shadow: 0 0 4px var(--color-primary-hover),
+                0 0 8px var(--color-primary-hover),
+                0 0 12px var(--color-primary);
+}
+
+
+@keyframes moveLight {
+    0% {
+        transform: translate(0px, 0px) scale(0.8);
+    }
+    25% {
+        transform: translate(calc(var(--random-x, 20) * 1px), calc(var(--random-y, -30) * 1px)) scale(1.1);
+    }
+    50% {
+        transform: translate(calc(var(--random-x, -10) * -1px), calc(var(--random-y, 40) * -1px)) scale(0.9);
+    }
+    75% {
+        transform: translate(calc(var(--random-x, 30) * 1px), calc(var(--random-y, -15) * 1px)) scale(1.2);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(0.8); /* Vuelve cerca del origen para un bucle más suave */
+    }
+}
+
+@keyframes flickerNeon {
+    0%, 100% { /* Estado base */
+        opacity: 0.7;
+        /* El box-shadow se mantiene el del tipo de luz */
+    }
+    20% {
+        opacity: 0.4;
+         /* Podrías reducir el box-shadow aquí para un parpadeo más notable del brillo */
+    }
+    50% { /* Punto de máximo brillo/opacidad */
+        opacity: 1;
+    }
+    80% {
+        opacity: 0.5;
+    }
+}
+
+/* Para usar las variables en la animación moveLight, puedes definirlas en cada .neon-light si quieres un control más fino */
+/* Ejemplo para un .neon-light específico (esto ya está en el HTML con style): */
+/*
+.neon-light:nth-child(1) {
+    --random-x: 40;
+    --random-y: -25;
+    top: 10%; left: 15%;
+    animation-delay: -0.5s;
+    animation-duration: 15s, 4s; // Duración para moveLight, duración para flickerNeon
+}
+*/
+/* --- FIN: Fondo Dinámico de Luces de Neón --- */

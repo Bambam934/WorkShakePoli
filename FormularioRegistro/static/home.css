@@ -2,16 +2,43 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
 
-body {
-    font-family: 'Orbitron', sans-serif;
-    background-color: #000; /* Fondo oscuro */
+:root {
+    --font-primary: 'Orbitron', sans-serif;
+    --color-primary: #00ffcc;
+    --color-primary-hover: #00e6b8;
+    --color-primary-border: #00ffcc55; /* Usado para bordes, alpha ~0.33 */
+    --color-primary-shadow-soft: #00ffcc33; /* Usado para sombras suaves/inset, alpha ~0.2 */
+    --color-primary-shadow-strong: #00ffcc88; /* Usado para text-shadow más intenso, alpha ~0.53 */
+
+    --color-background-body: #000;
+    --color-background-container: rgba(20, 20, 20, 0.85);
+    --color-background-input: #111;
+    --color-text-on-primary-bg: #111; /* Texto oscuro para botones con fondo primario */
+    
+    --color-text-body: var(--color-primary);
+    --color-error: #ff4d4d;
+    --color-text-footer: #777;
+
+    --blur-backdrop: blur(10px);
+}
+
+/* Reseteos globales y defaults */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
     margin: 0;
     padding: 0;
+}
+
+body {
+    font-family: var(--font-primary);
+    background-color: var(--color-background-body);
+    color: var(--color-text-body);
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    color: #00ffcc;
     position: relative;
 }
 
@@ -28,7 +55,7 @@ body {
 
 .particle {
     position: absolute;
-    color: #00ffcc;
+    color: var(--color-primary);
     font-weight: bold;
     opacity: 0.4;
     animation: floatWord linear infinite;
@@ -37,93 +64,97 @@ body {
 
 /* Contenedor del formulario */
 .container {
-    background: rgba(20, 20, 20, 0.85);
-    border: 2px solid #00ffcc55;
+    background: var(--color-background-container);
+    border: 2px solid var(--color-primary-border);
     padding: 30px;
     border-radius: 20px;
-    box-shadow: 0 0 25px #00ffcc55;
-    backdrop-filter: blur(10px);
+    box-shadow: 0 0 25px var(--color-primary-border);
+    backdrop-filter: var(--blur-backdrop);
+    -webkit-backdrop-filter: var(--blur-backdrop); /* Para compatibilidad con Safari */
     width: 90%;
     max-width: 450px;
     text-align: center;
     z-index: 1;
-    /* Añadido display flex y gap para centrar y separar los botones */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centra los elementos horizontalmente */
+    align-items: center; /* Centra los elementos hijos horizontalmente */
     gap: 15px; /* Espacio entre los elementos hijos */
 }
 
 /* Título */
 h1 {
     font-size: 2.5rem;
-    color: #00ffcc;
-    margin-bottom: 20px; /* Puedes ajustar este margin-bottom ya que el gap del container ya da espacio */
+    color: var(--color-primary);
+    margin-bottom: 20px; /* Se puede ajustar si el 'gap' del container es suficiente */
     font-weight: bold;
-    text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffcc88;
+    text-shadow: 0 0 10px var(--color-primary), 0 0 20px var(--color-primary-shadow-strong);
     animation: fadeIn 1s ease-in-out;
 }
 
-/* Formulario (estos estilos seguirán funcionando si añades un formulario) */
+/* Estilos base para formularios (si se usa <form>) */
 form {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%; /* Para que ocupe el ancho del .container */
 }
 
-form p {
+form p { /* Estilo genérico para párrafos dentro del form */
     margin-bottom: 15px;
+    text-align: left; /* Opcional, si prefieres el texto de los párrafos alineado a la izquierda */
 }
 
 form label {
     font-size: 1.2rem;
     margin-bottom: 5px;
     display: block;
-    color: #00ffcc;
+    color: var(--color-primary);
+    text-align: left; /* Alinea las etiquetas a la izquierda */
 }
 
-/* Inputs */
-form input {
+/* Estilos para Inputs directamente dentro de <form> */
+form input:not([type="checkbox"]):not([type="radio"]) { /* Excluye checkbox/radio para no alterar su tamaño por defecto si se añaden */
     width: 100%;
     padding: 12px;
-    background-color: #111;
-    color: #00ffcc;
-    border: 1px solid #00ffcc55;
+    background-color: var(--color-background-input);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
     border-radius: 10px;
     font-size: 1rem;
-    box-shadow: inset 0 0 6px #00ffcc33;
+    font-family: var(--font-primary); /* Asegura que la fuente se herede */
+    box-shadow: inset 0 0 6px var(--color-primary-shadow-soft);
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 form input:focus {
-    border-color: #00ffcc;
-    box-shadow: 0 0 8px #00ffcc;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
     outline: none;
 }
 
-/* Campo contraseña extra */
 form input[type="password"] {
     letter-spacing: 1px;
 }
 
-/* Botón dentro de formulario (si lo tienes) */
+/* Botón dentro de formulario */
 form button {
-    background: #00ffcc;
-    color: #111;
+    background: var(--color-primary);
+    color: var(--color-text-on-primary-bg);
     padding: 12px;
-    border: 1px solid #00ffcc55;
+    border: 1px solid var(--color-primary-border);
     border-radius: 10px;
     font-size: 1.1rem;
     font-weight: bold;
+    font-family: var(--font-primary);
     cursor: pointer;
-    box-shadow: 0 0 8px #00ffcc33;
+    box-shadow: 0 0 8px var(--color-primary-shadow-soft);
     transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
     margin-top: 10px;
 }
 
 form button:hover {
-    background: #00e6b8;
-    box-shadow: 0 0 15px #00ffcc;
+    background: var(--color-primary-hover);
+    box-shadow: 0 0 15px var(--color-primary);
     transform: translateY(-2px);
 }
 
@@ -131,93 +162,101 @@ form button:active {
     transform: translateY(0);
 }
 
-/* Estilo para los enlaces-botón con clase 'btn' */
-.btn {
-    /* Propiedades para hacer que parezca un botón */
-    display: inline-block; /* Permite aplicar padding y margin verticalmente */
-    background: #00ffcc; /* Color de fondo como el botón principal */
-    color: #111 !important; /* Color del texto oscuro (usamos !important por si hay otro estilo compitiendo) */
-    padding: 8px 15px; /* Padding para darle espacio al texto */
-    border: 1px solid #00ffcc55; /* Borde similar al botón */
-    border-radius: 8px; /* Bordes redondeados */
-    font-weight: bold; /* Texto en negrita */
-    text-decoration: none; /* Quita el subrayado */
-    font-size: 1rem; /* Tamaño de fuente similar al input */
-    cursor: pointer; /* Indicador de cursor */
-    box-shadow: 0 0 8px #00ffcc33; /* Sombra */
-    transition: background 0.3s, transform 0.2s, box-shadow 0.3s; /* Transiciones suaves */
-    margin: 0 5px; /* Margen para separar los dos "botones" */
-}
-
-.btn:hover {
-    background: #00e6b8; /* Color de fondo al pasar el ratón */
-    box-shadow: 0 0 15px #00ffcc; /* Sombra al pasar el ratón */
-    transform: translateY(-2px); /* Efecto de elevación al pasar el ratón */
-    color: #111 !important; /* Asegura el color del texto al pasar el ratón */
-}
-
-.btn:active {
-    transform: translateY(0); /* Vuelve a la posición original al hacer clic */
-}
-
-
-/* Mensajes de error */
-.errorlist {
-    color: #ff4d4d;
-    list-style: none;
-    padding: 0;
-    margin: 0 0 15px 0;
-}
-
-.errorlist li {
-    margin-bottom: 5px;
-}
-
-/* Pie de página (si lo añades más tarde, puedes usar esta regla) */
-.footer {
-    text-align: center;
-    margin-top: 20px;
-    color: #777;
-}
-
-.footer a {
-    color: #00ffcc; /* Color de enlace normal si hay otros enlaces en el footer */
-    text-decoration: none;
-    font-weight: bold;
-    transition: color 0.3s;
-}
-
-.footer a:hover {
-    color: #00e6b8;
-}
-
-/* Estilos para grupos de formularios */
+/* Estilos para grupos de formularios (clase .form-group) */
+/* Nota: Estos estilos son similares a 'form input' y 'form label'. 
+   Considera si pueden unificarse o si las diferencias son intencionales. */
 .form-group {
     margin-bottom: 20px;
+    width: 100%; /* Asegura que el grupo ocupe el ancho */
+    text-align: left; /* Alinea el contenido del grupo a la izquierda */
 }
 
 .form-group label {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
-    color: #00ffcc;
+    color: var(--color-primary);
+    font-size: 1.1rem; /* Ligeramente diferente de 'form label' */
 }
 
-.form-group input {
+.form-group input:not([type="checkbox"]):not([type="radio"]) {
     width: 100%;
-    padding: 10px;
-    background-color: #111;
-    color: #00ffcc;
-    border: 1px solid #00ffcc55;
-    border-radius: 8px;
+    padding: 10px; /* Ligeramente diferente de 'form input' */
+    background-color: var(--color-background-input);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary-border);
+    border-radius: 8px; /* Ligeramente diferente de 'form input' */
     font-size: 1rem;
-    box-shadow: inset 0 0 6px #00ffcc33;
-    transition: border-color 0.3s;
+    font-family: var(--font-primary);
+    box-shadow: inset 0 0 6px var(--color-primary-shadow-soft);
+    transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .form-group input:focus {
-    border-color: #00ffcc;
-    box-shadow: 0 0 8px #00ffcc;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 8px var(--color-primary);
+    outline: none;
+}
+
+/* Estilo para los enlaces-botón con clase 'btn' */
+.btn {
+    display: inline-block;
+    background: var(--color-primary);
+    color: var(--color-text-on-primary-bg) !important; /* !important mantenido por si es necesario por especificidad externa */
+    padding: 8px 15px;
+    border: 1px solid var(--color-primary-border);
+    border-radius: 8px;
+    font-weight: bold;
+    font-family: var(--font-primary);
+    text-decoration: none;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 8px var(--color-primary-shadow-soft);
+    transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+    margin: 0 5px; /* Margen para separar botones si están en línea */
+}
+
+.btn:hover {
+    background: var(--color-primary-hover);
+    box-shadow: 0 0 15px var(--color-primary);
+    transform: translateY(-2px);
+    color: var(--color-text-on-primary-bg) !important; /* !important mantenido */
+}
+
+.btn:active {
+    transform: translateY(0);
+}
+
+/* Mensajes de error */
+.errorlist {
+    color: var(--color-error);
+    list-style: none;
+    /* padding: 0; ya está en el reseteo global */
+    /* margin: 0 0 15px 0; El margin global es 0, ajustar si se necesita un margin específico aquí */
+    margin-bottom: 15px; 
+    text-align: left; /* Para que los errores se alineen a la izquierda */
+}
+
+.errorlist li {
+    margin-bottom: 5px;
+}
+
+/* Pie de página */
+.footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--color-text-footer);
+}
+
+.footer a {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+.footer a:hover {
+    color: var(--color-primary-hover);
 }
 
 /* Animaciones */
@@ -246,32 +285,140 @@ form button:active {
 /* Responsive */
 @media (max-width: 600px) {
     .container {
-        width: 90%;
-        padding: 20px;
-        /* En pantallas pequeñas, los elementos en el container pueden apilarse */
-        flex-direction: column;
+        /* width: 90%; ya es 90% por defecto */
+        padding: 20px; /* Reducir padding en pantallas pequeñas */
+        /* flex-direction: column; ya es column por defecto */
     }
 
     h1 {
         font-size: 2rem;
     }
 
-    /* Ajuste de margen para los botones con clase 'btn' en pantallas pequeñas */
+    /* Ajuste de margen y ancho para los botones con clase 'btn' en pantallas pequeñas */
     .btn {
-        margin: 5px 0; /* Más margen vertical, menos horizontal */
-        width: 80%; /* Haz que ocupen un poco más de ancho */
-        max-width: 200px; /* Limita el ancho máximo */
+        margin: 10px 0; /* Más margen vertical, sin margen horizontal para que se apilen bien */
+        width: 80%;   /* Ocupan un porcentaje del contenedor */
+        max-width: 250px; /* Un ancho máximo para que no sean demasiado anchos */
+        display: block; /* Para que ocupen su propia línea y el margin funcione bien */
+    }
+
+    /* Si tienes un grupo de botones .btn uno al lado del otro y quieres que se apilen en móvil */
+    .button-group { /* Suponiendo que envuelves los botones en un div con esta clase */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
     }
 }
 
-
-/* Solución para el autocompletado que cambia colores */
+/* Solución para el autocompletado que cambia colores en navegadores WebKit */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
-    -webkit-box-shadow: 0 0 0px 1000px #000 inset !important;
-    -webkit-text-fill-color: #00ffcc !important;
-    caret-color: #00ffcc !important;
-    border: 1px solid #00ffcc55;
+    -webkit-box-shadow: 0 0 0 1000px var(--color-background-body) inset !important; /* Fondo del body para que coincida */
+    -webkit-text-fill-color: var(--color-primary) !important;
+    caret-color: var(--color-primary) !important;
+    border: 1px solid var(--color-primary-border); /* Mantiene el borde */
+    font-family: var(--font-primary); /* Asegura la fuente */
 }
+/* --- INICIO: Fondo Dinámico de Luces de Neón --- */
+#dynamic-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none; /* Para que no interfiera con el contenido */
+    z-index: 0; /* Mismo nivel que el #particle-container original, o -1 si no tienes otros fondos */
+    overflow: hidden; /* Evita barras de scroll si alguna luz se sale un poco */
+}
+
+.neon-light {
+    position: absolute;
+    border-radius: 50%;
+    background-color: var(--color-primary);
+    opacity: 0; /* Comienzan invisibles, la animación las muestra */
+    animation-iteration-count: infinite;
+    animation-timing-function: linear; /* Para el movimiento */
+    /* animación combinada: nombre-movimiento duracion-movimiento timing-movimiento delay-movimiento,
+                           nombre-brillo duracion-brillo timing-brillo delay-brillo */
+    animation: moveLight var(--duration-move, 20s) ease-in-out var(--delay, 0s) infinite alternate, /* Movimiento más orgánico */
+               flickerNeon var(--duration-flicker, 3s) ease-in-out var(--delay, 0s) infinite alternate; /* Parpadeo */
+}
+
+/* Tipos de luces para variar tamaños y brillos */
+.neon-light.type1 {
+    width: 3px;
+    height: 3px;
+    box-shadow: 0 0 5px var(--color-primary),
+                0 0 10px var(--color-primary),
+                0 0 15px var(--color-primary-hover);
+}
+
+.neon-light.type2 {
+    width: 5px;
+    height: 5px;
+    box-shadow: 0 0 7px var(--color-primary),
+                0 0 15px var(--color-primary),
+                0 0 25px var(--color-primary-hover);
+}
+
+.neon-light.type3 { /* Un poco más sutil */
+    width: 2px;
+    height: 2px;
+    background-color: var(--color-primary-hover); /* Color base ligeramente diferente */
+    box-shadow: 0 0 4px var(--color-primary-hover),
+                0 0 8px var(--color-primary-hover),
+                0 0 12px var(--color-primary);
+}
+
+
+@keyframes moveLight {
+    0% {
+        transform: translate(0px, 0px) scale(0.8);
+    }
+    25% {
+        transform: translate(calc(var(--random-x, 20) * 1px), calc(var(--random-y, -30) * 1px)) scale(1.1);
+    }
+    50% {
+        transform: translate(calc(var(--random-x, -10) * -1px), calc(var(--random-y, 40) * -1px)) scale(0.9);
+    }
+    75% {
+        transform: translate(calc(var(--random-x, 30) * 1px), calc(var(--random-y, -15) * 1px)) scale(1.2);
+    }
+    100% {
+        transform: translate(0px, 0px) scale(0.8); /* Vuelve cerca del origen para un bucle más suave */
+    }
+}
+
+@keyframes flickerNeon {
+    0%, 100% { /* Estado base */
+        opacity: 0.7;
+        /* El box-shadow se mantiene el del tipo de luz */
+    }
+    20% {
+        opacity: 0.4;
+         /* Podrías reducir el box-shadow aquí para un parpadeo más notable del brillo */
+    }
+    50% { /* Punto de máximo brillo/opacidad */
+        opacity: 1;
+    }
+    80% {
+        opacity: 0.5;
+    }
+}
+
+/* Para usar las variables en la animación moveLight, puedes definirlas en cada .neon-light si quieres un control más fino */
+/* Ejemplo para un .neon-light específico (esto ya está en el HTML con style): */
+/*
+.neon-light:nth-child(1) {
+    --random-x: 40;
+    --random-y: -25;
+    top: 10%; left: 15%;
+    animation-delay: -0.5s;
+    animation-duration: 15s, 4s; // Duración para moveLight, duración para flickerNeon
+}
+*/
+/* --- FIN: Fondo Dinámico de Luces de Neón --- */
