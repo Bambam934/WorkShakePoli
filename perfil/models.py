@@ -19,17 +19,23 @@ class UserProfile(models.Model):
         default='#00ffcc'
     )
 
-    # 🔸 Nuevos contadores 🔸
-    total_score = models.PositiveIntegerField(default=0)
-    total_words = models.PositiveIntegerField(default=0)
-    coins       = models.PositiveIntegerField(default=0)
-
-    # ✨ Logros desbloqueados (nunca NULL) ✨
+    # 🔸 Logros desbloqueados (nunca NULL)
     achievements = models.JSONField(
         default=list,
         blank=True,
         help_text="Lista de IDs de logros obtenidos"
     )
+
+    # 🔸 Puntos totales (nunca NULL)
+    puntos = models.PositiveIntegerField(
+        default=0,
+        help_text="Puntos acumulados por el usuario"
+    )
+
+    # 🔸 Nuevos contadores 🔸
+    total_score = models.PositiveIntegerField(default=0)
+    total_words = models.PositiveIntegerField(default=0)
+    coins       = models.PositiveIntegerField(default=0)
 
     # ✨ Skins 🔸
     owned_skins = models.ManyToManyField(
