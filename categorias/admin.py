@@ -4,8 +4,9 @@ from .models import Category, Level
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('name',)          # <-- sin 'parent'
     search_fields = ('name',)
+    # list_filter = ('parent',)       # <-- quítalo si lo tenías
 
 @admin.register(Level)
 class LevelAdmin(admin.ModelAdmin):

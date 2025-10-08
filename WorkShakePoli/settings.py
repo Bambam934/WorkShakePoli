@@ -7,6 +7,7 @@ import environ
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from supabase import create_client
 
 
 # Definir la ruta base del proyecto
@@ -26,7 +27,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_URL = '/static/'
 # Aplicaciones instaladas
 INSTALLED_APPS = [
-    'jazzmin',                     # ① jazmin primero
+                
     # apps de Django
     'django.contrib.admin',
     'django.contrib.auth',
@@ -34,7 +35,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',   # ① staticfiles primero
-    'channels',                     # ② channels inmediatamente después
+    'channels', 
+    
     # apps de tu proyecto
     'WorkShakePoli',
     'FormularioRegistro',
@@ -45,6 +47,8 @@ INSTALLED_APPS = [
     'mptt',
     'perfil',
     'achievements',
+    'django_filters',
+    'drf_spectacular'
 ]
 
 #  bloquea la carga de la página dentro de un iframe
@@ -59,58 +63,52 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',  # 👈 Importante
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'core.middleware.TraceIdMiddleware'
 ]
+MIDDLEWARE.insert(1, "WorkShakePoli.middleware.IdempotencyMiddleware")
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "wordshake-local",
+    }
+}
 
 # Configuración de URLs y WSGI
 ROOT_URLCONF = 'WorkShakePoli.urls'
 WSGI_APPLICATION = 'WorkShakePoli.wsgi.application'
 
-# Configuración de la base de datos
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-        'OPTIONS': {
-            'sslmode': env('SSL_MODE', default='prefer'),
-            'sslrootcert': env('SSL_ROOT_CERT', default=''),
-        },
-    }
-}
 
 LANGUAGE_CODE = 'es'
 
 
-# Cargar variables de entorno
-env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
 
 # Configuración de la base de datos (ya la tienes, pero asegurémonos de que lee bien las variables)
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST'),
-        'PORT': env('DB_PORT'),
-        'OPTIONS': {
-            'sslmode': env('SSL_MODE', default='prefer'),
-            'sslrootcert': env('SSL_ROOT_CERT', default=''),
+    "default": {
+        "ENGINE": env("DB_ENGINE", default="django.db.backends.postgresql"),
+        "NAME": env("DB_NAME", default="workshake"),
+        "USER": env("DB_USER", default="postgres"),
+        "PASSWORD": env("DB_PASSWORD", default="postgres"),
+        "HOST": env("DB_HOST", default="127.0.0.1"),
+        "PORT": env("DB_PORT", default="5432"),
+        # En local NO uses SSL (evita el error de Supabase)
+        "OPTIONS": {
+            "sslmode": env("SSL_MODE", default="disable"),
         },
     }
 }
 load_dotenv()
 # Configuración de Supabase
-SUPABASE_URL = env('SUPABASE_URL')
-SUPABASE_KEY = env('SUPABASE_KEY')
+SUPABASE_URL = env("SUPABASE_URL", default=None)
+SUPABASE_KEY = env("SUPABASE_KEY", default=None)
 
-from supabase import create_client
+SUPABASE_CLIENT = None
 
-SUPABASE_CLIENT = create_client(SUPABASE_URL, SUPABASE_KEY)
+if SUPABASE_URL and SUPABASE_KEY:
+    from supabase import create_client
+    SUPABASE_CLIENT = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 # Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
@@ -204,10 +202,54 @@ CHANNEL_LAYERS = {
 
 LOGGING = {
     "version": 1,
-    "handlers": {
-        "console": {"class": "logging.StreamHandler"},
+    "disable_existing_loggers": False,
+    "formatters": {
+    "json": {"()": "pythonjsonlogger.jsonlogger.JsonFormatter"},
     },
+    "handlers": {
+        "console": {"class": "logging.StreamHandler", "formatter": "json"},
+    },
+    "root": {"handlers": ["console"], "level": "INFO"},
     "loggers": {
         "channels_redis.core": {"handlers": ["console"], "level": "INFO"},
     },
 }
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        # opcional en dev para probar desde el navegador:
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    "DEFAULT_FILTER_BACKENDS": (
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.OrderingFilter",
+        "rest_framework.filters.SearchFilter",
+    ),
+    "DEFAULT_THROTTLE_CLASSES": [
+        "rest_framework.throttling.UserRateThrottle",
+        "rest_framework.throttling.AnonRateThrottle",
+    ],
+    "DEFAULT_THROTTLE_RATES": {
+        "user": "5/second",
+        "anon": "1/second",
+    },
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Wordshake Game API",
+    "DESCRIPTION": "Fachada REST + eventos (SOA) para Wordshake.",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+}
+
+CELERY_BROKER_URL = env('CELERY_BROKER_URL', default="redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND', default="redis://127.0.0.1:6379/1")
+CELERY_TASK_ALWAYS_EAGER = False  # en local puedes poner True si no tienes Redis
+
+ALLOWED_HOSTS = ['workshakepoli.onrender.com', '127.0.0.1', 'localhost']
+
